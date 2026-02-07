@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { chapters } from "@/lib/data/chapters";
-import { Glass } from "@/components/ui/glass";
 
 export default function ChaptersPage() {
   return (
@@ -29,35 +28,27 @@ export default function ChaptersPage() {
               <Link
                 key={chapter.id}
                 href={`/${chapter.id}`}
-                className="block group h-full"
+                className="bg-background rounded-lg p-6 flex flex-col items-center justify-center hover:shadow-lg transition-all hover:scale-105 border border-border group h-full"
               >
-                <Glass
-                  variant="subtle"
-                  className="h-full flex-col hover:scale-105 transition-transform duration-300 !p-6 !items-stretch"
-                  backgroundOpacity={0.2}
-                >
-                  <div className="flex flex-col items-center justify-center h-full w-full">
-                    <div className="w-24 h-24 mb-4 flex-shrink-0 flex items-center justify-center">
-                      {chapter.image ? (
-                        <img
-                          src={chapter.image}
-                          alt={chapter.name}
-                          className="w-full h-full object-contain"
-                        />
-                      ) : (
-                        <div className="w-full h-full rounded-full bg-primary/10 flex items-center justify-center">
-                          <chapter.icon className="w-10 h-10 text-primary" />
-                        </div>
-                      )}
+                <div className="w-24 h-24 mb-4 flex-shrink-0 flex items-center justify-center">
+                  {chapter.image ? (
+                    <img
+                      src={chapter.image}
+                      alt={chapter.name}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="w-full h-full rounded-full bg-primary/10 flex items-center justify-center">
+                      <chapter.icon className="w-10 h-10 text-primary" />
                     </div>
-                    <h2 className="font-heading font-bold text-xl text-foreground text-center group-hover:text-primary transition-colors">
-                      {chapter.name}
-                    </h2>
-                    <p className="text-sm text-muted-foreground font-body text-center mt-1">
-                      {chapter.fullName}
-                    </p>
-                  </div>
-                </Glass>
+                  )}
+                </div>
+                <h2 className="font-heading font-bold text-xl text-foreground text-center group-hover:text-primary transition-colors">
+                  {chapter.name}
+                </h2>
+                <p className="text-sm text-muted-foreground font-body text-center mt-1">
+                  {chapter.fullName}
+                </p>
               </Link>
             ))}
           </div>

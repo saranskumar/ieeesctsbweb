@@ -95,10 +95,10 @@ export default function ContactPage() {
                       Email
                     </h3>
                     <a
-                      href="mailto:ieee@sctce.ac.in"
+                      href="mailto:ieeesctsb@gmail.com"
                       className="text-primary hover:underline font-body"
                     >
-                      ieee@sctce.ac.in
+                      ieeesctsb@gmail.com
                     </a>
                   </div>
                 </div>
@@ -112,7 +112,7 @@ export default function ContactPage() {
                       Phone
                     </h3>
                     <p className="text-muted-foreground font-body">
-                      +91 XXX XXX XXXX
+                      +91 9567694707
                     </p>
                   </div>
                 </div>
@@ -193,6 +193,27 @@ export default function ContactPage() {
                 </Button>
               </form>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="section-padding bg-background border-t border-border">
+        <div className="section-container">
+          <h2 className="text-2xl font-heading font-bold text-foreground mb-6 text-center">
+            Our Location
+          </h2>
+          <div className="w-full h-[450px] relative rounded-lg overflow-hidden border border-border shadow-sm">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1087.1118851564481!2d76.97857658187175!3d8.470231553187036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05baee56e6b99b%3A0x4ce024c88eb0ddcb!2sSree%20Chitra%20Thirunal%20College%20of%20Engineering%2C%20Thiruvananthapuram!5e0!3m2!1sen!2sin!4v1711636446051!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style={{ border: 0, filter: " invert(92%) contrast(93%) brightness(103%) hue-rotate(190deg) saturate(300%)" }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-full"
+            />
           </div>
         </div>
       </section>
