@@ -7,7 +7,7 @@ export default function WebTeamPage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="section-padding py-20 bg-primary/5 relative overflow-hidden">
+            <section className="py-12 md:py-16 bg-background relative overflow-hidden text-center">
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-2xl -translate-x-1/2 translate-y-1/2"></div>
@@ -18,7 +18,7 @@ export default function WebTeamPage() {
                         <Code className="w-4 h-4" />
                         <span>Behind the Code</span>
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-heading font-bold text-foreground mb-6">
+                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">
                         Meet the <span className="text-primary">Web Team</span>
                     </h1>
                     <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto leading-relaxed">
@@ -104,7 +104,7 @@ export default function WebTeamPage() {
                         Join the IEEE SCT SB Web Team to learn, build, and contribute to real-world projects.
                     </p>
                     <Button asChild size="lg" className="font-secondary">
-                        <Link href="/contact">Join the Team</Link>
+                        <Link href="/contact?subject=Joining%20the%20Web%20Team">Join the Team</Link>
                     </Button>
                 </div>
             </section>

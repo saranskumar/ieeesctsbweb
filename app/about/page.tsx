@@ -1,5 +1,11 @@
 import Link from "next/link";
 import { chapters } from "@/lib/data/chapters";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn about the history, mission, and achievements of IEEE Student Branch at SCT College of Engineering.",
+};
 
 const timelineEvents = [
   { year: "2008", milestone: "IEEE SCT Student Branch established" },
@@ -16,7 +22,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="section-padding bg-background">
+      <section className="py-12 md:py-16 bg-background">
         <div className="section-container">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">

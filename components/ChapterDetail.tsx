@@ -117,18 +117,13 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                                 </p>
 
                                 <div className="space-y-4">
-                                    <Button className="w-full flex items-center justify-center gap-2">
-                                        <Mail className="w-4 h-4" />
-                                        Contact {chapter.name}
+                                    <Button className="w-full gap-2" asChild>
+                                        <Link href={`/contact?subject=Enquiry%20regarding%20${encodeURIComponent(chapter.name)}`}>
+                                            <Mail className="w-4 h-4" />
+                                            Contact {chapter.name}
+                                        </Link>
                                     </Button>
-                                    {chapter.email && (
-                                        <p className="text-center text-sm text-muted-foreground font-body">
-                                            or email us at <br />
-                                            <a href={`mailto:${chapter.email}`} className="text-primary hover:underline">
-                                                {chapter.email}
-                                            </a>
-                                        </p>
-                                    )}
+
                                 </div>
                             </div>
                         </div>

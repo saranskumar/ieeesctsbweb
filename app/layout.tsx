@@ -1,16 +1,10 @@
-"use client";
-
 import type { Metadata } from "next";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import Navbar from "@/components/navbar";
 import MetaNav from "@/components/meta-nav";
 import Footer from "@/components/footer";
+import Providers from "@/components/providers";
 import "./colors.css";
 import "./globals.css";
-import { useState } from "react";
 
 import { Inter, Raleway, Poppins } from "next/font/google";
 
@@ -30,32 +24,56 @@ const poppins = Poppins({
   variable: "--font-secondary",
 });
 
+export const metadata: Metadata = {
+  title: {
+    default: "IEEE SCT Student Branch",
+    template: "%s | IEEE SCT SB",
+  },
+  description: "Official website of IEEE Student Branch, SCT College of Engineering (SB Code: 32041). Fostering technical innovation and professional growth.",
+  keywords: ["IEEE", "SCTCE", "Student Branch", "Engineering", "Technology", "Events", "Trivandrum", "Kerala"],
+  authors: [{ name: "IEEE SCT SB Web Team" }],
+  metadataBase: new URL("https://ieeesctsb.org"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://ieeesctsb.org",
+    siteName: "IEEE SCT SB",
+    title: "IEEE SCT Student Branch",
+    description: "Official website of IEEE Student Branch, SCT College of Engineering.",
+    images: [
+      {
+        url: "/og-image.jpg", // Ensure this exists or use a valid path
+        width: 1200,
+        height: 630,
+        alt: "IEEE SCT SB",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IEEE SCT Student Branch",
+    description: "Fostering technical innovation and professional growth at SCT College of Engineering.",
+    images: ["/og-image.jpg"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [queryClient] = useState(() => new QueryClient());
-
   return (
     <html lang="en">
-      <head>
-        <title>IEEE SB SCTCE</title>
-        <meta name="description" content="IEEE Student Branch SCTCE Website" />
-      </head>
       <body className={`${inter.variable} ${raleway.variable} ${poppins.variable} font-sans antialiased`}>
-        <QueryClientProvider client={queryClient}>
-
-
-          <TooltipProvider>
-            <MetaNav />
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <Toaster />
-            <Sonner />
-          </TooltipProvider>
-        </QueryClientProvider>
+        <Providers>
+          <MetaNav />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

@@ -1,4 +1,13 @@
-import { TeamMember } from "./team";
+// Shared interface for team members
+export interface TeamMember {
+    id: string;
+    name: string;
+    role: string;
+    image?: string;
+    linkedin?: string;
+    email?: string;
+    bio?: string;
+}
 
 export const execom25: TeamMember[] = [
     // Faculty Advisors

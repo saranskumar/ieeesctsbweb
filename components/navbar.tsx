@@ -45,6 +45,10 @@ const Navbar = () => {
                         </div>
                     </Link>
 
+
+
+
+
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-1">
                         {navLinks.map((link) => (
@@ -59,6 +63,9 @@ const Navbar = () => {
                                 {link.name}
                             </Link>
                         ))}
+                        <Button asChild variant="default" size="sm" className="ml-4 font-secondary">
+                            <Link href="/join">Join</Link>
+                        </Button>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -94,7 +101,7 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
-        </nav>
+        </nav >
     );
 };
 

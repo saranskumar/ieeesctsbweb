@@ -20,9 +20,7 @@ const Footer = () => {
                                 <h3 className="font-heading font-bold text-lg leading-tight">
                                     IEEE SCT SB
                                 </h3>
-                                <p className="text-sm text-muted-foreground font-secondary">
-                                    Student Branch Code: <strong>32041</strong>
-                                </p>
+                                
                             </div>
                         </div>
                         <p className="text-sm text-muted-foreground font-body leading-relaxed max-w-xs">

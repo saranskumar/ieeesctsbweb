@@ -12,7 +12,7 @@ const HeroSection = () => {
       </div>
 
       <div className="section-container relative">
-        <div className="py-16 md:py-24 lg:py-32">
+        <div className="py-12 md:py-16 lg:py-20">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-6">
@@ -29,7 +29,7 @@ const HeroSection = () => {
 
             {/* Subtitle */}
             <p className="text-lg md:text-xl text-muted-foreground font-body max-w-2xl mx-auto mb-10 leading-relaxed">
-              Empowering future engineers and technologists through innovation, 
+              Empowering future engineers and technologists through innovation,
               collaboration, and professional development since 2008.
             </p>
 
@@ -54,8 +54,8 @@ const HeroSection = () => {
                 About IEEE
               </h3>
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
-                The IEEE is the world's 
-                largest technical professional organization dedicated to advancing technology 
+                The IEEE is the world's
+                largest technical professional organization dedicated to advancing technology
                 for the benefit of humanity.
               </p>
             </div>
@@ -64,7 +64,7 @@ const HeroSection = () => {
                 About IEEE SCT SB
               </h3>
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
-                Established in 2008, IEEE SCT Student Branch has been fostering technical 
+                Established in 2008, IEEE SCT Student Branch has been fostering technical
                 excellence and professional growth among students at SCT College of Engineering.
               </p>
             </div>

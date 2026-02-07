@@ -8,7 +8,7 @@ export default function EventsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="section-padding bg-background">
+      <section className="py-12 md:py-16 bg-background">
         <div className="section-container">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">
