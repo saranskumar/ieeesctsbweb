@@ -1,0 +1,87 @@
+@layer base {
+    :root {
+        /* 
+      IEEE SCT Design System Colors
+      Format: H S L (Hue Saturation Lightness)
+    */
+
+        /* Core Brand Colors */
+        --cloudy-sky-raw: 204 35% 86%;
+
+        /* QUANTUM BLUE #0e2a47 -> HSL 210 67% 17% */
+        --quantum-blue-raw: 210 67% 17%;
+
+        /* Semantic mapping for easier changes */
+        --ocean-blue-raw: var(--quantum-blue-raw);
+        /* Primary Brand Color */
+
+        /* Light Mode Palette */
+        --foreground-raw: 210 30% 15%;
+        --card-raw: 204 35% 92%;
+        --card-foreground-raw: 210 30% 15%;
+        --popover-raw: 204 35% 92%;
+        --popover-foreground-raw: 210 30% 15%;
+        --primary-foreground-raw: 0 0% 100%;
+
+        /* Secondary: Reverting to a neutral/blue tone since Violet is removed */
+        --secondary-raw: 204 35% 80%;
+        --secondary-foreground-raw: 210 30% 15%;
+
+        --muted-raw: 204 35% 86%;
+        --muted-foreground-raw: 210 20% 40%;
+
+        /* Accent: Using Quantum Blue or a slightly lighter shade */
+        --accent-raw: 204 35% 80%;
+        /* Match secondary for consistency */
+        --accent-foreground-raw: 210 30% 15%;
+
+        --destructive-raw: 0 84% 60%;
+        --destructive-foreground-raw: 0 0% 100%;
+
+        --border-raw: 210 30% 80%;
+        --input-raw: 210 30% 80%;
+
+        --ring-raw: var(--quantum-blue-raw);
+    }
+
+    .dark {
+        /* Dark Mode Palette */
+        --cloudy-sky-raw: 210 30% 12%;
+        --ocean-blue-raw: 210 67% 30%;
+        /* Lighter version of Quantum Blue for Dark Mode */
+
+        --foreground-raw: 204 35% 90%;
+        --card-raw: 210 28% 18%;
+        --card-foreground-raw: 204 35% 90%;
+        --popover-raw: 210 28% 15%;
+        --popover-foreground-raw: 204 35% 90%;
+        --primary-foreground-raw: 0 0% 100%;
+
+        --secondary-raw: 210 25% 22%;
+        --secondary-foreground-raw: 204 35% 90%;
+
+        --muted-raw: 210 25% 20%;
+        --muted-foreground-raw: 204 30% 65%;
+
+        --accent-raw: 210 25% 20%;
+        --accent-foreground-raw: 204 35% 90%;
+
+        --destructive-raw: 0 62% 45%;
+        --destructive-foreground-raw: 0 0% 100%;
+
+        --border-raw: 210 25% 25%;
+        --input-raw: 210 25% 25%;
+        --ring-raw: 210 67% 30%;
+        /* Match primary in dark mode */
+
+        /* Sidebar Specifics (Dark Mode) */
+        --sidebar-background-raw: 210 30% 12%;
+        --sidebar-foreground-raw: 204 35% 90%;
+        --sidebar-primary-raw: 210 67% 30%;
+        --sidebar-primary-foreground-raw: 0 0% 100%;
+        --sidebar-accent-raw: 210 25% 20%;
+        --sidebar-accent-foreground-raw: 204 35% 90%;
+        --sidebar-border-raw: 210 25% 25%;
+        --sidebar-ring-raw: 210 67% 30%;
+    }
+}
