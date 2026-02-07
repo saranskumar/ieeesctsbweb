@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import Navbar from "@/components/navbar";
+import MetaNav from "@/components/meta-nav";
 import Footer from "@/components/footer";
 import "./colors.css";
 import "./globals.css";
@@ -44,7 +45,10 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${raleway.variable} ${poppins.variable} font-sans antialiased`}>
         <QueryClientProvider client={queryClient}>
+
+
           <TooltipProvider>
+            <MetaNav />
             <Navbar />
             <main>{children}</main>
             <Footer />

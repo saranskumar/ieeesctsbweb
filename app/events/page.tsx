@@ -2,46 +2,7 @@ import Link from "next/link";
 import { Calendar, MapPin, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const upcomingEvents = [
-  {
-    id: 1,
-    title: "TechTalk: AI in Healthcare",
-    date: "March 15, 2026",
-    mode: "Online",
-    status: "Registration Open",
-    description: "Explore the transformative impact of artificial intelligence in modern healthcare systems.",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 2,
-    title: "Workshop: IoT Fundamentals",
-    date: "March 22, 2026",
-    mode: "Offline",
-    venue: "Main Auditorium",
-    status: "Upcoming",
-    description: "Hands-on workshop covering the basics of Internet of Things and sensor integration.",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 3,
-    title: "Hackathon 2026",
-    date: "April 5-6, 2026",
-    mode: "Hybrid",
-    venue: "Innovation Lab",
-    status: "Registration Open",
-    description: "Annual 24-hour coding marathon with exciting prizes and industry mentorship.",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 4,
-    title: "Career Guidance Session",
-    date: "April 15, 2026",
-    mode: "Online",
-    status: "Upcoming",
-    description: "Industry experts share insights on career opportunities in technology.",
-    image: "/placeholder.svg",
-  },
-];
+import { events } from "@/lib/data/events";
 
 export default function EventsPage() {
   return (
@@ -65,7 +26,7 @@ export default function EventsPage() {
       <section className="section-padding bg-card">
         <div className="section-container">
           <div className="grid md:grid-cols-2 gap-6">
-            {upcomingEvents.map((event) => (
+            {events.map((event) => (
               <div key={event.id} className="bg-background rounded-lg overflow-hidden group">
                 <div className="aspect-[4/5] bg-muted overflow-hidden">
                   <img
