@@ -54,7 +54,7 @@ const HeroSection = () => {
                 About IEEE
               </h3>
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
-                The Institute of Electrical and Electronics Engineers (IEEE) is the world's 
+                The IEEE is the world's 
                 largest technical professional organization dedicated to advancing technology 
                 for the benefit of humanity.
               </p>
