@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 };
 
 const timelineEvents = [
-  { year: "2008", milestone: "IEEE SCT Student Branch established" },
+  { year: "2009", milestone: "IEEE SCT Student Branch established on October 23rd" },
   { year: "2010", milestone: "First technical symposium organized" },
   { year: "2013", milestone: "Computer Society chapter inaugurated" },
   { year: "2015", milestone: "Women in Engineering affinity group formed" },
-  { year: "2018", milestone: "10th Anniversary celebrations" },
+  { year: "2019", milestone: "10th Anniversary celebrations" },
   { year: "2020", milestone: "Robotics and Automation Society chapter launched" },
-  { year: "2023", milestone: "15th Anniversary milestone achieved" },
+  { year: "2024", milestone: "15th Anniversary milestone achieved" },
   { year: "2025", milestone: "Best Student Branch Award - Kerala Section" },
 ];
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
               IEEE SCT SB
             </h1>
             <p className="text-lg text-muted-foreground font-body leading-relaxed mb-4">
-              IEEE started off in Sree Chitra Thirunal College Of Engineering with the registration of members on 23rd October 2009 with 30 members in its first phase. The Student Branch is one of the top 10 SBs in the Travancore Hub. Sree Chitra Thirunal College Of Engineering is one of the leading engineering colleges in Thiruvananthapuram, Kerala.
+              IEEE started off in Sree Chitra Thirunal College Of Engineering with the registration of members on 23rd October 2009 with 30 members in its first phase. An IEEE students chapter was formulated and an IEEE student committee was formed. The Student Branch is one of the top 10 SBs in the Travancore Hub. Sree Chitra Thirunal College Of Engineering is one of the leading engineering colleges in Thiruvananthapuram, Kerala.
             </p>
             <div className="flex flex-col gap-2 text-muted-foreground font-body">
               <p><span className="font-semibold text-foreground">Founded:</span> 2009</p>
