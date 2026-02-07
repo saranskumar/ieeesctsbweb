@@ -1,4 +1,5 @@
-import { Cpu, Users, Code, Zap, Wifi, Heart, Settings, Activity } from "lucide-react";
+import Link from "next/link";
+import { chapters } from "@/lib/data/chapters";
 
 const timelineEvents = [
   { year: "2008", milestone: "IEEE SCT Student Branch established" },
@@ -9,57 +10,6 @@ const timelineEvents = [
   { year: "2020", milestone: "Robotics and Automation Society chapter launched" },
   { year: "2023", milestone: "15th Anniversary milestone achieved" },
   { year: "2025", milestone: "Best Student Branch Award - Kerala Section" },
-];
-
-const chapters = [
-  {
-    name: "PES",
-    fullName: "Power and Energy Society",
-    icon: Zap,
-    focus: "Power Generation, Energy Systems, Sustainability",
-  },
-  {
-    name: "ComSoc",
-    fullName: "Communications Society",
-    icon: Wifi,
-    focus: "Telecommunications, Networking, Information Theory",
-  },
-  {
-    name: "RAS",
-    fullName: "Robotics and Automation Society",
-    icon: Cpu,
-    focus: "Robotics, Automation, Intelligent Systems",
-  },
-  {
-    name: "CS",
-    fullName: "Computer Society",
-    icon: Code,
-    focus: "Computing, Software, Information Technology",
-  },
-  {
-    name: "WIE",
-    fullName: "Women in Engineering",
-    icon: Users,
-    focus: "Diversity, Inclusion, Women Empowerment",
-  },
-  {
-    name: "SIGHT",
-    fullName: "Special Interest Group on Humanitarian Technology",
-    icon: Heart,
-    focus: "Humanitarian Technology, Sustainable Development",
-  },
-  {
-    name: "IAS",
-    fullName: "Industry Applications Society",
-    icon: Settings,
-    focus: "Industrial Systems, Manufacturing, Process Control",
-  },
-  {
-    name: "EMBS",
-    fullName: "Engineering in Medicine and Biology Society",
-    icon: Activity,
-    focus: "Biomedical Engineering, Healthcare Technology",
-  },
 ];
 
 export default function AboutPage() {
@@ -179,29 +129,42 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Chapters */}
+      {/* Chapters (Our Families) */}
       <section className="section-padding bg-card">
         <div className="section-container">
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-12 text-center">
-            Our Chapters
+            Our Families
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {chapters.map((chapter) => (
-              <div key={chapter.name} className="bg-background rounded-lg p-6 text-center">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <chapter.icon className="w-7 h-7 text-primary" />
-                </div>
-                <h3 className="font-heading font-bold text-xl text-primary mb-1">
-                  {chapter.name}
-                </h3>
-                <p className="text-sm font-secondary text-foreground mb-2">
-                  {chapter.fullName}
-                </p>
-                <p className="text-xs text-muted-foreground font-body">
-                  {chapter.focus}
-                </p>
-              </div>
-            ))}
+          <div className="relative w-full overflow-hidden mask-fade-sides">
+            <div className="flex animate-scroll hover:pause gap-6 w-max">
+              {[...chapters, ...chapters].map((chapter, index) => (
+                <Link
+                  key={`${chapter.name}-${index}`}
+                  href={`/${chapter.id}`}
+                  className="w-[280px] bg-background rounded-lg p-6 flex flex-col items-center justify-center hover:shadow-lg transition-all border border-border group shrink-0"
+                >
+                  <div className="w-24 h-24 mb-4 flex-shrink-0 flex items-center justify-center">
+                    {chapter.image ? (
+                      <img
+                        src={chapter.image}
+                        alt={chapter.name}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-primary/10 flex items-center justify-center">
+                        <chapter.icon className="w-10 h-10 text-primary" />
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="font-heading font-bold text-xl text-foreground text-center group-hover:text-primary transition-colors">
+                    {chapter.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground font-body text-center mt-1">
+                    {chapter.fullName}
+                  </p>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>

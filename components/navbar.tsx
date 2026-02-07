@@ -11,6 +11,7 @@ const navLinks = [
     { name: "About", path: "/about" },
     { name: "Events", path: "/events" },
     { name: "Chapters", path: "/chapters" },
+    { name: "Team", path: "/team" },
     { name: "Gallery", path: "/gallery" },
     { name: "Contact", path: "/contact" },
 ];
@@ -36,7 +37,7 @@ const Navbar = () => {
                         </div>
                         <div className="hidden sm:block">
                             <p className="font-heading font-semibold text-foreground text-sm md:text-base">
-                                IEEE SCT 
+                                IEEE SCT
                             </p>
                             <p className="text-xs text-muted-foreground font-secondary">
                                 Student Branch
