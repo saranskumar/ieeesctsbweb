@@ -1,33 +1,8 @@
 import { Trophy, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { achievements } from "@/lib/data/achievements";
 
-const achievements = [
-  {
-    id: 1,
-    title: "Best Student Branch Award",
-    year: "2025",
-    level: "Kerala Section",
-  },
-  {
-    id: 2,
-    title: "Outstanding Technical Activity",
-    year: "2024",
-    level: "National Level",
-  },
-  {
-    id: 3,
-    title: "Membership Growth Excellence",
-    year: "2024",
-    level: "Region 10",
-  },
-  {
-    id: 4,
-    title: "Best Project Award",
-    year: "2023",
-    level: "All India Level",
-  },
-];
 
 const AchievementsSection = () => {
   return (
@@ -51,7 +26,7 @@ const AchievementsSection = () => {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {achievements.map((achievement, index) => (
+          {achievements.slice(0, 4).map((achievement, index) => (
             <div
               key={achievement.id}
               className="card-ieee text-center"

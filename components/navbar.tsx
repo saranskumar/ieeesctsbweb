@@ -24,8 +24,8 @@ const Navbar = () => {
 
     return (
         <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
-            <div className="section-container">
-                <div className="flex items-center justify-between h-16 md:h-20">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16 md:h-20 relative">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3">
                         <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0">
@@ -45,12 +45,8 @@ const Navbar = () => {
                         </div>
                     </Link>
 
-
-
-
-
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-1">
+                    {/* Centered Desktop Navigation */}
+                    <div className="hidden md:flex items-center gap-1 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.path}
@@ -63,21 +59,32 @@ const Navbar = () => {
                                 {link.name}
                             </Link>
                         ))}
-                        <Button asChild variant="default" size="sm" className="ml-4 font-secondary">
+                        <Button asChild variant="default" size="sm" className="ml-2 font-secondary">
                             <Link href="/join">Join</Link>
                         </Button>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="md:hidden"
-                        onClick={() => setIsOpen(!isOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                    </Button>
+                    {/* Right Side: Logo, Mobile Menu */}
+                    <div className="flex items-center gap-4">
+                        <div className="hidden md:block relative w-auto h-12 md:h-16 flex-shrink-0">
+                            <img
+                                src="/ieee_logo.png"
+                                alt="IEEE Logo"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
+
+                        {/* Mobile Menu Button */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="md:hidden"
+                            onClick={() => setIsOpen(!isOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Mobile Navigation */}
