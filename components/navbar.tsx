@@ -66,7 +66,7 @@ const Navbar = () => {
 
                     {/* Right Side: Logo, Mobile Menu */}
                     <div className="flex items-center gap-4">
-                        <div className="hidden md:block relative w-auto h-12 md:h-16 flex-shrink-0">
+                        <div className="hidden md:block relative w-auto h-11 md:h-14 flex-shrink-0">
                             <img
                                 src="/ieee_logo.png"
                                 alt="IEEE Logo"
