@@ -140,7 +140,6 @@ export const members: Record<string, MemberProfile> = {
         name: "Alfy Joseph Kunjumon",
         image: "/members/alfy-joseph-kunjumon.jpeg",
         batch: "2026",
-        linkedin: "https://www.linkedin.com/in/saran-s-kumar/",
     },
     "sneha-bijee": {
         id: "sneha-bijee",
@@ -220,6 +219,12 @@ export const members: Record<string, MemberProfile> = {
         image: "/members/vishnudev-r.jpeg",
         batch: "2026",
     },
+    "ron": {
+        id: "ron",
+        name: "Ron",
+        image: "/members/ron.jpg",
+        batch: "2026",
+    },
     "yohann-chandy": {
         id: "yohann-chandy",
         name: "Yohann Chandy",
@@ -247,7 +252,7 @@ export const members: Record<string, MemberProfile> = {
     "saran-s-kumar": {
         id: "saran-s-kumar",
         name: "Saran S Kumar",
-        image: "/members/saran-s-kumar.jpeg",
+        image: "/members/saran-s-kumar.jpg",
         batch: "2027",
     },
     "riya-mary-sajan": {

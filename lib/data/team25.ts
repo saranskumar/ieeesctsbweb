@@ -24,6 +24,7 @@ export const execom25: TeamEntry[] = [
     { id: "pdc-25",              memberId: "anaswara-paul",         role: "PDC Lead" },
     { id: "content-25",          memberId: "adithya-cj",            role: "Content Lead" },
     { id: "mdc-1-25",            memberId: "vishnudev-r",           role: "MD Coordinator" },
+    { id: "mdc-2-25",            memberId: "ron",           role: "MD Coordinator" },
 ];
 
 export const sbcTeams25: Record<string, TeamEntry[]> = {

@@ -47,11 +47,11 @@ export default function TeamPage() {
 
     const isFaculty = (role: string) => /(advisor|counselor)/i.test(role);
 
-    const coreRoles = ["Chairperson","Vice Chairperson","Secretary","Treasurer","Sub Treasurer","Link Representative","Webmaster","Activity Coordinator","Tech Head","Tech Lead","LINK Representative"];
+    const coreRoles = ["Chairperson", "Vice Chairperson", "Secretary", "Treasurer", "Sub Treasurer", "Link Representative", "Webmaster", "Activity Coordinator", "Tech Head", "Tech Lead", "LINK Representative"];
 
     const facultyTeam = resolved.filter(m => isFaculty(m.role));
-    const coreTeam    = resolved.filter(m => coreRoles.includes(m.role) && !isFaculty(m.role));
-    const otherTeam   = resolved.filter(m => !coreRoles.includes(m.role) && !isFaculty(m.role));
+    const coreTeam = resolved.filter(m => coreRoles.includes(m.role) && !isFaculty(m.role));
+    const otherTeam = resolved.filter(m => !coreRoles.includes(m.role) && !isFaculty(m.role));
 
 
     return (
@@ -113,7 +113,7 @@ export default function TeamPage() {
                         {year} Core Execom
                     </h2>
                     {coreTeam.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
                             {coreTeam.map((member, index) => (
                                 <div
                                     key={index}
@@ -130,24 +130,24 @@ export default function TeamPage() {
                                             <User className="w-16 h-16 text-primary/40 group-hover:text-primary transition-colors duration-300" />
                                         )}
                                     </div>
-                                    <div className="p-6">
-                                        <h3 className="font-heading font-bold text-xl text-foreground mb-1">
+                                    <div className="p-4">
+                                        <h3 className="font-heading font-bold text-base md:text-lg text-foreground mb-1 leading-tight">
                                             <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
                                                 {member.name}
                                             </Link>
                                         </h3>
-                                        <p className="text-sm font-secondary text-primary mb-4 font-medium">
+                                        <p className="text-xs font-secondary text-primary mb-3 font-medium line-clamp-2">
                                             {member.role}
                                         </p>
 
-                                        <div className="flex gap-4 relative z-10">
+                                        <div className="flex gap-3 relative z-10">
                                             {member.email && (
                                                 <a
                                                     href={`mailto:${member.email}`}
                                                     className="text-muted-foreground hover:text-primary transition-colors"
                                                     aria-label={`Email ${member.name}`}
                                                 >
-                                                    <Mail className="w-5 h-5" />
+                                                    <Mail className="w-4 h-4" />
                                                 </a>
                                             )}
                                             {member.linkedin && (
@@ -158,7 +158,7 @@ export default function TeamPage() {
                                                     className="text-muted-foreground hover:text-primary transition-colors"
                                                     aria-label={`LinkedIn profile of ${member.name}`}
                                                 >
-                                                    <Linkedin className="w-5 h-5" />
+                                                    <Linkedin className="w-4 h-4" />
                                                 </a>
                                             )}
                                         </div>
@@ -181,7 +181,7 @@ export default function TeamPage() {
                         Faculty Advisors
                     </h2>
                     {facultyTeam.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 justify-center">
                             {facultyTeam.map((member, index) => (
                                 <div
                                     key={index}
@@ -249,7 +249,7 @@ export default function TeamPage() {
                         Execom Members
                     </h2>
                     {otherTeam.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
                             {otherTeam.map((member, index) => (
                                 <div
                                     key={index}
@@ -266,24 +266,24 @@ export default function TeamPage() {
                                             <User className="w-16 h-16 text-primary/40 group-hover:text-primary transition-colors duration-300" />
                                         )}
                                     </div>
-                                    <div className="p-6">
-                                        <h3 className="font-heading font-bold text-xl text-foreground mb-1">
+                                    <div className="p-4">
+                                        <h3 className="font-heading font-bold text-base md:text-lg text-foreground mb-1 leading-tight">
                                             <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
                                                 {member.name}
                                             </Link>
                                         </h3>
-                                        <p className="text-sm font-secondary text-primary mb-4 font-medium">
+                                        <p className="text-xs font-secondary text-primary mb-3 font-medium line-clamp-2">
                                             {member.role}
                                         </p>
 
-                                        <div className="flex gap-4 relative z-10">
+                                        <div className="flex gap-3 relative z-10">
                                             {member.email && (
                                                 <a
                                                     href={`mailto:${member.email}`}
                                                     className="text-muted-foreground hover:text-primary transition-colors"
                                                     aria-label={`Email ${member.name}`}
                                                 >
-                                                    <Mail className="w-5 h-5" />
+                                                    <Mail className="w-4 h-4" />
                                                 </a>
                                             )}
                                             {member.linkedin && (
@@ -294,7 +294,7 @@ export default function TeamPage() {
                                                     className="text-muted-foreground hover:text-primary transition-colors"
                                                     aria-label={`LinkedIn profile of ${member.name}`}
                                                 >
-                                                    <Linkedin className="w-5 h-5" />
+                                                    <Linkedin className="w-4 h-4" />
                                                 </a>
                                             )}
                                         </div>
@@ -324,7 +324,7 @@ export default function TeamPage() {
                                     <h3 className="text-2xl font-heading font-bold text-primary mb-8 border-l-4 border-primary pl-4 uppercase">
                                         {chapterId} Execom
                                     </h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
                                         {members.map((member, index) => (
                                             <div
                                                 key={`${chapterId}-${index}`}
@@ -341,24 +341,24 @@ export default function TeamPage() {
                                                         <User className="w-16 h-16 text-primary/40 group-hover:text-primary transition-colors duration-300" />
                                                     )}
                                                 </div>
-                                                <div className="p-6">
-                                                    <h3 className="font-heading font-bold text-xl text-foreground mb-1">
+                                                <div className="p-4">
+                                                    <h3 className="font-heading font-bold text-base md:text-lg text-foreground mb-1 leading-tight">
                                                         <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
                                                             {member.name}
                                                         </Link>
                                                     </h3>
-                                                    <p className="text-sm font-secondary text-primary mb-4 font-medium">
+                                                    <p className="text-xs font-secondary text-primary mb-3 font-medium line-clamp-2">
                                                         {member.role}
                                                     </p>
 
-                                                    <div className="flex gap-4 relative z-10">
+                                                    <div className="flex gap-3 relative z-10">
                                                         {member.email && (
                                                             <a
                                                                 href={`mailto:${member.email}`}
                                                                 className="text-muted-foreground hover:text-primary transition-colors"
                                                                 aria-label={`Email ${member.name}`}
                                                             >
-                                                                <Mail className="w-5 h-5" />
+                                                                <Mail className="w-4 h-4" />
                                                             </a>
                                                         )}
                                                         {member.linkedin && (
@@ -369,7 +369,7 @@ export default function TeamPage() {
                                                                 className="text-muted-foreground hover:text-primary transition-colors"
                                                                 aria-label={`LinkedIn profile of ${member.name}`}
                                                             >
-                                                                <Linkedin className="w-5 h-5" />
+                                                                <Linkedin className="w-4 h-4" />
                                                             </a>
                                                         )}
                                                     </div>
