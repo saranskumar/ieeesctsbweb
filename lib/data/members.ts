@@ -138,7 +138,7 @@ export const members: Record<string, MemberProfile> = {
     "alfy-joseph-kunjumon": {
         id: "alfy-joseph-kunjumon",
         name: "Alfy Joseph Kunjumon",
-        image: "/globe.svg",
+        image: "/members/harisankar-prasad.jpg",
         batch: "2026",
     },
     "sneha-bijee": {
