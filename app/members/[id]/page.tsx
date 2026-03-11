@@ -69,18 +69,18 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
         <div className="min-h-screen bg-background relative pb-20">
             {/* Ambient Background Glow */}
             <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-primary/10 to-transparent -z-10 blur-3xl opacity-50 pointer-events-none" />
+            {/* Top Navigation */}
+            <div className="w-full max-w-7xl mx-auto px-4 pt-8 md:pt-12">
+                <Link
+                    href="/team"
+                    className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors font-body bg-muted/50 hover:bg-muted px-4 py-2 rounded-full"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Team
+                </Link>
+            </div>
             
-            <div className="max-w-xl mx-auto px-4 pt-12">
-                <div className="w-full flex justify-start mb-8">
-                    <Link
-                        href="/team"
-                        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors font-body bg-muted/50 hover:bg-muted px-4 py-2 rounded-full"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to Team
-                    </Link>
-                </div>
-
+            <div className="max-w-xl mx-auto px-4 pt-12 md:pt-4">
                 <div className="flex flex-col items-center text-center mb-10">
                     <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-background shadow-xl mb-6">
                         {member.image && member.image !== "/team/placeholder.jpg" ? (
