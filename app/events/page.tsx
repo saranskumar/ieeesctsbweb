@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import { events } from "@/lib/data/events";
 
 export default function EventsPage() {
-  const sortedEvents = [...events].sort((a, b) => (a.order || 0) - (b.order || 0));
+  const sortedEvents = [...events].sort((a, b) => {
+    const dateA = new Date(a.date).getTime();
+    const dateB = new Date(b.date).getTime();
+    if (!isNaN(dateA) && !isNaN(dateB) && dateA !== dateB) {
+      return dateB - dateA; // Descending: latest date first
+    }
+    return (a.order || 0) - (b.order || 0);
+  });
 
   const upcomingEvents = sortedEvents.filter(
     (e) => e.status === "Upcoming" || e.status === "Registration Open"

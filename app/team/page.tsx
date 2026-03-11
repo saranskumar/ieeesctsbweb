@@ -47,8 +47,8 @@ export default function TeamPage() {
 
     const isFaculty = (role: string) => /(advisor|counselor)/i.test(role);
 
-    const coreRoles = ["Chairperson", "Vice Chairperson", "Secretary", "Treasurer", "Sub Treasurer", "Link Representative", "Webmaster", "Activity Coordinator", "Tech Head", "Tech Lead", "LINK Representative"];
-
+    const coreRoles = ["Chairperson", "Vice Chairperson", "Secretary"];
+    
     const facultyTeam = resolved.filter(m => isFaculty(m.role));
     const coreTeam = resolved.filter(m => coreRoles.includes(m.role) && !isFaculty(m.role));
     const otherTeam = resolved.filter(m => !coreRoles.includes(m.role) && !isFaculty(m.role));
@@ -57,7 +57,7 @@ export default function TeamPage() {
     return (
         <>
             {/* Hero */}
-            <section className="section-padding bg-background">
+            <section className="py-8 md:py-12 bg-background">
                 <div className="section-container">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
                         <div className="max-w-3xl">
@@ -113,7 +113,7 @@ export default function TeamPage() {
                         {year} Core Execom
                     </h2>
                     {coreTeam.length > 0 ? (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 max-w-4xl mx-auto gap-6 sm:gap-8">
                             {coreTeam.map((member, index) => (
                                 <div
                                     key={index}

@@ -80,32 +80,32 @@ export const members: Record<string, MemberProfile> = {
     "deepa-ak": {
         id: "deepa-ak",
         name: "Deepa A K",
-        image: "/person.svg",
+        image: "/faculty/deepa-ak.jpg",
     },
     "sandhya-l": {
         id: "sandhya-l",
         name: "Sandhya L",
-        image: "/person.svg",
+        image: "/faculty/sandhya-l.jpg",
     },
     "lakshmi-vs": {
         id: "lakshmi-vs",
         name: "Dr. Lakshmi V S",
-        image: "/person.svg",
+        image: "/faculty/lakshmi-vs.jpg",
     },
     "rejimol-robinson": {
         id: "rejimol-robinson",
         name: "Rejimol Robinson R R",
-        image: "/person.svg",
+        image: "/faculty/rejimol-robinson.jpg",
     },
     "sajith-sethu": {
         id: "sajith-sethu",
         name: "Sajith Sethu",
-        image: "/person.svg",
+        image: "/faculty/sajith-sethu.jpg",
     },
     "baji-k": {
         id: "baji-k",
         name: "Baji K",
-        image: "/person.svg",
+        image: "/faculty/baji-k.jpg",
     },
     "asha-s": {
         id: "asha-s",
@@ -222,7 +222,7 @@ export const members: Record<string, MemberProfile> = {
     "ron": {
         id: "ron",
         name: "Ron",
-        image: "/members/ron.jpg",
+        image: "/members/ron.jpeg",
         batch: "2026",
     },
     "yohann-chandy": {
@@ -249,11 +249,19 @@ export const members: Record<string, MemberProfile> = {
         image: "/members/nandana-rajesh.jpg",
         batch: "2027",
     },
-    "saran-s-kumar": {
-        id: "saran-s-kumar",
+    "saranskumar": {
+        id: "saranskumar",
         name: "Saran S Kumar",
-        image: "/members/saran-s-kumar.jpg",
+        image: "/members/saranskumar.jpg",
         batch: "2027",
+       
+        // Socials
+        linkedin: "https://linkedin.com/in/saran-s-kumar",
+        github: "https://github.com/saranskumar",
+        instagram: "https://instagram.com/saraan.___",
+        website: "https://saranskumar.live",
+        email: "saranskumarwh@gmail.com",
+    
     },
     "riya-mary-sajan": {
         id: "riya-mary-sajan",

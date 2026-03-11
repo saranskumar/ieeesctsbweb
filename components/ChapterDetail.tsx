@@ -138,7 +138,7 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                 <section className="section-padding bg-background border-t border-border">
                     <div className="section-container">
                         <h2 className="text-3xl font-heading font-bold text-foreground mb-12 text-center">
-                            Upcoming Events
+                            Events
                         </h2>
                         <div className="grid md:grid-cols-2 gap-8">
                             {chapterEvents.map((event) => (

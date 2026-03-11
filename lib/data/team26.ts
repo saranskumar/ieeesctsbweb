@@ -33,7 +33,7 @@ export const sbcTeams26: Record<string, TeamEntry[]> = {
         { id: "cs-vice-26",   memberId: "athul-chacko",     role: "Vice Chairperson" },
         { id: "cs-sec-26",    memberId: "chinmayi-bs",      role: "Secretary" },
         { id: "cs-wic-26",    memberId: "nandana-rajesh",   role: "Women in Computing" },
-        { id: "cs-ai-26",     memberId: "saran-s-kumar",    role: "AI SIG Coordinator" },
+        { id: "cs-ai-26",     memberId: "saranskumar",    role: "AI SIG Coordinator" },
     ],
     "embs": [
         { id: "embs-chair-26",memberId: "riya-mary-sajan",  role: "Chairperson" },
