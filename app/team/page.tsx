@@ -48,7 +48,7 @@ export default function TeamPage() {
     const isFaculty = (role: string) => /(advisor|counselor)/i.test(role);
 
     const coreRoles = ["Chairperson", "Vice Chairperson", "Secretary"];
-    
+
     const facultyTeam = resolved.filter(m => isFaculty(m.role));
     const coreTeam = resolved.filter(m => coreRoles.includes(m.role) && !isFaculty(m.role));
     const otherTeam = resolved.filter(m => !coreRoles.includes(m.role) && !isFaculty(m.role));
