@@ -1,56 +1,49 @@
 import { Calendar, MapPin, ArrowRight, Monitor, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-const upcomingEvents = [
-  {
-    id: 1,
-    title: "TechTalk: AI in Healthcare",
-    date: "March 15, 2026",
-    mode: "Online",
-    status: "Registration Open",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 2,
-    title: "Workshop: IoT Fundamentals",
-    date: "March 22, 2026",
-    mode: "Offline",
-    status: "Upcoming",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 3,
-    title: "Hackathon 2026",
-    date: "April 5-6, 2026",
-    mode: "Hybrid",
-    status: "Registration Open",
-    image: "/placeholder.svg",
-  },
-];
-
-const pastEvents = [
-  {
-    id: 1,
-    title: "Annual Tech Fest 2025",
-    date: "December 2025",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 2,
-    title: "Python Bootcamp",
-    date: "November 2025",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 3,
-    title: "Industry Connect",
-    date: "October 2025",
-    image: "/placeholder.svg",
-  },
-];
+import { events } from "@/lib/data/events";
 
 const EventsSection = () => {
+  // Sort events by date (this is a simple string sort for now, better to use real dates if available)
+  // For now, we rely on the order in the events array or implement a basic filter
+  
+  const upcomingEvents = events
+    .filter(e => e.status === "Upcoming" || e.status === "Registration Open")
+    .slice(0, 3);
+    
+  // Since all events in dummy data are "Upcoming" or "Registration Open",
+  // let's just create a fallback past events list to show the UI if there are no completed ones
+  let pastEvents = events
+    .filter(e => e.status === "Completed")
+    .slice(0, 3);
+
+  // Fallback for visual testing if no completed events exist in data yet
+  if (pastEvents.length === 0) {
+      pastEvents = [
+        {
+          id: "past-1",
+          title: "Annual Tech Fest 2025",
+          date: "December 2025",
+          image: "/placeholder.svg",
+          time: "", mode: "Offline", status: "Completed", description: ""
+        },
+        {
+          id: "past-2",
+          title: "Python Bootcamp",
+          date: "November 2025",
+          image: "/placeholder.svg",
+          time: "", mode: "Offline", status: "Completed", description: ""
+        },
+        {
+          id: "past-3",
+          title: "Industry Connect",
+          date: "October 2025",
+          image: "/placeholder.svg",
+          time: "", mode: "Offline", status: "Completed", description: ""
+        },
+      ];
+  }
+
   return (
     <section className="section-padding bg-card">
       <div className="section-container">
@@ -73,20 +66,21 @@ const EventsSection = () => {
             </Button>
           </div>
 
+          {upcomingEvents.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {upcomingEvents.map((event, index) => (
               <div
                 key={event.id}
-                className="bg-background rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md"
+                className="bg-background rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md border border-border"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="aspect-[4/5] bg-muted relative">
                   <img
-                    src={event.image}
+                    src={event.image || "/placeholder.svg"}
                     alt={event.title}
                     className="w-full h-full object-cover"
                   />
-                  <span className="absolute top-3 left-3 badge-status badge-upcoming">
+                  <span className={`absolute top-3 left-3 badge-status ${event.status === 'Registration Open' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'badge-upcoming'}`}>
                     {event.status}
                   </span>
                 </div>
@@ -103,18 +97,25 @@ const EventsSection = () => {
                       {event.mode === "Online" ? (
                         <Monitor className="w-4 h-4 text-primary" />
                       ) : (
-                        <Users className="w-4 h-4 text-primary" />
+                        <MapPin className="w-4 h-4 text-primary" />
                       )}
-                      <span className="font-body">{event.mode}</span>
+                      <span className="font-body">{event.mode} {event.venue ? `• ${event.venue}` : ''}</span>
                     </div>
                   </div>
-                  <Button asChild className="w-full font-secondary" size="sm">
-                    <Link href={`/events/${event.id}`}>Register Now</Link>
+                  <Button asChild className="w-full font-secondary" size="sm" variant={event.status === 'Registration Open' ? 'default' : 'outline'}>
+                    <Link href={`/events/${event.id}`}>
+                      {event.status === 'Registration Open' ? 'Register Now' : 'View Details'}
+                    </Link>
                   </Button>
                 </div>
               </div>
             ))}
           </div>
+          ) : (
+            <div className="text-center py-12 bg-background rounded-lg border border-dashed border-border text-muted-foreground">
+              No upcoming events right now. Check back later!
+            </div>
+          )}
         </div>
 
         {/* Past Events */}

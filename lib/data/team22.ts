@@ -1,133 +1,50 @@
-import { TeamMember } from "./team25";
+import { TeamEntry } from "./members";
 
-export const execom22: TeamMember[] = [
-    {
-        id: "branch-counselor-22",
-        name: "Mrs Asha S",
-        role: "Advisor",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "chair-22",
-        name: "Govind S Nath",
-        role: "Chairperson",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "vice-chair-22",
-        name: "Akshara Bruno",
-        role: "Vice Chairperson",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "sec-22",
-        name: "Jyothika N",
-        role: "Secretary",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "treasurer-22",
-        name: "Salwa Firoz Khan",
-        role: "Treasurer",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "sub-treasurer-22",
-        name: "Janaki Devi R",
-        role: "Sub Treasurer",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "link-22",
-        name: "Arundhathi Krishna",
-        role: "LINK Representative",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "mdc-1-22",
-        name: "Ganga M K",
-        role: "Membership Development Cordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "mdc-2-22",
-        name: "Amal Nath M",
-        role: "Membership Development Cordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "tech-head-22",
-        name: "Sharron Mariam Varghese",
-        role: "Tech Head",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ecc-1-22",
-        name: "N S Hariram",
-        role: "ECC",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "webmaster-22",
-        name: "Benjamin Rojoy",
-        role: "Webmaster",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "joint-webmaster-22",
-        name: "Kalidas V B",
-        role: "Joint Webmaster",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ac-1-22",
-        name: "Athul Jayakumar",
-        role: "Activity Coordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ac-2-22",
-        name: "Esther B Susan",
-        role: "Activity Coordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ac-3-22",
-        name: "Nithin P",
-        role: "Activity Coordinator",
-        image: "/team/placeholder.jpg",
-    },
+export const execom22: TeamEntry[] = [
+    // Faculty Advisors
+    { id: "branch-counselor-22", memberId: "asha-s",             role: "Branch Counselor" },
+    // Core SB
+    { id: "chair-22",            memberId: "govind-s-nath",       role: "Chairperson" },
+    { id: "vice-chair-22",       memberId: "akshara-bruno",       role: "Vice Chairperson" },
+    { id: "sec-22",              memberId: "jyothika-n",          role: "Secretary" },
+    { id: "treasurer-22",        memberId: "salwa-firoz-khan",    role: "Treasurer" },
+    { id: "sub-treasurer-22",    memberId: "janaki-devi-r",       role: "Sub Treasurer" },
+    { id: "link-22",             memberId: "arundhathi-krishna",  role: "LINK Representative" },
+    { id: "mdc-1-22",            memberId: "ganga-mk",            role: "Membership Development Coordinator" },
+    { id: "mdc-2-22",            memberId: "amal-nath-m",         role: "Membership Development Coordinator" },
+    { id: "tech-head-22",        memberId: "sharron-mariam-varghese", role: "Tech Head" },
+    { id: "ecc-1-22",            memberId: "ns-hariram",          role: "ECC" },
+    { id: "webmaster-22",        memberId: "benjamin-rojoy",      role: "Webmaster" },
+    { id: "joint-webmaster-22",  memberId: "kalidas-vb",          role: "Joint Webmaster" },
+    { id: "ac-1-22",             memberId: "athul-jayakumar",     role: "Activity Coordinator" },
+    { id: "ac-2-22",             memberId: "esther-b-susan",      role: "Activity Coordinator" },
+    { id: "ac-3-22",             memberId: "nithin-p",            role: "Activity Coordinator" },
 ];
 
-export const sbcTeams22: Record<string, TeamMember[]> = {
+export const sbcTeams22: Record<string, TeamEntry[]> = {
     "cs": [
-        { id: "cs-advisor-22", name: "Dr.Soniya B", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "cs-chair-22", name: "Saranya Krishnan M", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "cs-sec-22", name: "Anoop Santhosh", role: "Secretary", image: "/team/placeholder.jpg" },
-        { id: "cs-wic-22", name: "Jayalakshmi Jayakumar", role: "Women in Computing", image: "/team/placeholder.jpg" },
+        { id: "cs-chair-22",  memberId: "saranya-krishnan-m",  role: "Chairperson" },
+        { id: "cs-sec-22",    memberId: "anoop-santhosh",       role: "Secretary" },
+        { id: "cs-wic-22",    memberId: "jayalakshmi-jayakumar",role: "Women in Computing" },
     ],
     "ras": [
-        { id: "ras-advisor-22", name: "Mrs. Sandhya L", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "ras-chair-22", name: "Sarathkumar K S", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "ras-sec-22", name: "Devika A R", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "ras-chair-22", memberId: "sarathkumar-ks",      role: "Chairperson" },
+        { id: "ras-sec-22",   memberId: "devika-ar",           role: "Secretary" },
     ],
     "ias": [
-        { id: "ias-advisor-22", name: "Dr.Bobby Philp", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "ias-chair-22", name: "Akhil Manikandan", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "ias-sec-22", name: "Emey Teresa Abraham", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "ias-chair-22", memberId: "akhil-manikandan",    role: "Chairperson" },
+        { id: "ias-sec-22",   memberId: "emey-teresa-abraham", role: "Secretary" },
     ],
     "pes": [
-        { id: "pes-advisor-22", name: "Mrs.Deepa A K", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "pes-chair-22", name: "Nanda Kishore P", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "pes-sec-22", name: "Gayathri S Warrier", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "pes-chair-22", memberId: "nanda-kishore-p",     role: "Chairperson" },
+        { id: "pes-sec-22",   memberId: "gayathri-s-warrier",  role: "Secretary" },
     ],
     "wie": [
-        { id: "wie-advisor-22", name: "Dr.Lakshmi V S", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "wie-chair-22", name: "Soni P", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "wie-sec-22", name: "Aparna SL", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "wie-chair-22", memberId: "soni-p",              role: "Chairperson" },
+        { id: "wie-sec-22",   memberId: "aparna-sl",           role: "Secretary" },
     ],
     "sight": [
-        { id: "sight-chair-22", name: "Niranjan K Warrier", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "sight-sec-22", name: "Gowri Nandana A R", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "sight-chair-22",memberId: "niranjan-k-warrier", role: "Chairperson" },
+        { id: "sight-sec-22",  memberId: "gowri-nandana-ar",   role: "Secretary" },
     ],
 };

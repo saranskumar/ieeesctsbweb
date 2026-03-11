@@ -2,11 +2,13 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { execom } from "@/lib/data/team";
+import { resolveEntry } from "@/lib/data/members";
 
-// Filter out faculty advisors/counselors — show only student execom
-const coreMembers = execom.filter(
-  (m) => !/(advisor|counselor)/i.test(m.role)
-);
+// Resolve TeamEntry → full profiles, then filter out faculty advisors/counselors
+const coreMembers = execom
+  .map(resolveEntry)
+  .filter((m) => !/(advisor|counselor)/i.test(m.role));
+
 
 const ExecomSection = () => {
   return (

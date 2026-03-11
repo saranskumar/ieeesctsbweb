@@ -1,115 +1,47 @@
-import { TeamMember } from "./team25";
+import { TeamEntry } from "./members";
 
-export const execom21: TeamMember[] = [
-    {
-        id: "branch-counselor-21",
-        name: "Mrs Asha S",
-        role: "Advisor",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "chair-21",
-        name: "Nikitha Susan Jose",
-        role: "Chairperson",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "vice-chair-21",
-        name: "Abhinav MS",
-        role: "Vice Chairperson",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "sec-21",
-        name: "Govind S Nath",
-        role: "Secretary",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "joint-sec-21",
-        name: "Pooja P S",
-        role: "Joint Secretary",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "treasurer-21",
-        name: "Sivapriya B",
-        role: "Treasurer",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "sub-treasurer-21",
-        name: "Salwa Firoz C M",
-        role: "Sub Treasurer",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "link-21",
-        name: "Ananda Narayan",
-        role: "LINK Representative",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "mdc-1-21",
-        name: "Soni P",
-        role: "Membership Development Cordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ac-1-21",
-        name: "Sharika Menon R",
-        role: "Activity Coordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ac-2-21",
-        name: "Abila Antony Fernandez",
-        role: "Activity Coordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ac-3-21",
-        name: "Vyshnavi Jayakumar K",
-        role: "Activity Coordinator",
-        image: "/team/placeholder.jpg",
-    },
-    {
-        id: "ac-4-21",
-        name: "Neelima Anilkumar",
-        role: "Activity Coordinator",
-        image: "/team/placeholder.jpg",
-    },
+export const execom21: TeamEntry[] = [
+    // Faculty Advisors
+    { id: "branch-counselor-21", memberId: "asha-s",              role: "Branch Counselor" },
+    // Core SB
+    { id: "chair-21",            memberId: "nikitha-susan-jose",   role: "Chairperson" },
+    { id: "vice-chair-21",       memberId: "abhinav-ms",           role: "Vice Chairperson" },
+    { id: "sec-21",              memberId: "govind-s-nath",        role: "Secretary" },
+    { id: "joint-sec-21",        memberId: "pooja-ps",             role: "Joint Secretary" },
+    { id: "treasurer-21",        memberId: "sivapriya-b",          role: "Treasurer" },
+    { id: "sub-treasurer-21",    memberId: "salwa-firoz-cm",       role: "Sub Treasurer" },
+    { id: "link-21",             memberId: "ananda-narayan",       role: "LINK Representative" },
+    { id: "mdc-1-21",            memberId: "soni-p",               role: "Membership Development Coordinator" },
+    { id: "ac-1-21",             memberId: "sharika-menon-r",      role: "Activity Coordinator" },
+    { id: "ac-2-21",             memberId: "abila-antony-fernandez",role: "Activity Coordinator" },
+    { id: "ac-3-21",             memberId: "vyshnavi-jayakumar-k", role: "Activity Coordinator" },
+    { id: "ac-4-21",             memberId: "neelima-anilkumar",    role: "Activity Coordinator" },
 ];
 
-export const sbcTeams21: Record<string, TeamMember[]> = {
+export const sbcTeams21: Record<string, TeamEntry[]> = {
     "cs": [
-        { id: "cs-advisor-21", name: "Dr.Soniya B", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "cs-chair-21", name: "Arsha R S", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "cs-sec-21", name: "Saranya Krishnan M", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "cs-chair-21",  memberId: "arsha-rs",          role: "Chairperson" },
+        { id: "cs-sec-21",    memberId: "saranya-krishnan-m", role: "Secretary" },
     ],
     "ras": [
-        { id: "ras-advisor-21", name: "Mrs. Sandhya L", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "ras-chair-21", name: "Midhun B M", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "ras-sec-21", name: "Athul Jayakumar", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "ras-chair-21", memberId: "midhun-bm",          role: "Chairperson" },
+        { id: "ras-sec-21",   memberId: "athul-jayakumar",    role: "Secretary" },
     ],
     "ias": [
-        { id: "ias-advisor-21", name: "Dr.Bobby Philp", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "ias-chair-21", name: "Abhijit M", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "ias-sec-21", name: "Akhil Manikandan", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "ias-chair-21", memberId: "abhijit-m",          role: "Chairperson" },
+        { id: "ias-sec-21",   memberId: "akhil-manikandan",   role: "Secretary" },
     ],
     "pes": [
-        { id: "pes-advisor-21", name: "Mrs.Deepa A K", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "pes-chair-21", name: "Adith G M", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "pes-sec-21", name: "Nanda Kishore P", role: "Secretary", image: "/team/placeholder.jpg" },
-        { id: "pes-wip-21", name: "Anisha Khalam", role: "Women In Power", image: "/team/placeholder.jpg" },
+        { id: "pes-chair-21", memberId: "adith-gm",           role: "Chairperson" },
+        { id: "pes-sec-21",   memberId: "nanda-kishore-p",    role: "Secretary" },
+        { id: "pes-wip-21",   memberId: "anisha-khalam",      role: "Women In Power" },
     ],
     "wie": [
-        { id: "wie-advisor-21", name: "Mrs.Kutty Maalu V K", role: "Chapter Advisor", image: "/team/placeholder.jpg" },
-        { id: "wie-chair-21", name: "Kaveri T S", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "wie-sec-21", name: "Akshara Bruno", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "wie-chair-21", memberId: "kaveri-ts",          role: "Chairperson" },
+        { id: "wie-sec-21",   memberId: "akshara-bruno",      role: "Secretary" },
     ],
     "sight": [
-        { id: "sight-chair-21", name: "Neha Merin Jacob", role: "Chairperson", image: "/team/placeholder.jpg" },
-        { id: "sight-sec-21", name: "Esther B Susan", role: "Secretary", image: "/team/placeholder.jpg" },
+        { id: "sight-chair-21",memberId: "neha-merin-jacob",  role: "Chairperson" },
+        { id: "sight-sec-21",  memberId: "esther-b-susan",    role: "Secretary" },
     ],
 };

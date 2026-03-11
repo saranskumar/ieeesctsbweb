@@ -1,5 +1,6 @@
 import { chapters } from "@/lib/data/chapters";
 import { sbcTeams } from "@/lib/data/team";
+import { resolveEntry } from "@/lib/data/members";
 import { events } from "@/lib/data/events";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -201,7 +202,7 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
 
                     {sbcTeams[chapterId] ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {sbcTeams[chapterId].map((member, index) => (
+                            {sbcTeams[chapterId].map(resolveEntry).map((member, index) => (
                                 <div
                                     key={index}
                                     className="bg-card rounded-lg overflow-hidden border border-border hover:shadow-lg transition-all hover:-translate-y-1 group relative"

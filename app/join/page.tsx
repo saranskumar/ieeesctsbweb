@@ -16,7 +16,7 @@ export default function JoinPage() {
                 <div className="section-container relative z-10">
                     <div className="max-w-3xl mx-auto text-center">
                         <h1 className="text-4xl md:text-6xl font-heading font-bold text-foreground mb-6">
-                            Join the <span className="text-primary">IEEE SCT SB</span> Family
+                            Join the <span className="text-primary">IEEE SCT SB</span> Societies
                         </h1>
                         <p className="text-xl text-muted-foreground font-body leading-relaxed mb-8">
                             Be part of the world's largest technical professional organization. Connect, learn, and grow with a vibrant community of innovators.

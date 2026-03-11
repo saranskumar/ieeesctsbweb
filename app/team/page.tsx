@@ -10,58 +10,47 @@ import { execom20, sbcTeams20 } from "@/lib/data/team20";
 import { Mail, Linkedin, ChevronLeft, ChevronRight, User } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { TeamMember } from "@/lib/data/team";
+import { TeamEntry, resolveEntry } from "@/lib/data/members";
 
 // Map years to their respective data modules
-const teamData: Record<string, { execom: TeamMember[], sbcTeams: Record<string, TeamMember[]> }> = {
+const teamData: Record<string, { execom: TeamEntry[], sbcTeams: Record<string, TeamEntry[]> }> = {
     "2025": { execom: execom25, sbcTeams: sbcTeams25 },
     "2024": { execom: execom24, sbcTeams: sbcTeams24 },
     "2023": { execom: execom23, sbcTeams: sbcTeams23 },
     "2022": { execom: execom22, sbcTeams: sbcTeams22 },
     "2021": { execom: execom21, sbcTeams: sbcTeams21 },
     "2020": { execom: execom20, sbcTeams: sbcTeams20 },
-    // Add future years here
 };
 
-const availableYears = Object.keys(teamData).sort((a, b) => Number(b) - Number(a)); // ["2025", "2024"]
+const availableYears = Object.keys(teamData).sort((a, b) => Number(b) - Number(a));
 
 export default function TeamPage() {
     const [year, setYear] = useState<string>(availableYears[0]);
     const currentIndex = availableYears.indexOf(year);
 
     const handlePreviousYear = () => {
-        if (currentIndex < availableYears.length - 1) {
-            setYear(availableYears[currentIndex + 1]);
-        }
+        if (currentIndex < availableYears.length - 1) setYear(availableYears[currentIndex + 1]);
     };
-
     const handleNextYear = () => {
-        if (currentIndex > 0) {
-            setYear(availableYears[currentIndex - 1]);
-        }
+        if (currentIndex > 0) setYear(availableYears[currentIndex - 1]);
     };
 
-    const currentData = teamData[year];
-    const { execom, sbcTeams } = currentData;
+    const { execom, sbcTeams } = teamData[year];
 
-    const isFaculty = (role: string) => role.includes("Advisor") || role.includes("Counselor");
+    // Resolve TeamEntry → full profile from members registry
+    const resolved = execom.map(resolveEntry);
+    const resolvedSbc = Object.fromEntries(
+        Object.entries(sbcTeams).map(([k, v]) => [k, v.map(resolveEntry)])
+    );
 
-    const coreRoles = [
-        "Chairperson",
-        "Vice Chairperson",
-        "Secretary",
-        "Treasurer",
-        "Sub Treasurer",
-        "Link Representative",
-        "Webmaster",
-        "Activity Coordinator",
-        "Tech Head",
-        "Tech Lead"
-    ];
+    const isFaculty = (role: string) => /(advisor|counselor)/i.test(role);
 
-    const facultyTeam = execom.filter(member => isFaculty(member.role));
-    const coreTeam = execom.filter(member => coreRoles.includes(member.role) && !isFaculty(member.role));
-    const otherTeam = execom.filter(member => !coreRoles.includes(member.role) && !isFaculty(member.role));
+    const coreRoles = ["Chairperson","Vice Chairperson","Secretary","Treasurer","Sub Treasurer","Link Representative","Webmaster","Activity Coordinator","Tech Head","Tech Lead","LINK Representative"];
+
+    const facultyTeam = resolved.filter(m => isFaculty(m.role));
+    const coreTeam    = resolved.filter(m => coreRoles.includes(m.role) && !isFaculty(m.role));
+    const otherTeam   = resolved.filter(m => !coreRoles.includes(m.role) && !isFaculty(m.role));
+
 
     return (
         <>
@@ -141,13 +130,9 @@ export default function TeamPage() {
                                     </div>
                                     <div className="p-6">
                                         <h3 className="font-heading font-bold text-xl text-foreground mb-1">
-                                            {member.id.startsWith("past") ? (
-                                                <span>{member.name}</span>
-                                            ) : (
-                                                <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
-                                                    {member.name}
-                                                </Link>
-                                            )}
+                                            <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
+                                                {member.name}
+                                            </Link>
                                         </h3>
                                         <p className="text-sm font-secondary text-primary mb-4 font-medium">
                                             {member.role}
@@ -213,13 +198,9 @@ export default function TeamPage() {
                                     </div>
                                     <div className="p-6">
                                         <h3 className="font-heading font-bold text-xl text-foreground mb-1">
-                                            {member.id.startsWith("past") ? (
-                                                <span>{member.name}</span>
-                                            ) : (
-                                                <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
-                                                    {member.name}
-                                                </Link>
-                                            )}
+                                            <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
+                                                {member.name}
+                                            </Link>
                                         </h3>
                                         <p className="text-sm font-secondary text-primary mb-4 font-medium">
                                             {member.role}
@@ -285,13 +266,9 @@ export default function TeamPage() {
                                     </div>
                                     <div className="p-6">
                                         <h3 className="font-heading font-bold text-xl text-foreground mb-1">
-                                            {member.id.startsWith("past") ? (
-                                                <span>{member.name}</span>
-                                            ) : (
-                                                <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
-                                                    {member.name}
-                                                </Link>
-                                            )}
+                                            <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
+                                                {member.name}
+                                            </Link>
                                         </h3>
                                         <p className="text-sm font-secondary text-primary mb-4 font-medium">
                                             {member.role}
@@ -335,12 +312,12 @@ export default function TeamPage() {
             <section className="section-padding bg-background border-t border-border">
                 <div className="section-container">
                     <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-12 text-center">
-                        Our Families
+                        Our Societies
                     </h2>
 
                     <div className="space-y-16">
-                        {Object.keys(sbcTeams).length > 0 ? (
-                            Object.entries(sbcTeams).map(([chapterId, members]) => (
+                        {Object.keys(resolvedSbc).length > 0 ? (
+                            Object.entries(resolvedSbc).map(([chapterId, members]) => (
                                 <div key={chapterId}>
                                     <h3 className="text-2xl font-heading font-bold text-primary mb-8 border-l-4 border-primary pl-4 uppercase">
                                         {chapterId} Execom
@@ -364,13 +341,9 @@ export default function TeamPage() {
                                                 </div>
                                                 <div className="p-6">
                                                     <h3 className="font-heading font-bold text-xl text-foreground mb-1">
-                                                        {member.id.startsWith("past") ? (
-                                                            <span>{member.name}</span>
-                                                        ) : (
-                                                            <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
-                                                                {member.name}
-                                                            </Link>
-                                                        )}
+                                                        <Link href={`/members/${member.id}`} className="after:absolute after:inset-0">
+                                                            {member.name}
+                                                        </Link>
                                                     </h3>
                                                     <p className="text-sm font-secondary text-primary mb-4 font-medium">
                                                         {member.role}
