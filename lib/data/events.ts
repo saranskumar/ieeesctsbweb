@@ -13,11 +13,12 @@ export interface Event {
     eligibility?: string;
     rules?: string[];
     gallery?: string[]; // Array of poster images
+    order: number; // Manual sorting order
 }
 
 export const events: Event[] = [
     {
-        id: "ev-1",
+        id: "techtalk-ai-in-healthcare",
         title: "TechTalk: AI in Healthcare",
         date: "March 15, 2026",
         time: "3:00 PM - 5:00 PM",
@@ -29,10 +30,11 @@ export const events: Event[] = [
         speakers: ["Dr. Sarah Chen - AI Research Lead", "Prof. Michael Roberts - Healthcare Innovation"],
         eligibility: "Open to all IEEE members and students",
         rules: ["Registration required", "Certificate will be provided", "Q&A session at the end"],
-        gallery: ["/placeholder.svg", "/placeholder.svg", "/placeholder.svg"]
+        gallery: ["/placeholder.svg", "/placeholder.svg", "/placeholder.svg"],
+        order: 1,
     },
     {
-        id: "ev-2",
+        id: "iot-workshop",
         title: "IoT Workshop",
         date: "March 22, 2026",
         time: "10:00 AM - 4:00 PM",
@@ -45,10 +47,11 @@ export const events: Event[] = [
         speakers: ["Eng. David Park - IoT Specialist"],
         eligibility: "Basic programming knowledge required",
         rules: ["Bring your own laptop", "Materials will be provided", "Limited seats available"],
-        gallery: ["/placeholder.svg", "/placeholder.svg"]
+        gallery: ["/placeholder.svg", "/placeholder.svg"],
+        order: 2,
     },
     {
-        id: "ev-3",
+        id: "renewable-energy-seminar",
         title: "Renewable Energy Seminar",
         date: "April 5, 2026",
         time: "10:00 AM - 1:00 PM",
@@ -61,9 +64,10 @@ export const events: Event[] = [
         speakers: ["Dr. Emily White - Renewable Energy Expert"],
         eligibility: "Open to all students",
         rules: ["Registration required", "Certificate will be provided"],
+        order: 3,
     },
     {
-        id: "ev-4",
+        id: "women-in-tech-summit",
         title: "Women in Tech Summit",
         date: "April 15, 2026",
         time: "9:00 AM - 5:00 PM",
@@ -76,10 +80,11 @@ export const events: Event[] = [
         speakers: ["Jane Doe - CTO at Tech Corp", "Alice Smith - Founder of StartUp"],
         eligibility: "Open to all",
         rules: ["Registration required", "Networking session included"],
-        gallery: ["/placeholder.svg", "/placeholder.svg", "/placeholder.svg", "/placeholder.svg"]
+        gallery: ["/placeholder.svg", "/placeholder.svg", "/placeholder.svg", "/placeholder.svg"],
+        order: 4,
     },
     {
-        id: "ev-5",
+        id: "industrial-automation-expo",
         title: "Industrial Automation Expo",
         date: "May 10, 2026",
         time: "10:00 AM - 6:00 PM",
@@ -91,9 +96,10 @@ export const events: Event[] = [
         chapterId: "ias",
         eligibility: "Open to all engineering students",
         rules: ["ID card mandatory", "Formal dress code"],
+        order: 5,
     },
     {
-        id: "ev-6",
+        id: "5g-and-beyond",
         title: "5G & Beyond",
         date: "May 20, 2026",
         time: "4:00 PM - 6:00 PM",
@@ -105,9 +111,10 @@ export const events: Event[] = [
         speakers: ["Dr. Alan Turing (AI Persona)"],
         eligibility: "Open to IEEE Members",
         rules: ["Webinar link will be shared via email"],
+        order: 6,
     },
     {
-        id: "ev-7",
+        id: "biomedical-engineering-trends",
         title: "Biomedical Engineering Trends",
         date: "June 1, 2026",
         time: "2:00 PM - 4:00 PM",
@@ -119,9 +126,10 @@ export const events: Event[] = [
         chapterId: "embs",
         speakers: ["Dr. House"],
         eligibility: "Biomedical students preferred",
+        order: 7,
     },
     {
-        id: "ev-8",
+        id: "community-outreach",
         title: "Community Outreach",
         date: "June 15, 2026",
         time: "9:00 AM - 12:00 PM",
@@ -133,5 +141,21 @@ export const events: Event[] = [
         chapterId: "sight",
         eligibility: "Volunteers restricted to IEEE members",
         rules: ["Volunteers must attend briefing session"],
+        order: 8,
+    },
+    {
+        id: "yesnd",
+        title: "yesnd",
+        date: "May 20, 2026",
+        time: "4:00 PM - 6:00 PM",
+        mode: "Online",
+        status: "Upcoming",
+        description: "Deep dive into the future of communication technologies. Understanding the architecture and potential applications of 6G.",
+        image: "/placeholder.svg",
+        chapterId: "comsoc",
+        speakers: ["Dr. Alan Turing (AI Persona)"],
+        eligibility: "Open to IEEE Members",
+        rules: ["Webinar link will be shared via email"],
+        order: 9,
     },
 ];

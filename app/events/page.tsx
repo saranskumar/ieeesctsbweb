@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { events } from "@/lib/data/events";
 
 export default function EventsPage() {
-  const upcomingEvents = events.filter(
+  const sortedEvents = [...events].sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  const upcomingEvents = sortedEvents.filter(
     (e) => e.status === "Upcoming" || e.status === "Registration Open"
   );
   
-  const pastEvents = events.filter((e) => e.status === "Completed");
+  const pastEvents = sortedEvents.filter((e) => e.status === "Completed");
 
   return (
     <>
@@ -98,7 +100,7 @@ export default function EventsPage() {
                           className="w-full font-secondary text-base py-6"
                           variant={event.status === "Registration Open" ? "default" : "secondary"}
                         >
-                          <Link href={`/events/${event.id}`}>
+                          <Link href={`/${event.id}`}>
                             {event.status === "Registration Open" ? "Register Now" : "View Details"}
                           </Link>
                         </Button>
@@ -155,7 +157,7 @@ export default function EventsPage() {
                           <span className="font-body">{event.date}</span>
                         </div>
                         <Button asChild variant="outline" className="w-full font-secondary">
-                          <Link href={`/events/${event.id}`}>View Gallery & Details</Link>
+                          <Link href={`/${event.id}`}>View Gallery & Details</Link>
                         </Button>
                       </div>
                     </div>

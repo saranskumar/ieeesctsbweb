@@ -182,8 +182,8 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                                                 </span>
                                             </div>
                                         </div>
-                                        <Button asChild className="w-full font-secondary" variant="outline">
-                                            <Link href={`/events/${event.id}`}>View Details</Link>
+                                        <Button asChild variant="outline" size="sm" className="w-full sm:w-auto font-secondary">
+                                            <Link href={`/${event.id}`}>View Details</Link>
                                         </Button>
                                     </div>
                                 </div>

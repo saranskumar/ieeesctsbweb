@@ -7,13 +7,15 @@ const EventsSection = () => {
   // Sort events by date (this is a simple string sort for now, better to use real dates if available)
   // For now, we rely on the order in the events array or implement a basic filter
   
-  const upcomingEvents = events
+  const sortedEvents = [...events].sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  const upcomingEvents = sortedEvents
     .filter(e => e.status === "Upcoming" || e.status === "Registration Open")
     .slice(0, 3);
     
   // Since all events in dummy data are "Upcoming" or "Registration Open",
   // let's just create a fallback past events list to show the UI if there are no completed ones
-  let pastEvents = events
+  let pastEvents = sortedEvents
     .filter(e => e.status === "Completed")
     .slice(0, 3);
 
@@ -25,21 +27,21 @@ const EventsSection = () => {
           title: "Annual Tech Fest 2025",
           date: "December 2025",
           image: "/placeholder.svg",
-          time: "", mode: "Offline", status: "Completed", description: ""
+          time: "", mode: "Offline", status: "Completed", description: "", order: 0
         },
         {
           id: "past-2",
           title: "Python Bootcamp",
           date: "November 2025",
           image: "/placeholder.svg",
-          time: "", mode: "Offline", status: "Completed", description: ""
+          time: "", mode: "Offline", status: "Completed", description: "", order: 0
         },
         {
           id: "past-3",
           title: "Industry Connect",
           date: "October 2025",
           image: "/placeholder.svg",
-          time: "", mode: "Offline", status: "Completed", description: ""
+          time: "", mode: "Offline", status: "Completed", description: "", order: 0
         },
       ];
   }
@@ -103,7 +105,7 @@ const EventsSection = () => {
                     </div>
                   </div>
                   <Button asChild className="w-full font-secondary" size="sm" variant={event.status === 'Registration Open' ? 'default' : 'outline'}>
-                    <Link href={`/events/${event.id}`}>
+                    <Link href={`/${event.id}`}>
                       {event.status === 'Registration Open' ? 'Register Now' : 'View Details'}
                     </Link>
                   </Button>

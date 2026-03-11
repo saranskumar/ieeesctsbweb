@@ -11,9 +11,11 @@ import { Mail, Linkedin, ChevronLeft, ChevronRight, User } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { TeamEntry, resolveEntry } from "@/lib/data/members";
+import { execom26, sbcTeams26 } from "@/lib/data/team26";
 
 // Map years to their respective data modules
 const teamData: Record<string, { execom: TeamEntry[], sbcTeams: Record<string, TeamEntry[]> }> = {
+    "2026": { execom: execom26, sbcTeams: sbcTeams26 },
     "2025": { execom: execom25, sbcTeams: sbcTeams25 },
     "2024": { execom: execom24, sbcTeams: sbcTeams24 },
     "2023": { execom: execom23, sbcTeams: sbcTeams23 },
