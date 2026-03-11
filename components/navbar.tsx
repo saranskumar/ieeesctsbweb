@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const navLinks = [
     { name: "Home", path: "/" },
@@ -19,15 +17,44 @@ const navLinks = [
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
+    const touchStartY = useRef<number | null>(null);
 
     const isActive = (path: string) => pathname === path;
 
+    // Swipe down on the whole nav to open, swipe up to close
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartY.current === null) return;
+        const delta = e.changedTouches[0].clientY - touchStartY.current;
+        if (delta > 30) setIsOpen(true);
+        else if (delta < -20) setIsOpen(false);
+        touchStartY.current = null;
+    };
+
     return (
-        <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
+        <nav
+            className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border"
+        >
             <div className="w-full px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16 md:h-20 relative">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-3">
+                {/* The bar row — entire row is tappable on mobile */}
+                <div
+                    className="flex items-center justify-between h-16 md:h-20 relative md:cursor-default cursor-pointer select-none"
+                    onClick={() => {
+                        // Only toggle on mobile widths
+                        if (window.innerWidth < 768) setIsOpen((prev) => !prev);
+                    }}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                >
+                    {/* Logo — stop click so tapping logo navigates, not toggles */}
+                    <Link
+                        href="/"
+                        className="flex items-center gap-3"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0">
                             <img
                                 src="/logo.png"
@@ -35,11 +62,11 @@ const Navbar = () => {
                                 className="w-full h-full object-contain"
                             />
                         </div>
-                        <div className="hidden sm:block">
-                            <p className="font-heading font-semibold text-foreground text-sm md:text-base">
+                        <div className="hidden sm:flex flex-col gap-0">
+                            <p className="font-heading font-semibold text-foreground text-sm md:text-base leading-none">
                                 IEEE SCT
                             </p>
-                            <p className="text-xs text-muted-foreground font-secondary">
+                            <p className="text-xs text-muted-foreground font-secondary leading-none mt-0.5">
                                 Student Branch
                             </p>
                         </div>
@@ -51,64 +78,62 @@ const Navbar = () => {
                             <Link
                                 key={link.path}
                                 href={link.path}
-                                className={`px-4 py-2 rounded-md text-sm font-medium font-secondary transition-colors ${isActive(link.path)
-                                    ? "bg-primary text-primary-foreground"
-                                    : "text-foreground hover:bg-secondary"
-                                    }`}
+                                onClick={(e) => e.stopPropagation()}
+                                className={`px-4 py-2 rounded-md text-sm font-medium font-secondary transition-colors ${
+                                    isActive(link.path)
+                                        ? "bg-primary text-primary-foreground"
+                                        : "text-foreground hover:bg-secondary"
+                                }`}
                             >
                                 {link.name}
                             </Link>
                         ))}
-                        <Button asChild variant="default" size="sm" className="ml-2 font-secondary">
-                            <Link href="/join">Join</Link>
-                        </Button>
                     </div>
 
-                    {/* Right Side: Logo, Mobile Menu */}
-                    <div className="flex items-center gap-4">
-                        <div className="relative w-auto h-10 md:h-14 flex-shrink-0">
+                    {/* Right Side: IEEE Logo */}
+                    <div className="flex items-center">
+                        <div className="relative w-auto h-7 md:h-9 flex-shrink-0">
                             <img
-                                src="/ieee_logo.png"
+                                src="/ieee_black.png"
                                 alt="IEEE Logo"
                                 className="w-full h-full object-contain"
                             />
                         </div>
-
-                        {/* Mobile Menu Button */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="md:hidden"
-                            onClick={() => setIsOpen(!isOpen)}
-                            aria-label="Toggle menu"
-                        >
-                            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </Button>
                     </div>
                 </div>
 
-                {/* Mobile Navigation */}
-                {isOpen && (
-                    <div className="md:hidden py-4 border-t border-border">
-                        <div className="flex flex-col gap-2">
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.path}
-                                    href={link.path}
-                                    onClick={() => setIsOpen(false)}
-                                    className={`px-4 py-3 rounded-md text-sm font-medium font-secondary transition-colors ${isActive(link.path)
+                {/* Mobile pull-down navigation panel */}
+                <div
+                    className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+                        isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                >
+                    {/* Drag handle visual */}
+                    <div className="flex justify-center py-2">
+                        <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
+                    </div>
+                    <div className="flex flex-col gap-1 pb-4">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.path}
+                                href={link.path}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsOpen(false);
+                                }}
+                                className={`px-4 py-3 rounded-md text-sm font-medium font-secondary transition-colors ${
+                                    isActive(link.path)
                                         ? "bg-primary text-primary-foreground"
                                         : "text-foreground hover:bg-secondary"
-                                        }`}
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
-                        </div>
+                                }`}
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
                     </div>
-                )}
+                </div>
             </div>
-        </nav >
+        </nav>
     );
 };
 

@@ -1,45 +1,12 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { execom } from "@/lib/data/team";
 
-const execomMembers = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    role: "Chairperson",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 2,
-    name: "Sarah Williams",
-    role: "Vice Chairperson",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 3,
-    name: "Michael Chen",
-    role: "Secretary",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 4,
-    name: "Emily Davis",
-    role: "Treasurer",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 5,
-    name: "David Kumar",
-    role: "Technical Lead",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 6,
-    name: "Priya Sharma",
-    role: "Webmaster",
-    image: "/placeholder.svg",
-  },
-];
+// Filter out faculty advisors/counselors — show only student execom
+const coreMembers = execom.filter(
+  (m) => !/(advisor|counselor)/i.test(m.role)
+);
 
 const ExecomSection = () => {
   return (
@@ -62,8 +29,8 @@ const ExecomSection = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {execomMembers.map((member, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+          {coreMembers.map((member, index) => (
             <div
               key={member.id}
               className="text-center"
@@ -72,7 +39,7 @@ const ExecomSection = () => {
               <div className="relative mb-4">
                 <div className="aspect-square rounded-lg overflow-hidden bg-muted">
                   <img
-                    src={member.image}
+                    src={member.image ?? "/team/placeholder.jpg"}
                     alt={member.name}
                     className="w-full h-full object-cover"
                   />

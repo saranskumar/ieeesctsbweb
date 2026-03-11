@@ -24,16 +24,25 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="py-12 md:py-16 bg-background">
         <div className="section-container">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">
-              IEEE SCT SB
-            </h1>
-            <p className="text-lg text-muted-foreground font-body leading-relaxed mb-4">
-              IEEE started off in Sree Chitra Thirunal College Of Engineering with the registration of members on 23rd October 2009 with 30 members in its first phase. An IEEE students chapter was formulated and an IEEE student committee was formed. The Student Branch is one of the top 10 SBs in the Travancore Hub. Sree Chitra Thirunal College Of Engineering is one of the leading engineering colleges in Thiruvananthapuram, Kerala.
-            </p>
-            <div className="flex flex-col gap-2 text-muted-foreground font-body">
-              <p><span className="font-semibold text-foreground">Founded:</span> 2009</p>
-              <p><span className="font-semibold text-foreground">Current Strength:</span> 117 Members</p>
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">
+                IEEE SCT SB
+              </h1>
+              <p className="text-lg text-muted-foreground font-body leading-relaxed mb-4">
+                IEEE started off in Sree Chitra Thirunal College Of Engineering with the registration of members on 23rd October 2009 with 30 members in its first phase. An IEEE students chapter was formulated and an IEEE student committee was formed. The Student Branch is one of the top 10 SBs in the Travancore Hub. Sree Chitra Thirunal College Of Engineering is one of the leading engineering colleges in Thiruvananthapuram, Kerala.
+              </p>
+              <div className="flex flex-col gap-2 text-muted-foreground font-body">
+                <p><span className="font-semibold text-foreground">Founded:</span> 2009</p>
+                <p><span className="font-semibold text-foreground">Current Strength:</span> 117 Members</p>
+              </div>
+            </div>
+            <div className="flex justify-center items-center">
+              <img
+                src="/sctsb.gif"
+                alt="IEEE SCT Student Branch"
+                className="max-w-full h-auto rounded-xl"
+              />
             </div>
           </div>
         </div>
@@ -59,7 +68,7 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="mt-8 space-y-6">
+              <div className="mt-8 grid sm:grid-cols-2 gap-6">
                 <div>
                   <h3 className="text-xl font-heading font-bold text-foreground mb-2">Mission</h3>
                   <p className="text-muted-foreground font-body leading-relaxed">

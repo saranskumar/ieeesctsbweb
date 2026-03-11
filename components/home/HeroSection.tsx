@@ -30,7 +30,7 @@ const HeroSection = () => {
             {/* Subtitle */}
             <p className="text-lg md:text-xl text-muted-foreground font-body max-w-2xl mx-auto mb-10 leading-relaxed">
               Empowering future engineers and technologists through innovation,
-              collaboration, and professional development since 2008.
+              collaboration, and professional development since 2009.
             </p>
 
             {/* CTA */}

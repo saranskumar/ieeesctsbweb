@@ -135,12 +135,7 @@ export const execom25: TeamMember[] = [
         role: "MD Coordinator",
         image: "/team/placeholder.jpg",
     },
-    {
-        id: "mdc-2-25",
-        name: "Ron John Kurien",
-        role: "MD Coordinator",
-        image: "/team/placeholder.jpg",
-    },
+
 ];
 
 export const sbcTeams25: Record<string, TeamMember[]> = {
