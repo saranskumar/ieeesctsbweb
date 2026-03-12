@@ -1,31 +1,11 @@
-export interface WebTeamMember {
-    id: string;
-    name: string;
-    role: string;
-    image: string;
-    linkedin?: string;
-    github?: string;
-    portfolio?: string;
-}
+import { TeamEntry } from "./members";
 
-export const webTeam: WebTeamMember[] = [
-    {
-        id: "saran-s-kumar",
-        name: "Saran S Kumar",
-        role: "Web Team",
-        image: "/person.svg",
-        github: "https://github.com/saran",
-    },
-    {
-        id: "mahreen-zuraiq",
-        name: "Mahreen Zuraiq",
-        role: "Web Team",
-        image: "/person.svg",
-    },
-    {
-        id: "harisankar-prasad",
-        name: "Harisankar Prasad",
-        role: "Web Team",
-        image: "/person.svg",
-    },
+/**
+ * Web Team Configuration
+ * List of members from the central registry who are part of the web development team.
+ */
+export const webTeam: TeamEntry[] = [
+    { id: "web-dev-1",     memberId: "saranskumar",     role: "Web Team Lead" },
+    { id: "web-dev-2",     memberId: "mahreen-zuraiq",  role: "" },
+    { id: "web-dev-3",     memberId: "hari-narayanan-s",  role: "" },
 ];

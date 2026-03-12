@@ -142,6 +142,12 @@ export const members: Record<string, MemberProfile> = {
         image: "/members/alfy-joseph-kunjumon.jpeg",
         batch: "2026",
     },
+    "hari-narayanan-s": {
+        id: "hari-narayanan-s",
+        name: "Hari Narayanan S",
+        image: "/person.svg",
+        batch: "2027",
+    },
     "sneha-bijee": {
         id: "sneha-bijee",
         name: "Sneha Bijee",

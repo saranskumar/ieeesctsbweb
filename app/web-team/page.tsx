@@ -1,55 +1,61 @@
 import { webTeam } from "@/lib/data/web-team";
-import { Github, Linkedin, Globe, Code } from "lucide-react";
+import { resolveEntry } from "@/lib/data/members";
+import { Github, Linkedin, Globe, Code, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function WebTeamPage() {
+    const resolvedTeam = webTeam.map(resolveEntry);
+
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="py-12 md:py-16 bg-background relative overflow-hidden text-center">
+            <section className="py-20 md:py-28 bg-background relative overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-2xl -translate-x-1/2 translate-y-1/2"></div>
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 via-primary/5 to-transparent rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 animate-pulse"></div>
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-secondary/10 via-secondary/5 to-transparent rounded-full blur-[100px] -translate-x-1/4 translate-y-1/4"></div>
                 </div>
 
                 <div className="section-container relative z-10 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-8 border border-primary/20 backdrop-blur-sm">
                         <Code className="w-4 h-4" />
-                        <span>Behind the Code</span>
+                        <span>Development Force</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">
-                        Meet the <span className="text-primary">Web Team</span>
+                    <h1 className="text-5xl md:text-7xl font-heading font-black text-foreground mb-8 tracking-tight">
+                        The <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">Architects</span> of Digital Experience
                     </h1>
-                    <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto leading-relaxed">
-                        The creative minds and technical wizards who designed and developed the IEEE SCT SB website. Passionate about pixels, code, and community.
+                    <p className="text-xl text-muted-foreground font-body max-w-2xl mx-auto leading-relaxed opacity-80">
+                        Bridging innovation and implementation. We build the interfaces that connect our community to the world of technology.
                     </p>
                 </div>
             </section>
 
             {/* Team Grid */}
-            <section className="section-padding bg-background">
+            <section className="pb-24 bg-background">
                 <div className="section-container">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {webTeam.map((member) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {resolvedTeam.map((member, index) => (
                             <div
                                 key={member.id}
-                                className="group bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+                                className="group relative bg-card rounded-2xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 translate-y-0 hover:-translate-y-3"
+                                style={{ transitionDelay: `${index * 50}ms` }}
                             >
-                                <div className="aspect-square relative overflow-hidden bg-muted">
+                                <div className="aspect-[4/5] relative overflow-hidden bg-muted">
                                     <img
                                         src={member.image}
                                         alt={member.name}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                                        <div className="flex gap-4">
+                                    
+                                    {/* Glass Overlay on Hover */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
+                                        <div className="flex gap-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                                             {member.linkedin && (
                                                 <a
                                                     href={member.linkedin}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-white hover:text-primary transition-colors"
+                                                    className="p-2 rounded-full bg-white/10 hover:bg-primary hover:text-white backdrop-blur-md text-white transition-all border border-white/20"
                                                     aria-label={`${member.name}'s LinkedIn`}
                                                 >
                                                     <Linkedin className="w-5 h-5" />
@@ -60,18 +66,18 @@ export default function WebTeamPage() {
                                                     href={member.github}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-white hover:text-primary transition-colors"
+                                                    className="p-2 rounded-full bg-white/10 hover:bg-primary hover:text-white backdrop-blur-md text-white transition-all border border-white/20"
                                                     aria-label={`${member.name}'s GitHub`}
                                                 >
                                                     <Github className="w-5 h-5" />
                                                 </a>
                                             )}
-                                            {member.portfolio && (
+                                            {member.website && (
                                                 <a
-                                                    href={member.portfolio}
+                                                    href={member.website}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-white hover:text-primary transition-colors"
+                                                    className="p-2 rounded-full bg-white/10 hover:bg-primary hover:text-white backdrop-blur-md text-white transition-all border border-white/20"
                                                     aria-label={`${member.name}'s Portfolio`}
                                                 >
                                                     <Globe className="w-5 h-5" />
@@ -80,13 +86,18 @@ export default function WebTeamPage() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="p-6">
-                                    <h3 className="text-xl font-heading font-bold text-foreground mb-1">
+                                <div className="p-6 border-t border-border/50 bg-card/50 backdrop-blur-sm">
+                                    <h3 className="text-xl font-heading font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
                                         {member.name}
                                     </h3>
-                                    <p className="text-sm font-secondary text-primary font-medium">
+                                    <p className="text-sm font-secondary text-primary/80 font-semibold tracking-wider uppercase">
                                         {member.role}
                                     </p>
+                                    {member.department && (
+                                        <p className="text-xs text-muted-foreground mt-2 font-body italic">
+                                            {member.department}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -94,18 +105,29 @@ export default function WebTeamPage() {
                 </div>
             </section>
 
-            {/* Tech Stack / CTA */}
-            <section className="section-padding bg-muted/30 border-t border-border">
-                <div className="section-container text-center">
-                    <h2 className="text-2xl font-heading font-bold text-foreground mb-4">
-                        Interested in Web Development?
+            {/* CTA Section */}
+            <section className="py-24 bg-muted/20 border-t border-border/50 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+                <div className="section-container relative z-10 text-center">
+                    <h2 className="text-3xl md:text-5xl font-heading font-black text-foreground mb-6">
+                        Build the Future <span className="text-primary italic">With Us</span>
                     </h2>
-                    <p className="text-muted-foreground font-body mb-8 max-w-lg mx-auto">
-                        Join the IEEE SCT SB Web Team to learn, build, and contribute to real-world projects.
+                    <p className="text-lg text-muted-foreground font-body mb-10 max-w-xl mx-auto opacity-90">
+                        We're always looking for passionate developers, designers, and tech enthusiasts to join our creative collective.
                     </p>
-                    <Button asChild size="lg" className="font-secondary">
-                        <Link href="/contact?subject=Joining%20the%20Web%20Team">Join the Team</Link>
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <Button asChild size="lg" className="font-bold px-8 h-14 text-lg rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all group">
+                            <Link href="/contact?subject=Joining%20the%20Web%20Team" className="flex items-center gap-2">
+                                Join the Squad
+                                <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" size="lg" className="font-bold px-8 h-14 text-lg rounded-full border-2 hover:bg-background/80 transition-all">
+                            <Link href="https://github.com/ieeesctsb" target="_blank">
+                                View Open Source
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </section>
         </div>
