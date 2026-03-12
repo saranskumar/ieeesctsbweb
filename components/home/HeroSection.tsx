@@ -64,7 +64,7 @@ const HeroSection = () => {
                 About IEEE SCT SB
               </h3>
               <p className="text-muted-foreground font-body text-sm leading-relaxed">
-                Established in 2008, IEEE SCT Student Branch has been fostering technical
+                Established in 2009, IEEE SCT Student Branch has been fostering technical
                 excellence and professional growth among students at SCT College of Engineering.
               </p>
             </div>

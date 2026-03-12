@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { chapters } from "@/lib/data/chapters";
 import type { Metadata } from "next";
+import { AnimatedNumber } from "@/components/animated-number";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -8,14 +9,15 @@ export const metadata: Metadata = {
 };
 
 const timelineEvents = [
-  { year: "2009", milestone: "IEEE SCT Student Branch established on October 23rd" },
-  { year: "2010", milestone: "First technical symposium organized" },
-  { year: "2013", milestone: "Computer Society chapter inaugurated" },
-  { year: "2015", milestone: "Women in Engineering affinity group formed" },
-  { year: "2019", milestone: "10th Anniversary celebrations" },
-  { year: "2020", milestone: "Robotics and Automation Society chapter launched" },
-  { year: "2024", milestone: "15th Anniversary milestone achieved" },
-  { year: "2025", milestone: "Best Student Branch Award - Kerala Section" },
+  { year: "2009", milestone: "Formation Of SB, October 23" },
+  { year: "2011", milestone: "Women in Engineering (WIE) Affinity Group inaugurated" },
+  { year: "2015", milestone: "Robotics and Automation Society (RAS) inaugurated" },
+  { year: "2015", milestone: "Special Interest Group on Humanitarian Technology (SIGHT) launched" },
+  { year: "2017", milestone: "Computer Society (CS) inaugurated" },
+  { year: "2019", milestone: "Industry Applications Society (IAS) inaugurated" },
+  { year: "2019", milestone: "Power and Energy Society (PES) inaugurated" },
+  { year: "2025", milestone: "Communications Society (ComSoc) inaugurated" },
+  { year: "2025", milestone: "Engineering in Medicine and Biology Society (EMBS) inaugurated" },
 ];
 
 export default function AboutPage() {
@@ -34,7 +36,10 @@ export default function AboutPage() {
               </p>
               <div className="flex flex-col gap-2 text-muted-foreground font-body">
                 <p><span className="font-semibold text-foreground">Founded:</span> 2009</p>
-                <p><span className="font-semibold text-foreground">Current Strength:</span> 117 Members</p>
+                <p>
+                  <span className="font-semibold text-foreground">Current Strength:</span>{" "}
+                  <AnimatedNumber value={253} duration={2000} /> Members
+                </p>
               </div>
             </div>
             <div className="flex justify-center items-center">
@@ -69,15 +74,23 @@ export default function AboutPage() {
               </div>
 
               <div className="mt-8 grid sm:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-xl font-heading font-bold text-foreground mb-2">Mission</h3>
-                  <p className="text-muted-foreground font-body leading-relaxed">
+                <div className="bg-background rounded-xl p-6 border border-border shadow-sm hover:shadow-md transition-all hover:-translate-y-1 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-8 -mt-8 transition-transform group-hover:scale-150 duration-500"></div>
+                  <h3 className="text-xl font-heading font-bold text-primary mb-3 relative z-10 flex items-center gap-2">
+                     <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+                     Mission
+                  </h3>
+                  <p className="text-muted-foreground font-body leading-relaxed text-sm relative z-10">
                     IEEE's core purpose is to foster technological innovation and excellence for the benefit of humanity.
                   </p>
                 </div>
-                <div>
-                  <h3 className="text-xl font-heading font-bold text-foreground mb-2">Vision</h3>
-                  <p className="text-muted-foreground font-body leading-relaxed">
+                <div className="bg-background rounded-xl p-6 border border-border shadow-sm hover:shadow-md transition-all hover:-translate-y-1 relative overflow-hidden group">
+                   <div className="absolute bottom-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-8 -mb-8 transition-transform group-hover:scale-150 duration-500"></div>
+                  <h3 className="text-xl font-heading font-bold text-primary mb-3 relative z-10 flex items-center gap-2">
+                      <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+                      Vision
+                  </h3>
+                  <p className="text-muted-foreground font-body leading-relaxed text-sm relative z-10">
                     IEEE will be essential to the global technical community and to technical professionals everywhere, and be universally recognized for the contributions of technology and of technical professionals in improving global conditions.
                   </p>
                 </div>
@@ -86,19 +99,27 @@ export default function AboutPage() {
             <div className="card-ieee p-8">
               <div className="grid grid-cols-2 gap-6 text-center">
                 <div>
-                  <p className="text-4xl font-heading font-bold text-primary mb-2">400K+</p>
+                  <p className="text-4xl font-heading font-bold text-primary mb-2">
+                    <AnimatedNumber value={400} suffix="K+" duration={1500} />
+                  </p>
                   <p className="text-sm text-muted-foreground font-body">Members Worldwide</p>
                 </div>
                 <div>
-                  <p className="text-4xl font-heading font-bold text-primary mb-2">160+</p>
+                  <p className="text-4xl font-heading font-bold text-primary mb-2">
+                    <AnimatedNumber value={160} suffix="+" duration={1200} />
+                  </p>
                   <p className="text-sm text-muted-foreground font-body">Countries</p>
                 </div>
                 <div>
-                  <p className="text-4xl font-heading font-bold text-primary mb-2">39</p>
+                  <p className="text-4xl font-heading font-bold text-primary mb-2">
+                    <AnimatedNumber value={39} duration={1000} />
+                  </p>
                   <p className="text-sm text-muted-foreground font-body">Technical Societies</p>
                 </div>
                 <div>
-                  <p className="text-4xl font-heading font-bold text-primary mb-2">1884</p>
+                  <p className="text-4xl font-heading font-bold text-primary mb-2">
+                    <AnimatedNumber value={1884} duration={2000} />
+                  </p>
                   <p className="text-sm text-muted-foreground font-body">Founded</p>
                 </div>
               </div>
@@ -120,7 +141,7 @@ export default function AboutPage() {
 
               {timelineEvents.map((event, index) => (
                 <div
-                  key={event.year}
+                  key={index}
                   className={`relative flex items-center gap-6 mb-8 ${index % 2 === 0 ? "md:flex-row-reverse" : ""
                     }`}
                 >

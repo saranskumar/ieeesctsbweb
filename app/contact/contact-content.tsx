@@ -111,10 +111,10 @@ export default function ContactContent() {
                                             Email
                                         </h3>
                                         <a
-                                            href="mailto:ieeesctsb@gmail.com"
+                                            href="mailto:mailtoieeesctsb@gmail.com"
                                             className="text-primary hover:underline font-body"
                                         >
-                                            ieeesctsb@gmail.com
+                                            mailtoieeesctsb@gmail.com
                                         </a>
                                     </div>
                                 </div>

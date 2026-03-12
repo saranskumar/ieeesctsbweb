@@ -13,7 +13,7 @@ interface ChapterDetailProps {
 
 export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
     const chapter = chapters.find((c) => c.id === chapterId);
-    const chapterEvents = events.filter((e) => e.chapterId === chapterId);
+    const chapterEvents = events.filter((e) => e.chapterId === chapterId || e.collaborators?.includes(chapterId));
 
     if (!chapter) {
         notFound();
@@ -48,9 +48,16 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                             )}
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-heading font-bold text-foreground mb-2">
-                                {chapter.name}
-                            </h1>
+                            <div className="flex items-center gap-4 mb-2">
+                                <h1 className="text-3xl md:text-5xl font-heading font-bold text-foreground">
+                                    {chapter.name}
+                                </h1>
+                                {chapter.members && (
+                                    <span className="bg-primary/10 text-primary text-sm font-semibold px-3 py-1.5 rounded-full mt-1">
+                                        {chapter.members} Members
+                                    </span>
+                                )}
+                            </div>
                             <p className="text-xl md:text-2xl text-muted-foreground font-body">
                                 {chapter.fullName}
                             </p>

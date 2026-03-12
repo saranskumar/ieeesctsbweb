@@ -9,6 +9,7 @@ export interface Event {
     description: string;
     image: string;
     chapterId?: string; // Optional: if null/undefined, it could be a main SB event
+    collaborators?: string[]; // Array of chapter IDs that co-hosted the event
     speakers?: string[];
     eligibility?: string;
     rules?: string[];
@@ -127,6 +128,7 @@ export const events: Event[] = [
         description: "A two-day initiative featuring a hands-on workshop on cell culturing techniques, followed by an Agar Art Competition. Provided practical insights into aseptic practices and cell culture fundamentals.",
         image: "/placeholder.svg",
         chapterId: "embs",
+        collaborators: ["sight"],
         order: 9,
     },
     {

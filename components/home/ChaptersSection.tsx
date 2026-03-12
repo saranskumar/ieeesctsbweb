@@ -37,11 +37,18 @@ const ChaptersSection = () => {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-heading font-bold text-xl text-primary">
-                  {chapter.name}
-                </h3>
-                <ArrowRight className="w-4 h-4 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-heading font-bold text-xl text-primary">
+                    {chapter.name}
+                  </h3>
+                  <ArrowRight className="w-4 h-4 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                </div>
+                {chapter.members && (
+                    <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded-md">
+                        {chapter.members} Members
+                    </span>
+                )}
               </div>
               <p className="text-sm font-secondary text-foreground mb-2">
                 {chapter.fullName}

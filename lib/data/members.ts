@@ -33,6 +33,7 @@ export interface MemberProfile {
     // Profile
     bio?: string;
     awards?: string[];
+    pastRoles?: { role: string; year: string }[];
 }
 
 /**
@@ -261,7 +262,10 @@ export const members: Record<string, MemberProfile> = {
         instagram: "https://instagram.com/saraan.___",
         website: "https://saranskumar.live",
         email: "saranskumarwh@gmail.com",
-    
+        pastRoles: [
+            { role: "IEEE XTREME 19.0 Campus Ambassador", year: "2025" },
+            { role: "IEEE COMSOC KC WEBMASTER", year: "2026" }
+        ],
     },
     "riya-mary-sajan": {
         id: "riya-mary-sajan",

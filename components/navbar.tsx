@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const navLinks = [
     { name: "Home", path: "/" },
@@ -78,7 +79,7 @@ const Navbar = () => {
                             <Link
                                 key={link.path}
                                 href={link.path}
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
                                 className={`px-4 py-2 rounded-md text-sm font-medium font-secondary transition-colors ${
                                     isActive(link.path)
                                         ? "bg-primary text-primary-foreground"
@@ -88,6 +89,9 @@ const Navbar = () => {
                                 {link.name}
                             </Link>
                         ))}
+                        <Button asChild className="ml-2 font-secondary rounded-full px-5 h-9">
+                            <a href="/join" target="_blank" rel="noopener noreferrer" onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>Join IEEE</a>
+                        </Button>
                     </div>
 
                     {/* Right Side: IEEE Logo */}
@@ -117,7 +121,7 @@ const Navbar = () => {
                             <Link
                                 key={link.path}
                                 href={link.path}
-                                onClick={(e) => {
+                                onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                                     e.stopPropagation();
                                     setIsOpen(false);
                                 }}
@@ -130,6 +134,9 @@ const Navbar = () => {
                                 {link.name}
                             </Link>
                         ))}
+                        <Button asChild className="w-full mt-2 font-secondary">
+                            <a href="https://www.ieee.org/membership/join" target="_blank" rel="noopener noreferrer" onClick={(e: React.MouseEvent<HTMLAnchorElement>) => { e.stopPropagation(); setIsOpen(false); }}>Join IEEE</a>
+                        </Button>
                     </div>
                 </div>
             </div>

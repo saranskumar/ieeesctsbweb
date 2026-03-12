@@ -33,7 +33,7 @@ const Footer = () => {
                                 { icon: Instagram, url: "https://www.instagram.com/ieeesctsb/", label: "Instagram" },
                                 { icon: Linkedin, url: "https://in.linkedin.com/company/ieeesctsb", label: "LinkedIn" },
                                 { icon: Facebook, url: "https://www.facebook.com/ieeesctsb", label: "Facebook" }, // Assuming FB link exists/is wanted, keeping generic if not
-                                { icon: Mail, url: "mailto:ieeesctsb@gmail.com", label: "Email" },
+                                { icon: Mail, url: "mailto:mailtoieeesctsb@gmail.com", label: "Email" },
                             ].map((social) => (
                                 <a
                                     key={social.label}
@@ -57,7 +57,7 @@ const Footer = () => {
                                 <span className="absolute -bottom-2 left-0 w-8 h-1 bg-accent rounded-full"></span>
                             </h4>
                             <ul className="space-y-3">
-                                {["About", "Events", "Chapters", "Gallery", "Contact"].map((link) => (
+                                {["About", "Events", "Chapters", "Achievements", "Gallery", "Contact"].map((link) => (
                                     <li key={link}>
                                         <Link
                                             href={`/${link.toLowerCase()}`}
@@ -117,10 +117,10 @@ const Footer = () => {
                                     <Mail className="w-4 h-4 text-primary" />
                                 </div>
                                 <a
-                                    href="mailto:ieeesctsb@gmail.com"
+                                    href="mailto:mailtoieeesctsb@gmail.com"
                                     className="text-sm text-muted-foreground hover:text-primary transition-colors font-body"
                                 >
-                                    ieeesctsb@gmail.com
+                                    mailtoieeesctsb@gmail.com
                                 </a>
                             </li>
                             <li className="flex items-center gap-4 group">

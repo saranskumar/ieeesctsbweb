@@ -62,8 +62,10 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
         notFound();
     }
 
-    const roles = getMemberRoles(id);
-    const latestRole = roles.length > 0 ? roles[0] : null;
+    const generatedRoles = getMemberRoles(id);
+    // Combine generated history with manually specified pastRoles from the registry
+    const roles = [...generatedRoles, ...(member.pastRoles || [])];
+    const latestRole = generatedRoles.length > 0 ? generatedRoles[0] : null;
 
     return (
         <div className="min-h-screen bg-background relative pb-20">
@@ -188,11 +190,20 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
                             Past Roles
                         </h3>
                         <ul className="space-y-3">
-                            {roles.slice(1).map((r, i) => (
-                                <li key={i} className="text-muted-foreground font-body text-sm flex items-center justify-between border-b border-border/50 pb-3 last:border-0 last:pb-0">
-                                    <span>{r.role} ({r.chapter})</span>
-                                </li>
-                            ))}
+                            {roles.map((r, i) => {
+                                // Skip the very first role IF it came from the generated registry and is the active "latestRole"
+                                if (i === 0 && Array.isArray(generatedRoles) && generatedRoles.length > 0 && r === generatedRoles[0]) return null;
+                                
+                                // Handling dynamic registry roles (which have a 'chapter' property) vs hardcoded pastRoles
+                                const chapterSuffix = 'chapter' in r ? ` (${r.chapter})` : '';
+                                
+                                return (
+                                    <li key={i} className="text-muted-foreground font-body text-sm flex items-center justify-between border-b border-border/50 pb-3 last:border-0 last:pb-0">
+                                        <span>{r.role}{chapterSuffix}</span>
+                                        {'year' in r && <span className="text-xs px-2 py-1 bg-muted rounded-md">{r.year}</span>}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </div>
                 )}

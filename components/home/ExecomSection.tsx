@@ -1,13 +1,36 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { execom } from "@/lib/data/team";
+import { execom, sbcTeams } from "@/lib/data/team";
 import { resolveEntry } from "@/lib/data/members";
 
-// Resolve TeamEntry → full profiles, then filter out faculty advisors/counselors
+const coreRoles = [
+  "Chairperson",
+  "Vice Chairperson",
+  "Secretary",
+];
+
 const coreMembers = execom
   .map(resolveEntry)
-  .filter((m) => !/(advisor|counselor)/i.test(m.role));
+  .filter((m) => coreRoles.includes(m.role));
+
+const sbcChairRoles = [
+  "CS Chairperson",
+  "EMBS Chairperson",
+  "RAS Chairperson",
+  "IAS Chairperson",
+  "PES Chairperson",
+  "ComSoc Chairperson",
+  "SIGHT Chairperson",
+  "WIE Chairperson",
+];
+
+const sbcChairs = Object.values(sbcTeams)
+  .flat()
+  .map(resolveEntry)
+  .filter((m) => sbcChairRoles.includes(m.role));
+
+const displayMembers = [...coreMembers, ...sbcChairs];
 
 
 const ExecomSection = () => {
@@ -32,9 +55,9 @@ const ExecomSection = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-          {coreMembers.map((member, index) => (
+          {displayMembers.map((member, index) => (
             <div
-              key={member.id}
+              key={`${member.id}-${index}`}
               className="text-center"
               style={{ animationDelay: `${index * 50}ms` }}
             >
