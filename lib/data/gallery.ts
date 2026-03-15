@@ -1,7 +1,7 @@
 export interface GalleryItem {
     id: string;
     title: string;
-    category: "Event" | "Workshop" | "Seminar" | "Activity" | "Outreach" | "Exhibition" | "Other";
+    category?: "Event" | "Workshop" | "Seminar" | "Activity" | "Outreach" | "Exhibition" | "Other" | string;
     image: string;         // Path to the image, relative to /public
     date?: string;         // Optional: date of the event/moment
     eventId?: string;      // Optional: links back to an event in events.ts
