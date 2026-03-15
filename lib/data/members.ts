@@ -6,7 +6,7 @@
  * Key = canonical permanent ID (kebab-case full name).
  *
  * Team year files (team20 → team25) store ONLY:
- *   { id: "pes-chair-25", memberId: "fisa-fathima-feroze", role: "Chairperson" }
+ * { id: "pes-chair-25", memberId: "fisa-fathima-feroze", role: "Chairperson" }
  *
  * Call getMember(memberId) anywhere to get the full profile.
  * Update details here → reflects everywhere automatically.
@@ -159,6 +159,8 @@ export const members: Record<string, MemberProfile> = {
         name: "Niyatha Suresh",
         image: "/members/niyatha-suresh.jpeg",
         batch: "2026",
+        // Socials
+        linkedin: "https://www.linkedin.com/in/niyatha-suresh-r-5a2121291?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "janani-cm": {
         id: "janani-cm",
@@ -177,6 +179,9 @@ export const members: Record<string, MemberProfile> = {
         name: "Diya Das S G",
         image: "/members/diya-das-sg.jpg",
         batch: "2026",
+        // Socials
+        email: "diyadas571@gmail.com",
+        linkedin: "https://www.linkedin.com/in/diya-das-s-g",
     },
     "dona-sebastian": {
         id: "dona-sebastian",
@@ -195,12 +200,18 @@ export const members: Record<string, MemberProfile> = {
         name: "Ciril Jose",
         image: "/members/ciril-jose.jpg",
         batch: "2026",
+        // Socials
+        email: "ciriljosepm6996@gmail.com",
+        linkedin: "https://www.linkedin.com/in/ciril-jose-990908294?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "abhijith-pv": {
         id: "abhijith-pv",
         name: "Abhijith P V",
         image: "/members/abhijith-pv.jpg",
         batch: "2026",
+        // Socials
+        email: "pvabhijith11@gmail.com",
+        linkedin: "https://www.linkedin.com/in/abhijith-p-v?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "harisankar-prasad": {
         id: "harisankar-prasad",
@@ -219,12 +230,18 @@ export const members: Record<string, MemberProfile> = {
         name: "Adithya C J",
         image: "/members/adithya-cj.jpg",
         batch: "2026",
+        // Socials
+        email: "adithyacj88@gmail.com",
+        linkedin: "https://www.linkedin.com/in/adithya-cj-b0614029b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     },
     "vishnudev-r": {
         id: "vishnudev-r",
         name: "Vishnudev R",
         image: "/members/vishnudev-r.jpeg",
         batch: "2026",
+        // Socials
+        email: "vishnudev.wrk@gmail.com",
+        linkedin: "https://www.linkedin.com/in/vishnudev-r-b6b327252?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "ron": {
         id: "ron",
@@ -237,6 +254,9 @@ export const members: Record<string, MemberProfile> = {
         name: "Yohann Chandy",
         image: "/members/yohann-chandy.jpg",
         batch: "2026",
+        // Socials
+        email: "yohannschandy@gmail.com",
+        linkedin: "https://www.linkedin.com/in/yohannchandy?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     },
     "athul-chacko": {
         id: "athul-chacko",
@@ -249,6 +269,9 @@ export const members: Record<string, MemberProfile> = {
         name: "Chinmayi B S",
         image: "/members/chinmayi-bs.jpg",
         batch: "2027",
+        // Socials
+        email: "chinmayibs@ieee.org",
+        linkedin: "https://www.linkedin.com/in/chinmayi-b-s-01606334a?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     },
     "nandana-rajesh": {
         id: "nandana-rajesh",
@@ -261,9 +284,8 @@ export const members: Record<string, MemberProfile> = {
         name: "Saran S Kumar",
         image: "/members/saranskumar.jpg",
         batch: "2027",
-       
         // Socials
-        linkedin: "https://linkedin.com/in/saran-s-kumar",
+        linkedin: "https://www.linkedin.com/in/saran-s-kumar",
         github: "https://github.com/saranskumar",
         instagram: "https://instagram.com/saraan.___",
         website: "https://saranskumar.live",
@@ -278,36 +300,54 @@ export const members: Record<string, MemberProfile> = {
         name: "Riya Mary Sajan",
         image: "/members/riya-mary-sajan.jpg",
         batch: "2026",
+        // Socials
+        email: "riyamarysajan@gmail.com",
+        linkedin: "https://www.linkedin.com/in/riya-mary-sajan-a73a88271",
     },
     "adithya-as": {
         id: "adithya-as",
         name: "Adithya A S",
         image: "/members/adithya-as.jpg",
         batch: "2026",
+        // Socials
+        email: "adithyaasanil@ieee.org",
+        linkedin: "https://www.linkedin.com/in/adithya-a-s-84b25a316",
     },
     "sabari-nath": {
         id: "sabari-nath",
         name: "Sabari Nath",
         image: "/members/sabari-nath.png",
         batch: "2027",
+        // Socials
+        email: "sabarinathanilkumar155@gmail.com",
+        linkedin: "https://www.linkedin.com/in/sabari-nath-a9661b29a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     },
     "arun-aravindakshan": {
         id: "arun-aravindakshan",
         name: "Arun Aravindakshan",
         image: "/members/arun-aravindakshan.jpg",
         batch: "2026",
+        // Socials
+        email: "arun.a@ieee.org",
+        linkedin: "https://www.linkedin.com/in/arun-aravindakshan-b441822b7",
     },
     "durgadas-dk": {
         id: "durgadas-dk",
         name: "Durgadas D K",
         image: "/members/durgadas-dk.jpg",
         batch: "2026",
+        // Socials
+        email: "durgadasdk@ieee.org",
+        linkedin: "https://www.linkedin.com/in/durgadasdk/",
     },
     "fida-fathima-shine": {
         id: "fida-fathima-shine",
         name: "Fida Fathima Shine",
         image: "/members/fida-fathima-shine.jpg",
         batch: "2027",
+        // Socials
+        email: "fidafathimashine@ieee.org",
+        linkedin: "https://www.linkedin.com/in/fida-fathima-shine?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "aqeel-hussain": {
         id: "aqeel-hussain",
@@ -320,12 +360,18 @@ export const members: Record<string, MemberProfile> = {
         name: "Babitha B",
         image: "/members/babitha-b.jpg",
         batch: "2027",
+        // Socials
+        email: "babithab1510@gmail.com",
+        linkedin: "https://www.linkedin.com/in/babitha-b-808a84270?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "parthasarathy-a": {
         id: "parthasarathy-a",
         name: "Parthasarathy A",
         image: "/members/parthasarathy-a.jpeg",
         batch: "2027",
+        // Socials
+        email: "parthasarathy03062005@gmail.com",
+        linkedin: "https://www.linkedin.com/in/parthasarathy-a-ba7499338?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     },
     "fisa-fathima-feroze": {
         id: "fisa-fathima-feroze",
@@ -338,18 +384,27 @@ export const members: Record<string, MemberProfile> = {
         name: "Devanarayan S",
         image: "/members/devanarayan-s.jpeg",
         batch: "2026",
+        // Socials
+        email: "devanarayansuniloffl@gmail.com",
+        linkedin: "https://www.linkedin.com/in/devanarayans",
     },
     "abhinand-s-nath": {
         id: "abhinand-s-nath",
         name: "Abhinand S Nath",
         image: "/members/abhinand-s-nath.jpg",
         batch: "2027",
+        // Socials
+        email: "abhinandsnath@ieee.org",
+        linkedin: "https://www.linkedin.com/in/abhinand-s-nath-a01582349?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "archana-r-sethu": {
         id: "archana-r-sethu",
         name: "Archana R Sethu",
         image: "/members/archana-r-sethu.png",
         batch: "2026",
+        // Socials
+        email: "archanarsethu@gmail.com",
+        linkedin: "https://www.linkedin.com/in/archana-r-sethu-12372a324?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
     "meghna-j-pai": {
         id: "meghna-j-pai",
@@ -362,18 +417,26 @@ export const members: Record<string, MemberProfile> = {
         name: "Aakash Anand",
         image: "/members/aakash-anand.png",
         batch: "2027",
+        // Socials
+        linkedin: "https://www.linkedin.com/in/aakashanandak?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     },
     "mahreen-zuraiq": {
         id: "mahreen-zuraiq",
         name: "Mahreen Zuraiq",
         image: "/members/mahreen-zuraiq.jpg",
         batch: "2027",
+        // Socials
+        email: "mahreen.zuraiq@gmail.com",
+        linkedin: "https://www.linkedin.com/in/mahreenzuraiq",
     },
     "fathima-meera": {
         id: "fathima-meera",
         name: "Fathima Meera",
         image: "/members/fathima-meera.jpg",
         batch: "2027",
+        // Socials
+        email: "fathimameera0101@gmail.com",
+        linkedin: "https://www.linkedin.com/in/fathima-meera-b296b43a5?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     },
     "rizan-amani": {
         id: "rizan-amani",
@@ -392,6 +455,9 @@ export const members: Record<string, MemberProfile> = {
         name: "Shahnas M",
         image: "/members/shahnas-m.jpeg",
         batch: "2027",
+        // Socials
+        email: "shahnas.m.10a@gmail.com",
+        linkedin: "https://www.linkedin.com/in/shahnas-m-448693290?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
     },
     "basil-joy": {
         id: "basil-joy",
@@ -410,12 +476,18 @@ export const members: Record<string, MemberProfile> = {
         name: "Sonal Santhosh",
         image: "/members/sonal-santhosh.jpg",
         batch: "2026",
+        // Socials
+        email: "sonalsanth23@gmail.com",
+        linkedin: "https://www.linkedin.com/in/sonal-santhosh",
     },
     "bhagavathy-an": {
         id: "bhagavathy-an",
         name: "Bhagavathy A N",
         image: "/members/bhagavathy-an.jpg",
         batch: "2027",
+        // Socials
+        email: "bhagavathyan@gmail.com",
+        linkedin: "https://www.linkedin.com/in/bhagavathy-an-89b3b3290?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     },
 
     // ── 2024 ────────────────────────────────────────────────────────────────

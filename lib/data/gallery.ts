@@ -364,7 +364,7 @@ export const galleryItems: GalleryItem[] = [
     {
         id: "gallery-aura4-1",
         title: "Aura 4.0",
-        category: "",
+        category: "test",
         image: "events/aura.jpeg",
         date: "",
         eventId: "",
