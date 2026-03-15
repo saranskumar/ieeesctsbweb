@@ -19,7 +19,7 @@ export const galleryItems: GalleryItem[] = [
         date: "March 8, 2025",
         eventId: "cyberaware-workshop",
         chapterId: "wie",
-        description: "Hands-on cybersecurity workshop covering Linux security, Bash scripting, and IoT-based attacks.",
+        description: "",
         order: 1,
     },
     {
@@ -30,7 +30,7 @@ export const galleryItems: GalleryItem[] = [
         date: "March 10, 2025",
         eventId: "embs-inauguration",
         chapterId: "embs",
-        description: "Official inauguration of the IEEE EMBS Chapter at SCT Student Branch.",
+        description: "",
         order: 2,
     },
     {
@@ -41,7 +41,7 @@ export const galleryItems: GalleryItem[] = [
         date: "March 14, 2025",
         eventId: "reboot-ideathon",
         chapterId: "ias",
-        description: "Ideathon on disaster resilience and climate tech solutions for Kerala.",
+        description: "",
         order: 3,
     },
     {
@@ -52,7 +52,7 @@ export const galleryItems: GalleryItem[] = [
         date: "April 2, 2025",
         eventId: "build-your-bot",
         chapterId: "cs",
-        description: "Hands-on chatbot development workshop led by industry interns.",
+        description: "",
         order: 4,
     },
     {
@@ -63,7 +63,7 @@ export const galleryItems: GalleryItem[] = [
         date: "April 21, 2025",
         eventId: "navigating-internships",
         chapterId: "cs",
-        description: "Panel discussion guiding students through finding and succeeding in internships.",
+        description: "",
         order: 5,
     },
     {
@@ -74,7 +74,7 @@ export const galleryItems: GalleryItem[] = [
         date: "April 23, 2025",
         eventId: "tree-plantation-drive",
         chapterId: "pes",
-        description: "Community tree plantation drive to celebrate IEEE PES Day.",
+        description: "",
         order: 6,
     },
     {
@@ -85,7 +85,7 @@ export const galleryItems: GalleryItem[] = [
         date: "June 7, 2025",
         eventId: "bionext",
         chapterId: "embs",
-        description: "Panel exploring career pathways after B.Tech in Bio-Engineering.",
+        description: "",
         order: 7,
     },
     {
@@ -95,7 +95,7 @@ export const galleryItems: GalleryItem[] = [
         image: "events/build-up.jpeg",
         date: "June 21, 2025",
         eventId: "build-up",
-        description: "Week-long program guiding students through the product development lifecycle.",
+        description: "",
         order: 8,
     },
     {
@@ -106,7 +106,7 @@ export const galleryItems: GalleryItem[] = [
         date: "June 26, 2025",
         eventId: "yukthiverse",
         chapterId: "sight",
-        description: "24-hour ideathon for engineering students to tackle real-world challenges.",
+        description: "",
         order: 9,
     },
     {
@@ -117,7 +117,7 @@ export const galleryItems: GalleryItem[] = [
         date: "June 27, 2025",
         eventId: "neurolink",
         chapterId: "ias",
-        description: "Talk on Brain-Computer Interface (BCI) technology and its medical applications.",
+        description: "",
         order: 10,
     },
     {
@@ -128,7 +128,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 4, 2025",
         eventId: "ctrl-c-ctrl-bot",
         chapterId: "ras",
-        description: "Simplifying robotics through no-code and low-code AI tools.",
+        description: "",
         order: 11,
     },
     {
@@ -139,7 +139,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 6, 2025",
         eventId: "decodex",
         chapterId: "wie",
-        description: "Online CTF event hosted for WIE Day 2025.",
+        description: "",
         order: 12,
     },
     {
@@ -150,7 +150,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 9, 2025",
         eventId: "techspirations",
         chapterId: "cs",
-        description: "Online write-up competition on Life in 2100: A Future Reimagined for Women.",
+        description: "",
         order: 13,
     },
     {
@@ -161,7 +161,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 14, 2025",
         eventId: "fiction-to-fact",
         chapterId: "embs",
-        description: "Interactive talk exploring the real science behind fictional superpowers.",
+        description: "",
         order: 14,
     },
     {
@@ -172,7 +172,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 20, 2025",
         eventId: "fact-to-fiction-story",
         chapterId: "embs",
-        description: "Creative story writing competition blending science and imagination.",
+        description: "",
         order: 15,
     },
     {
@@ -183,7 +183,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 22, 2025",
         eventId: "skill-stack-1",
         chapterId: "cs",
-        description: "10-day intensive boot camp on full-stack web development.",
+        description: "",
         order: 16,
     },
     {
@@ -194,7 +194,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 23, 2025",
         eventId: "comconnect1.0-1",
         chapterId: "comsoc",
-        description: "Talk on RIS-Assisted THz Communications and the future of wireless networking.",
+        description: "",
         order: 17,
     },
     {
@@ -205,7 +205,7 @@ export const galleryItems: GalleryItem[] = [
         date: "July 26, 2025",
         eventId: "gridlock",
         chapterId: "pes",
-        description: "Online treasure hunt where participants solve puzzles to restore the power grid.",
+        description: "",
         order: 18,
     },
     {
@@ -215,7 +215,7 @@ export const galleryItems: GalleryItem[] = [
         image: "/events/ensemble-4.jpeg",
         date: "August 3, 2025",
         eventId: "ensemble-4",
-        description: "Annual IEEE SCT SB Ensemble featuring inauguration, honoring ceremony, and networking.",
+        description: "",
         order: 19,
     },
     {
@@ -226,7 +226,7 @@ export const galleryItems: GalleryItem[] = [
         date: "August 4, 2025",
         eventId: "overclock",
         chapterId: "ras",
-        description: "5-day hands-on robotics masterclass to build a line follower bot from scratch.",
+        description: "",
         order: 20,
     },
     {
@@ -237,7 +237,7 @@ export const galleryItems: GalleryItem[] = [
         date: "August 26, 2025",
         eventId: "talentified-1",
         chapterId: "cs",
-        description: "Fostering collaboration and idea sharing among IEEE CS members.",
+        description: "",
         order: 21,
     },
     {
@@ -248,7 +248,7 @@ export const galleryItems: GalleryItem[] = [
         date: "September 9, 2025",
         eventId: "xcelerate",
         chapterId: "cs",
-        description: "20-day coding bootcamp preparing students for IEEEXtreme.",
+        description: "",
         order: 22,
     },
     {
@@ -259,7 +259,7 @@ export const galleryItems: GalleryItem[] = [
         date: "September 15, 2025",
         eventId: "thirike",
         chapterId: "sight",
-        description: "E-waste and scrap collection drive across campus and local community.",
+        description: "",
         order: 23,
     },
     {
@@ -270,7 +270,7 @@ export const galleryItems: GalleryItem[] = [
         date: "September 28, 2025",
         eventId: "xtremetalks-2",
         chapterId: "cs",
-        description: "Orientation for IEEEXtreme 19.0 — the global 24-hour programming marathon.",
+        description: "",
         order: 24,
     },
     {
@@ -281,7 +281,7 @@ export const galleryItems: GalleryItem[] = [
         date: "September 29, 2025",
         eventId: "comconnect1.0-2",
         chapterId: "comsoc",
-        description: "Session bridging wireless communication and radio astronomy.",
+        description: "",
         order: 25,
     },
     {
@@ -292,7 +292,7 @@ export const galleryItems: GalleryItem[] = [
         date: "October 4, 2025",
         eventId: "trailquest",
         chapterId: "wie",
-        description: "Multi-stage logic and tech-themed online treasure hunt.",
+        description: "",
         order: 26,
     },
     {
@@ -303,7 +303,7 @@ export const galleryItems: GalleryItem[] = [
         date: "October 6, 2025",
         eventId: "algorithmic-thinking",
         chapterId: "cs",
-        description: "Two-day bootcamp on algorithmic thinking with Python for first-year students.",
+        description: "",
         order: 27,
     },
     {
@@ -314,7 +314,7 @@ export const galleryItems: GalleryItem[] = [
         date: "October 25, 2025",
         eventId: "aigenix-workshop",
         chapterId: "cs",
-        description: "Hands-on workshop introducing agentic AI and autonomous AI systems.",
+        description: "",
         order: 28,
     },
     {
@@ -325,7 +325,7 @@ export const galleryItems: GalleryItem[] = [
         date: "October 25, 2025",
         eventId: "dhyuthi-cellestro",
         chapterId: "embs",
-        description: "Hands-on cell culturing workshop and Agar Art Competition.",
+        description: "",
         order: 29,
     },
     {
@@ -336,7 +336,7 @@ export const galleryItems: GalleryItem[] = [
         date: "October 26, 2025",
         eventId: "incepta-track3",
         chapterId: "ias",
-        description: "Robo Soccer competition as part of Dhyuthi 6.0's Incepta track.",
+        description: "",
         order: 30,
     },
     {
@@ -347,7 +347,7 @@ export const galleryItems: GalleryItem[] = [
         date: "November 10, 2025",
         eventId: "code-sprint",
         chapterId: "cs",
-        description: "Session on competitive programming in collaboration with HackerRank.",
+        description: "",
         order: 31,
     },
     {
@@ -358,18 +358,18 @@ export const galleryItems: GalleryItem[] = [
         date: "December 12, 2025",
         eventId: "stem-outreach",
         chapterId: "embs",
-        description: "Guiding school students on STEM education pathways and career opportunities.",
+        description: "",
         order: 32,
     },
     {
         id: "gallery-aura4-1",
         title: "Aura 4.0",
-        category: "Event",
+        category: "",
         image: "events/aura.jpeg",
-        date: "January 12, 2026",
-        eventId: "aura4",
+        date: "",
+        eventId: "",
         chapterId: "wie",
-        description: "IEEE WIE's flagship event — a week dedicated to leadership and empowering women.",
+        description: "",
         order: 33,
     },
 ];
