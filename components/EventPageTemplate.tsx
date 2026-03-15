@@ -45,7 +45,7 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                                                 <img
                                                     src={img || "/placeholder.svg"}
                                                     alt={`${event.title} - Image ${index + 1}`}
-                                                    className="w-full h-full object-cover"
+                                                    className="w-full h-full object-contain"
                                                 />
                                             </div>
                                         </CarouselItem>

@@ -59,11 +59,11 @@ export default function EventsPage() {
                     key={event.id}
                     className="bg-background rounded-xl overflow-hidden group flex flex-col h-full border border-border shadow-sm hover:shadow-xl transition-all duration-300"
                   >
-                    <div className="aspect-video bg-muted relative overflow-hidden">
+                    <div className="aspect-[4/5] bg-muted relative overflow-hidden">
                       <img
                         src={event.image || "/placeholder.svg"}
                         alt={event.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                       />
                       <span
                         className={`absolute top-4 left-4 badge-status ${
@@ -142,11 +142,11 @@ export default function EventsPage() {
                     key={event.id}
                     className="bg-background/50 rounded-xl overflow-hidden group flex flex-col h-full border border-border"
                   >
-                    <div className="aspect-video bg-muted relative overflow-hidden">
+                    <div className="aspect-[4/5] bg-muted relative overflow-hidden">
                       <img
                         src={event.image || "/placeholder.svg"}
                         alt={event.title}
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                        className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
                       />
                       <span className="absolute top-4 left-4 badge-status badge-completed">
                         {event.status}
