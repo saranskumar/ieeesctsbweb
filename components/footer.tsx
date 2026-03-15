@@ -80,7 +80,7 @@ const Footer = () => {
                                     { name: "IEEE Xplore", url: "https://ieeexplore.ieee.org" },
                                     { name: "IEEE Standards", url: "https://standards.ieee.org" },
                                     { name: "IEEE Spectrum", url: "https://spectrum.ieee.org" },
-                                    { name: "Kerala Section", url: "https://ieee-kerala.org" },
+                                    { name: "Kerala Section", url: "https://ieeekerala.org" },
                                 ].map((link) => (
                                     <li key={link.name}>
                                         <a
