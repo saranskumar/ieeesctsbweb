@@ -145,7 +145,7 @@ export const members: Record<string, MemberProfile> = {
     "hari-narayanan-s": {
         id: "hari-narayanan-s",
         name: "Hari Narayanan S",
-        image: "/person.svg",
+        image: "/members/hari-narayanan-s.jpg",
         batch: "2027",
     },
     "sneha-bijee": {
@@ -288,7 +288,6 @@ export const members: Record<string, MemberProfile> = {
         linkedin: "https://www.linkedin.com/in/saran-s-kumar",
         github: "https://github.com/saranskumar",
         instagram: "https://instagram.com/saraan.___",
-        website: "https://saranskumar.live",
         email: "saranskumarwh@gmail.com",
         otherRoles: [
             { role: "IEEE XTREME 19.0 Campus Ambassador", year: "2025" },

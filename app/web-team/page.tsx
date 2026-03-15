@@ -110,15 +110,14 @@ export default function WebTeamPage() {
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
                 <div className="section-container relative z-10 text-center">
                     <h2 className="text-3xl md:text-5xl font-heading font-black text-foreground mb-6">
-                        Build the Future <span className="text-primary italic">With Us</span>
-                    </h2>
+                        Build the Future With Us  </h2> 
                     <p className="text-lg text-muted-foreground font-body mb-10 max-w-xl mx-auto opacity-90">
                         We're always looking for passionate developers, designers, and tech enthusiasts to join our creative collective.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Button asChild size="lg" className="font-bold px-8 h-14 text-lg rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all group">
                             <Link href="/contact?subject=Joining%20the%20Web%20Team" className="flex items-center gap-2">
-                                Join the Squad
+                                Join
                                 <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </Link>
                         </Button>

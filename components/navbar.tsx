@@ -112,10 +112,8 @@ const Navbar = () => {
                         isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
                     }`}
                 >
-                    {/* Drag handle visual */}
-                    <div className="flex justify-center py-2">
-                        <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
-                    </div>
+                    {/* Drag handle space */}
+                    <div className="py-1" />
                     <div className="flex flex-col gap-1 pb-4">
                         {navLinks.map((link) => (
                             <Link
@@ -140,6 +138,9 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
+            
+            {/* Mobile handle indicator — centered at the very bottom of the nav bar on mobile only */}
+            <div className="md:hidden absolute bottom-1.5 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-foreground/10 pointer-events-none" />
         </nav>
     );
 };
