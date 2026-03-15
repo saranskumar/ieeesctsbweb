@@ -347,7 +347,7 @@ export const events: Event[] = [
     		mode: "Offline",
     		venue: "ASAP Hall",
     		status: "Completed",
-    		description: "SCT’s first-ever robotics marathon is here to ignite your inner innovator! In this 5-day hardware-based hands-on masterclass, you’ll learn, build, and compete as you design an advanced line follower bot from scratch. No prior experience needed, just your curiosity and team spirit!",
+    		description: "A five-day hands-on hardware masterclass and robotics marathon where students design and build an advanced line-follower robot from scratch to compete in a final challenge.",
     		image: "events/overclock",
     		chapterId: "ras",
     		order: 29
@@ -359,7 +359,7 @@ export const events: Event[] = [
     		time: "Online Submission",
     		mode: "Online",
     		status: "Completed",
-    		description: "Presenting WATTWISE – the ultimate energy meter competition! 🏠📊 Compete to prove your household/hostel is the most energy-efficient and win exciting prizes!",
+    		description: "A competitive energy meter challenge where households and hostels compete to demonstrate the highest level of energy efficiency for a chance to win exciting prizes.",
     		image: "events/wattwise.jpg",
     		chapterId: "pes",
     		order: 6
@@ -531,7 +531,7 @@ export const events: Event[] = [
     		mode: "Offline",
     		venue: "SCTCE College",
     		status: "Completed",
-    		description: "IEEE WIE AG SCT SB presents it's flagship event AURA 4.0 - The 4th Edition 🗓️12th January, 2026 onwardsGet ready to grow with purpose, step into confidence and strive for excellence. AURA 4.0 is a week dedicated to progress, leadership, and empowering women to reach their fullest potential.",
+    		description: "A flagship week-long event dedicated to empowering women through sessions on progress, leadership, and personal excellence to help them reach their fullest potential.",
     		image: "events/aura.jpeg",
     		chapterId: "wie",
     		order: 42
