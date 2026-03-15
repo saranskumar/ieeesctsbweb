@@ -141,64 +141,80 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
             </section>
 
             {/* Events Section */}
-            {chapterEvents.length > 0 && (
-                <section className="section-padding bg-background border-t border-border">
-                    <div className="section-container">
-                        <h2 className="text-3xl font-heading font-bold text-foreground mb-12 text-center">
-                            Events
-                        </h2>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            {chapterEvents.map((event) => (
-                                <div key={event.id} className="bg-card rounded-lg overflow-hidden border border-border group hover:shadow-lg transition-all">
-                                    <div className="aspect-[4/5] md:aspect-video bg-muted overflow-hidden">
-                                        <img
-                                            src={event.image}
-                                            alt={event.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                    </div>
-                                    <div className="p-6">
-                                        <span
-                                            className={`inline-block px-3 py-1 rounded-full text-sm font-secondary mb-3 ${event.status === "Registration Open"
-                                                ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                                : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+            {chapterEvents.length > 0 && (() => {
+                const sortedChapterEvents = [...chapterEvents].sort((a, b) => (b.order || 0) - (a.order || 0));
+                return (
+                    <section className="section-padding bg-background border-t border-border">
+                        <div className="section-container">
+                            <div className="flex items-center justify-between mb-8">
+                                <h2 className="text-3xl font-heading font-bold text-foreground">
+                                    Events & Activities
+                                </h2>
+                                <Link href="/events" className="text-sm text-primary font-secondary font-medium hover:underline underline-offset-4">
+                                    View all →
+                                </Link>
+                            </div>
+
+                            {/* Horizontal scroll container */}
+                            <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth" style={{scrollbarWidth: "none", msOverflowStyle: "none"}}>
+                                {sortedChapterEvents.map((event) => (
+                                    <div
+                                        key={event.id}
+                                        className="flex-none w-64 snap-start bg-card rounded-xl overflow-hidden border border-border group hover:shadow-xl transition-all duration-500 flex flex-col"
+                                    >
+                                        {/* Poster — 4:5 ratio */}
+                                        <div className="aspect-[4/5] bg-muted relative overflow-hidden">
+                                            <img
+                                                src={event.image || "/placeholder.svg"}
+                                                alt={event.title}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            />
+                                            <span
+                                                className={`absolute bottom-3 left-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
+                                                    event.status === "Registration Open"
+                                                        ? "bg-green-500 text-white shadow-lg shadow-green-500/20"
+                                                        : "bg-secondary/90 text-secondary-foreground backdrop-blur-sm"
                                                 }`}
-                                        >
-                                            {event.status}
-                                        </span>
-                                        <h3 className="text-xl font-heading font-bold text-foreground mb-2">
-                                            {event.title}
-                                        </h3>
-                                        <p className="text-muted-foreground font-body text-sm mb-4 line-clamp-2">
-                                            {event.description}
-                                        </p>
-                                        <div className="space-y-2 mb-4">
-                                            <div className="flex items-center gap-2 text-sm text-foreground">
-                                                <Calendar className="w-4 h-4 text-primary" />
-                                                <span className="font-body">{event.date}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-sm text-foreground">
-                                                {event.mode === "Online" ? (
-                                                    <Monitor className="w-4 h-4 text-primary" />
-                                                ) : (
-                                                    <MapPin className="w-4 h-4 text-primary" />
-                                                )}
-                                                <span className="font-body">
-                                                    {event.mode}
-                                                    {event.venue && ` • ${event.venue}`}
-                                                </span>
+                                            >
+                                                {event.status}
+                                            </span>
+                                        </div>
+
+                                        {/* Info */}
+                                        <div className="p-4 flex flex-col flex-grow">
+                                            <h3 className="text-base font-heading font-bold text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                                                {event.title}
+                                            </h3>
+                                            <div className="mt-auto space-y-2">
+                                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                                    <Calendar className="w-3.5 h-3.5 text-primary" />
+                                                    <span className="font-body">{event.date}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                                    {event.mode === "Online" ? (
+                                                        <Monitor className="w-3.5 h-3.5 text-primary" />
+                                                    ) : (
+                                                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                                                    )}
+                                                    <span className="font-body">
+                                                        {event.mode}{event.venue && ` • ${event.venue}`}
+                                                    </span>
+                                                </div>
+                                                <Button asChild variant={event.status === "Registration Open" ? "default" : "outline"} size="sm" className="w-full font-secondary mt-1">
+                                                    <Link href={`/${event.id}`}>
+                                                        {event.status === "Registration Open" ? "Join Event" : "Explore Details"}
+                                                    </Link>
+                                                </Button>
                                             </div>
                                         </div>
-                                        <Button asChild variant="outline" size="sm" className="w-full sm:w-auto font-secondary">
-                                            <Link href={`/${event.id}`}>View Details</Link>
-                                        </Button>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </section>
-            )}
+                    </section>
+                );
+            })()}
+
 
             {/* Execom Section */}
             <section className="section-padding bg-background border-t border-border">
