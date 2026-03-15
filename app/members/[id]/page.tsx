@@ -63,9 +63,14 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
     }
 
     const generatedRoles = getMemberRoles(id);
-    // Combine generated history with manually specified pastRoles from the registry
-    const roles = [...generatedRoles, ...(member.pastRoles || [])];
-    const latestRole = generatedRoles.length > 0 ? generatedRoles[0] : null;
+    // Combine generated history with manually specified otherRoles from the registry
+    const combinedRoles = [...generatedRoles, ...(member.otherRoles || [])];
+    
+    // Sort all roles in descending order based on the year
+    const roles = combinedRoles.sort((a, b) => parseInt(b.year) - parseInt(a.year));
+    
+    // The "latestRole" is the one used for the top badge. We can just take the first one after sorting.
+    const latestRole = roles.length > 0 ? roles[0] : null;
 
     return (
         <div className="min-h-screen bg-background relative pb-20">
@@ -105,7 +110,7 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
                     {latestRole && (
                         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-5 py-2 rounded-full font-secondary text-sm font-medium mb-4 shadow-sm">
                             <Briefcase className="w-4 h-4" />
-                            {latestRole.role} ({latestRole.chapter})
+                            {latestRole.role}{'chapter' in latestRole ? ` (${latestRole.chapter})` : ''}
                         </div>
                     )}
 
@@ -187,7 +192,7 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
                     <div className="mt-8 bg-card border border-border rounded-2xl p-6 shadow-sm">
                         <h3 className="flex items-center gap-2 font-heading font-bold text-foreground mb-4">
                             <Briefcase className="w-5 h-5 text-muted-foreground" />
-                            Past Roles
+                            Other Roles
                         </h3>
                         <ul className="space-y-3">
                             {roles.map((r, i) => {

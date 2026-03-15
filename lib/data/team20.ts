@@ -10,7 +10,7 @@ export const execom20: TeamEntry[] = [
     { id: "joint-sec-20",        memberId: "naveen-jo-sajan",      role: "Joint Secretary" },
     { id: "treasurer-20",        memberId: "neetha-j",             role: "Treasurer" },
     { id: "sub-treasurer-20",    memberId: "sivapriya-b",          role: "Sub Treasurer" },
-    { id: "link-20",             memberId: "g-h-giri",             role: "LINK Representative" },
+    { id: "link-20",             memberId: "g-h-giri",             role: "Link Representative" },
     { id: "mdc-1-20",            memberId: "nikitha-susan-jose",   role: "Membership Development Head" },
     { id: "webmaster-20",        memberId: "hari-govind-s",        role: "Webmaster" },
     { id: "tech-1-20",           memberId: "sreelekshmi-s",        role: "Technical Committee" },
@@ -24,33 +24,33 @@ export const execom20: TeamEntry[] = [
 
 export const sbcTeams20: Record<string, TeamEntry[]> = {
     "cs": [
-        { id: "cs-chair-20",  memberId: "sharan-p",          role: "Chairperson" },
+        { id: "cs-chair-20",  memberId: "sharan-p",          role: "CS Chairperson" },
         { id: "cs-vice-20",   memberId: "abhinav-ms",        role: "Vice-Chair" },
-        { id: "cs-sec-20",    memberId: "arsha-rs",          role: "Secretary" },
+        { id: "cs-sec-20",    memberId: "arsha-rs",          role: "CS Secretary" },
     ],
     "ras": [
-        { id: "ras-chair-20", memberId: "ashna-satheesh",    role: "Chairperson" },
+        { id: "ras-chair-20", memberId: "ashna-satheesh",    role: "RAS Chairperson" },
         { id: "ras-vice-20",  memberId: "aishwarya-r",       role: "Vice-Chair" },
-        { id: "ras-sec-20",   memberId: "varun-g",           role: "Secretary" },
+        { id: "ras-sec-20",   memberId: "varun-g",           role: "RAS Secretary" },
     ],
     "ias": [
         { id: "ias-chair-20", memberId: "abish-vijayan",     role: "Chairman" },
         { id: "ias-vice-20",  memberId: "midhun-bm",         role: "Vice-Chair" },
-        { id: "ias-sec-20",   memberId: "vyshnavi-jayakumar-k",role: "Secretary" },
+        { id: "ias-sec-20",   memberId: "vyshnavi-jayakumar-k",role: "IAS Secretary" },
     ],
     "pes": [
         { id: "pes-chair-20", memberId: "harikrishnan-g",    role: "Chairman" },
         { id: "pes-vice-20",  memberId: "niyasuddin-mohamed", role: "Vice Chair" },
-        { id: "pes-sec-20",   memberId: "adith-gm",          role: "Secretary" },
+        { id: "pes-sec-20",   memberId: "adith-gm",          role: "PES Secretary" },
     ],
     "wie": [
-        { id: "wie-chair-20", memberId: "rakshantha-as",     role: "Chairperson" },
+        { id: "wie-chair-20", memberId: "rakshantha-as",     role: "WIE Chairperson" },
         { id: "wie-vice-20",  memberId: "gowri-rajesh",      role: "Vice Chair" },
-        { id: "wie-sec-20",   memberId: "saadhvi-gs",        role: "Secretary" },
+        { id: "wie-sec-20",   memberId: "saadhvi-gs",        role: "WIE Secretary" },
     ],
     "sight": [
         { id: "sight-chair-20",memberId: "midhin-murali",    role: "Chairman" },
         { id: "sight-vice-20", memberId: "parvathy-as",      role: "Vice Chair" },
-        { id: "sight-sec-20",  memberId: "sharika-menon",    role: "Secretary" },
+        { id: "sight-sec-20",  memberId: "sharika-menon",    role: "SIGHT Secretary" },
     ],
 };

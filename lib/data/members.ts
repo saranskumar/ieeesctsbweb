@@ -33,7 +33,7 @@ export interface MemberProfile {
     // Profile
     bio?: string;
     awards?: string[];
-    pastRoles?: { role: string; year: string }[];
+    otherRoles?: { role: string; year: string }[];
 }
 
 /**
@@ -290,7 +290,7 @@ export const members: Record<string, MemberProfile> = {
         instagram: "https://instagram.com/saraan.___",
         website: "https://saranskumar.live",
         email: "saranskumarwh@gmail.com",
-        pastRoles: [
+        otherRoles: [
             { role: "IEEE XTREME 19.0 Campus Ambassador", year: "2025" },
             { role: "IEEE COMSOC KC WEBMASTER", year: "2026" }
         ],
@@ -594,12 +594,7 @@ export const members: Record<string, MemberProfile> = {
         image: "/person.svg",
         batch: "2025",
     },
-    "arun-a": {
-        id: "arun-a",
-        name: "Arun A",
-        image: "/person.svg",
-        batch: "2025",
-    },
+    
 
     // ── 2023 ────────────────────────────────────────────────────────────────
 

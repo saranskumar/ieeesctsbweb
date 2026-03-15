@@ -1,5 +1,5 @@
 import { chapters } from "@/lib/data/chapters";
-import { sbcTeams } from "@/lib/data/team";
+import { sbcTeams, execom } from "@/lib/data/team";
 import { resolveEntry } from "@/lib/data/members";
 import { events } from "@/lib/data/events";
 import { notFound } from "next/navigation";
@@ -18,6 +18,15 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
     if (!chapter) {
         notFound();
     }
+
+    // Filter main execom to find any Advisors or Branch Counselors matching this chapter
+    const regex = new RegExp(`\\b${chapterId}\\b`, 'i');
+    const advisors = execom.filter(e => 
+        (e.role.toLowerCase().includes("advisor") || e.role.toLowerCase().includes("counselor")) &&
+        regex.test(e.role)
+    );
+
+    const teamToDisplay = [...advisors, ...(sbcTeams[chapterId] || [])];
 
     return (
         <>
@@ -223,9 +232,9 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                         Chapter Execom
                     </h2>
 
-                    {sbcTeams[chapterId] ? (
+                    {teamToDisplay.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {sbcTeams[chapterId].map(resolveEntry).map((member, index) => (
+                            {teamToDisplay.map(resolveEntry).map((member, index) => (
                                 <div
                                     key={index}
                                     className="bg-card rounded-lg overflow-hidden border border-border hover:shadow-lg transition-all hover:-translate-y-1 group relative"

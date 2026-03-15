@@ -525,4 +525,16 @@ export const events: Event[] = [
     		chapterId: "ras",
     		order: 43
     },
+    {
+        id: "agm-2026",
+        title: "Annual General Meeting 2026",
+        date: "March 16, 2026",
+        time: "4:30 PM",
+        mode: "Offline",
+        venue: "Seminar Hall (Room no 112)",
+        status: "Upcoming",
+        description: "The Annual General Meeting of IEEE SCT SB serves as a cornerstone event for our student branch, providing a formal platform to reflect on the milestones achieved during the past year. This year's gathering will feature the presentation of the Student Awards for the 2025-26 term, recognizing the outstanding contributions of our members. Additionally, the event will conclude with the announcement and introduction of the new Executive Committee, marking the commencement of the next leadership cycle. All members are invited to join us as we evaluate our progress and set the trajectory for our future endeavors.",
+        image: "/events/agm26.jpg",
+        order: 44
+    },
 ];
