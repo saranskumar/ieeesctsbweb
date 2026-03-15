@@ -523,4 +523,17 @@ export const events: Event[] = [
     		chapterId: "comsoc",
     		order: 41
     },
+    {
+    		id: "aura4",
+    		title: "Aura 4.0 - The 4th Edition",
+    		date: "January 12, 2026",
+    		time: "3 Day",
+    		mode: "Offline",
+    		venue: "SCTCE College",
+    		status: "Completed",
+    		description: "IEEE WIE AG SCT SB presents it's flagship event AURA 4.0 - The 4th Edition 🗓️12th January, 2026 onwardsGet ready to grow with purpose, step into confidence and strive for excellence. AURA 4.0 is a week dedicated to progress, leadership, and empowering women to reach their fullest potential.",
+    		image: "events/aura.jpeg",
+    		chapterId: "wie",
+    		order: 42
+    },
 ];
