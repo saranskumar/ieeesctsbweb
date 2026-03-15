@@ -5,16 +5,7 @@ import { events } from "@/lib/data/events";
 
 const EventsSection = () => {
   const sortedEvents = [...events].sort((a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    
-    // Sort primarily by date descending (newest / furthest in future first)
-    if (!isNaN(dateA) && !isNaN(dateB) && dateA !== dateB) {
-      return dateB - dateA;
-    }
-    
-    // Fallback to manual order if dates are identical or invalid
-    return (a.order || 0) - (b.order || 0);
+    return (b.order || 0) - (a.order || 0);
   }).slice(0, 6);
 
   return (

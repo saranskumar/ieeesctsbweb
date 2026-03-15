@@ -53,7 +53,7 @@ export const events: Event[] = [
         description: "An engaging online treasure hunt hosted as part of the Dhyuthi 6.0 pre-events. A multi-stage challenge guiding participants through technical and logic-based puzzles, cryptic clues, and tech-themed riddles.",
         image: "/events/trailquest",
         chapterId: "wie",
-        order: 3,
+        order: 35,
     },
     {
         id: "embs-inauguration",
@@ -66,7 +66,7 @@ export const events: Event[] = [
         description: "The official inauguration of the IEEE EMBS Chapter of SCT Student Branch. Features insights on EMBS activities, benefits, and the year's upcoming plans.",
         image: "/events/embs_chapter_inau.jpeg",
         chapterId: "embs",
-        order: 4,
+        order: 3,
     },
     {
         id: "bionext",
@@ -78,7 +78,7 @@ export const events: Event[] = [
         description: "A panel discussion focusing on guiding students through diverse career pathways after a B.Tech in Bio-Engineering, including insights into academia, industry, research, and entrepreneurship.",
         image: "/events/bio_next.jpeg",
         chapterId: "embs",
-        order: 5,
+        order: 14,
     },
     {
         id: "fiction-to-fact",
@@ -90,7 +90,7 @@ export const events: Event[] = [
         description: "An interactive one-hour talk exploring the real scientific principles behind abilities often portrayed as superhuman in fiction, connecting concepts from fiction with advancements in science and biomedical engineering.",
         image: "/events/science-behind-superpower.jpeg",
         chapterId: "embs",
-        order: 6,
+        order: 23,
     },
     {
         id: "fact-to-fiction-story",
@@ -102,7 +102,7 @@ export const events: Event[] = [
         description: "A creative story writing competition encouraging participants to blend scientific concepts with imaginative storytelling, with a focus on the real science behind superpowers.",
         image: "/events/fact-2-fiction.jpeg",
         chapterId: "embs",
-        order: 8,
+        order: 24,
     },
     {
         id: "dhyuthi-cellestro",
@@ -116,7 +116,7 @@ export const events: Event[] = [
         image: "/events/dhyuthi-cellestro.jpg",
         chapterId: "embs",
         collaborators: ["sight"],
-        order: 9,
+        order: 37,
     },
     {
         id: "stem-outreach",
@@ -129,7 +129,7 @@ export const events: Event[] = [
         description: "An interactive session guiding Class IX and X students on STEM education pathways, providing clarity on post-10th academic streams and career opportunities.",
         image: "/events/outreach-embs.jpeg",
         chapterId: "embs",
-        order: 10,
+        order: 41,
     },
    /* {
         id: "ai-news-3",
@@ -141,7 +141,7 @@ export const events: Event[] = [
         description: "An online poster release initiative to keep students informed, curious, and inspired about the latest developments in Artificial Intelligence and emerging technologies. Delivered carefully curated, byte-sized insights into current breakthroughs.",
         image: "/events/ai-news-3.jpeg",
         chapterId: "cs",
-        order: 11,
+        order: 15,
     },*/
     {
         id: "algorithmic-thinking",
@@ -153,7 +153,7 @@ export const events: Event[] = [
         description: "A two-day online bootcamp designed especially for first-year students studying Algorithmic Thinking with Python. Focused on breaking down complex problems into simple, structured steps, pattern recognition, and applying logic efficiently.",
         image: "/events/algothink.jpg",
         chapterId: "cs",
-        order: 12,
+        order: 36,
     },
     {
         id: "ensemble-4",
@@ -165,7 +165,7 @@ export const events: Event[] = [
         status: "Completed",
         description: "The IEEE student branch of Sree Chitra Thirunal College of Engineering conducted Ensemble 4.0, featuring a grand inauguration, sharing of experiences by faculty advisors, an honoring ceremony, and networking sessions.",
         image: "/events/ensemble-4.jpeg",
-        order: 13,
+        order: 28,
     },
     {
         id: "aigenix-workshop",
@@ -178,7 +178,7 @@ export const events: Event[] = [
         description: "As part of DHYUTHI 6.0, AIGENIX introduced participants to the basics of agentic AI through a hands-on workshop, focusing on building simple autonomous AI systems that learn, adapt, and act.",
         image: "/events/aigenix.jpg",
         chapterId: "cs",
-        order: 14,
+        order: 38,
     },
     {
         id: "incepta-track3",
@@ -191,7 +191,7 @@ export const events: Event[] = [
         description: "A Robo Soccer competition conducted as a follow-up event to the INCEPTA workshop organized by IEEE IAS and PES. It aimed to deliver a structured, hands-on technical learning experience.",
         image: "/events/incepta.jpg",
         chapterId: "ias",
-        order: 15,
+        order: 39,
     },
     {
         id: "reboot-ideathon",
@@ -203,7 +203,7 @@ export const events: Event[] = [
         description: "An online Ideathon organized by IEEE IAS SCT SB focusing on disaster resilience and climate tech solutions for Kerala, encouraging tech-driven ideas for flood management and climate impact mitigation.",
         image: "/events/reboot-ideathon.jpeg",
         chapterId: "ias",
-        order: 16,
+        order: 8,
     },
     {
         id: "ai-gender-bias",
@@ -215,7 +215,7 @@ export const events: Event[] = [
         description: "An expert panel discussion on the topic of AI and gender bias, discussing how AI mirrors everyday gender biases and how to prevent them.",
         image: "/events/ai_gender_bias.jpeg",
         chapterId: "comsoc",
-        order: 17,
+        order: 5,
     },
     {
         id: "build-your-bot",
@@ -228,7 +228,7 @@ export const events: Event[] = [
         description: "A two-day hands-on workshop led by industry interns to introduce the fundamentals of chatbot development and conversational AI.",
         image: "/events/build_your_bot.jpeg",
         chapterId: "cs",
-        order: 18,
+        order: 11,
     },
     {
         id: "code-sprint",
@@ -240,7 +240,7 @@ export const events: Event[] = [
         description: "A dedicated session highlighting the importance of competitive programming, organized in collaboration with HackerRank.",
         image: "/events/codesprint.jpeg",
         chapterId: "cs",
-        order: 19,
+        order: 40,
     },
     {
         id: "codequeen",
@@ -252,7 +252,7 @@ export const events: Event[] = [
         description: "An exhilarating online quiz competition tailored for first and second-year female students to sharpen their programming and problem-solving skills.",
         image: "/events/code-queen.jpeg",
         chapterId: "cs",
-        order: 20,
+        order: 4,
     },
     {
         id: "ink-her-nation",
@@ -264,7 +264,7 @@ export const events: Event[] = [
         description: "A vibrant AI doodle generation competition celebrating digital artistry and social advocacy under the theme Digital Utopia for Women.",
         image: "/events/ink-her-nation.jpeg",
         chapterId: "cs",
-        order: 21,
+        order: 16,
     },
     {
         id: "skill-stack-1",
@@ -276,7 +276,7 @@ export const events: Event[] = [
         description: "A 10-day intensive boot camp on full-stack web development focusing on practical, project-based learning through modern web development practices.",
         image: "/events/skillstack-1.jpeg",
         chapterId: "cs",
-        order: 22,
+        order: 25,
     },
     {
         id: "techspirations",
@@ -288,7 +288,7 @@ export const events: Event[] = [
         description: "An online write-up competition challenging students to explore the theme Life in 2100: A Future Reimagined for Women.",
         image: "/events/techspirations.jpeg",
         chapterId: "cs",
-        order: 23,
+        order: 22,
     },
     {
         id: "xcelerate",
@@ -300,7 +300,7 @@ export const events: Event[] = [
         description: "A 20-day journey toward coding mastery serving as a definitive launchpad for students preparing for the IEEEXtreme programming marathon.",
         image: "/events/xcelerate.jpeg",
         chapterId: "cs",
-        order: 24,
+        order: 31,
     },
     {
         id: "navigating-internships",
@@ -312,7 +312,7 @@ export const events: Event[] = [
         description: "A panel discussion to guide students through the process of finding and succeeding in internships across tech and research domains.",
         image: "/events/nav_internships.jpeg",
         chapterId: "cs",
-        order: 25,
+        order: 12,
     },
     {
         id: "talentified-1",
@@ -325,7 +325,7 @@ export const events: Event[] = [
         description: "An event designed to foster collaboration and idea sharing among IEEE CS members through teamwork and presentations.",
         image: "/events/talentified.jpeg",
         chapterId: "cs",
-        order: 26,
+        order: 30,
     },
     {
         id: "neurolink",
@@ -337,7 +337,7 @@ export const events: Event[] = [
         description: "An insightful talk session focused on Brain-Computer Interface (BCI) technology and its transformative role in the medical sector.",
         image: "/events/neuro_link.jpeg",
         chapterId: "ias",
-        order: 27,
+        order: 19,
     },
     {
     		id: "overclock",
@@ -350,7 +350,7 @@ export const events: Event[] = [
     		description: "SCT’s first-ever robotics marathon is here to ignite your inner innovator! In this 5-day hardware-based hands-on masterclass, you’ll learn, build, and compete as you design an advanced line follower bot from scratch. No prior experience needed, just your curiosity and team spirit!",
     		image: "events/overclock",
     		chapterId: "ras",
-    		order: 28
+    		order: 29
     },
     {
     		id: "wattwise",
@@ -362,7 +362,7 @@ export const events: Event[] = [
     		description: "Presenting WATTWISE – the ultimate energy meter competition! 🏠📊 Compete to prove your household/hostel is the most energy-efficient and win exciting prizes!",
     		image: "events/wattwise.jpg",
     		chapterId: "pes",
-    		order: 29
+    		order: 6
     },
     {
     		id: "wattsnext",
@@ -375,7 +375,7 @@ export const events: Event[] = [
     		description: "A technical session exploring the latest innovations and strategic advancements in energy efficiency to promote a sustainable future.",
     		image: "events/watts_next.jpeg",
     		chapterId: "pes",
-    		order: 30
+    		order: 9
     },
     {
     		id: "echelon",
@@ -387,7 +387,7 @@ export const events: Event[] = [
     		description: "An inspiring talk session featuring Sherin Hannah on achieving financial independence for women in STEM by transforming technical passion into profitable ventures.",
     		image: "events/echelon.jpeg",
     		chapterId: "wie",
-    		order: 31
+    		order: 10
     },
     {
     		id: "outreach-comsoc-1",
@@ -400,7 +400,7 @@ export const events: Event[] = [
     		description: "An inspiring STEM outreach program that engaged over 60 tenth-grade students at L’Ecole Chempaka to foster curiosity and confidence in young female leaders through interactive sessions on technology and innovation.",
     		image: "events/outreach_comsoc-1.jpeg",
     		chapterId: "comsoc",
-    		order: 32
+    		order: 7
     },
     {
     		id: "tree-plantation-drive",
@@ -413,7 +413,7 @@ export const events: Event[] = [
     		description: "A successful tree plantation drive organized by IEEE PES SBC SCT at SCTCE to celebrate IEEE PES Day and promote environmental sustainability through the collective planting of saplings.",
     		image: "events/tree_plantation.jpeg",
     		chapterId: "pes",
-    		order: 33
+    		order: 13
     },
     {
     		id: "yukthiverse",
@@ -425,7 +425,7 @@ export const events: Event[] = [
     		description: "A 24-hour online ideathon for engineering students to collaborate in teams and develop impactful solutions for real-world challenges across four dedicated tracks.",
     		image: "events/yukthiverse.jpg",
     		chapterId: "sight",
-    		order: 34
+    		order: 18
     },
     {
     		id: "build-up",
@@ -436,7 +436,7 @@ export const events: Event[] = [
     		status: "Completed",
     		description: "A week-long immersive program designed to guide students through the complete product development lifecycle, from initial ideation and expert-led training to building a minimum viable product and pitching to a professional panel.",
     		image: "events/build-up.jpeg",
-    		order: 35
+    		order: 17
     },
     {
     		id: "ctrl-c-ctrl-bot",
@@ -448,7 +448,7 @@ export const events: Event[] = [
     		description: "A creative workshop and ideation space designed to simplify robotics through no-code and low-code AI tools, encouraging students to transform their ideas into functional creations without the barrier of complex programming.",
     		image: "events/ctrl-c-ctrl-bot.jpeg",
     		chapterId: "ras",
-    		order: 35
+    		order: 20
     },
     {
     		id: "decodex",
@@ -460,7 +460,7 @@ export const events: Event[] = [
     		description: "A competitive Capture the Flag event hosted for WIE Day 2025 where participants solve cyber challenges and crack codes under the theme of women pioneering security and safe cyberspace.",
     		image: "events/decodex.jpeg",
     		chapterId: "wie",
-    		order: 36
+    		order: 21
     },
     {
     		id: "comconnect1.0-1",
@@ -472,7 +472,7 @@ export const events: Event[] = [
     		description: "An insightful talk session exploring the intersection of Reconfigurable Intelligent Surfaces and THz communication technologies to understand their transformative impact on the future of 6G and wireless networking.",
     		image: "events/com-connect1.0.jpeg",
     		chapterId: "comsoc",
-    		order: 37
+    		order: 26
     },
     {
     		id: "gridlock",
@@ -484,7 +484,7 @@ export const events: Event[] = [
     		description: "An immersive online treasure hunt adventure where participants solve cryptic puzzles and crack hidden codes to navigate a high-stakes blackout rescue mission and restore the power grid.",
     		image: "events/gridlock.jpeg",
     		chapterId: "pes",
-    		order: 38
+    		order: 27
     },
     {
     		id: "thirike",
@@ -497,7 +497,7 @@ export const events: Event[] = [
     		description: "A collection drive organized by NSS SCTCE and IEEE SIGHT SCT SB to promote environmental sustainability through responsible e-waste and scrap disposal across the campus and local community.",
     		image: "events/thirike.jpeg",
     		chapterId: "sight",
-    		order: 39
+    		order: 32
     },
     {
     		id: "xtremetalks-2",
@@ -509,7 +509,7 @@ export const events: Event[] = [
     		description: "An orientation session designed to guide students through team formation, registration, and strategic preparation for IEEEXtreme 19.0, a global 24-hour competitive programming marathon.",
     		image: "events/xtreme-talks.jpeg",
     		chapterId: "cs",
-    		order: 40
+    		order: 33
     },
     {
     		id: "comconnect1.0-2",
@@ -521,7 +521,7 @@ export const events: Event[] = [
     		description: "An engaging session that bridges wireless communication and radio astronomy to explore how radio waves power global connectivity and provide a window into the secrets of the cosmos.",
     		image: "events/com-connect1.0-2.jpeg",
     		chapterId: "comsoc",
-    		order: 41
+    		order: 34
     },
     {
     		id: "aura4",
