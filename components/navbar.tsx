@@ -90,7 +90,7 @@ const Navbar = () => {
                             </Link>
                         ))}
                         <Button asChild className="ml-2 font-secondary rounded-full px-5 h-9">
-                            <a href="/join" target="_blank" rel="noopener noreferrer" onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>Join IEEE</a>
+                            <a href="/join"  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>Join IEEE</a>
                         </Button>
                     </div>
 

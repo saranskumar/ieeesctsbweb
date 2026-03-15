@@ -14,9 +14,11 @@ export default function ContactContent() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
+        phone: "",
         subject: "",
         message: "",
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const searchParams = useSearchParams();
 
@@ -33,7 +35,7 @@ export default function ContactContent() {
         }
     }, [searchParams]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!formData.name || !formData.email || !formData.message) {
@@ -45,12 +47,37 @@ export default function ContactContent() {
             return;
         }
 
-        toast({
-            title: "Message Sent!",
-            description: "We'll get back to you soon.",
-        });
+        setIsSubmitting(true);
 
-        setFormData({ name: "", email: "", subject: "", message: "" });
+        try {
+            // REPLACE THIS URL with your deployed Google Apps Script Web App URL
+            const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSU9NJyNxD2PB6qrlq6W1-DHMMh_lnixlUov6SrhvKPMCqfkgmJq4ygtVUqRJnunE0/exec";
+
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors", // Required for Google Apps Script
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams(formData).toString(),
+            });
+
+            toast({
+                title: "Message Sent!",
+                description: "We'll get back to you soon.",
+            });
+
+            setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+        } catch (error) {
+            console.error("Submission error:", error);
+            toast({
+                title: "Error",
+                description: "Something went wrong. Please try again later.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -154,6 +181,7 @@ export default function ContactContent() {
                                         onChange={handleChange}
                                         className="font-body"
                                         required
+                                        disabled={isSubmitting}
                                     />
                                 </div>
 
@@ -170,6 +198,23 @@ export default function ContactContent() {
                                         onChange={handleChange}
                                         className="font-body"
                                         required
+                                        disabled={isSubmitting}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone" className="font-secondary">
+                                        Phone Number
+                                    </Label>
+                                    <Input
+                                        id="phone"
+                                        name="phone"
+                                        type="tel"
+                                        placeholder="Your phone number"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        className="font-body"
+                                        disabled={isSubmitting}
                                     />
                                 </div>
 
@@ -185,6 +230,7 @@ export default function ContactContent() {
                                         value={formData.subject}
                                         onChange={handleChange}
                                         className="font-body"
+                                        disabled={isSubmitting}
                                     />
                                 </div>
 
@@ -200,12 +246,19 @@ export default function ContactContent() {
                                         onChange={handleChange}
                                         className="font-body min-h-[150px]"
                                         required
+                                        disabled={isSubmitting}
                                     />
                                 </div>
 
-                                <Button type="submit" size="lg" className="w-full font-secondary gap-2">
-                                    <Send className="w-4 h-4" />
-                                    Send Message
+                                <Button type="submit" size="lg" className="w-full font-secondary gap-2" disabled={isSubmitting}>
+                                    {isSubmitting ? (
+                                        <>Sending...</>
+                                    ) : (
+                                        <>
+                                            <Send className="w-4 h-4" />
+                                            Send Message
+                                        </>
+                                    )}
                                 </Button>
                             </form>
                         </div>

@@ -5,6 +5,13 @@ import { achievements } from "@/lib/data/achievements";
 
 
 const AchievementsSection = () => {
+  // Sort achievements by year descending
+  const sortedAchievements = [...achievements].sort((a, b) => {
+    const yearA = a.year.split(',').pop()?.trim() || "0";
+    const yearB = b.year.split(',').pop()?.trim() || "0";
+    return parseInt(yearB) - parseInt(yearA);
+  }).slice(0, 4);
+
   return (
     <section className="section-padding bg-background">
       <div className="section-container">
@@ -26,7 +33,7 @@ const AchievementsSection = () => {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {achievements.slice(0, 4).map((achievement, index) => (
+          {sortedAchievements.map((achievement, index) => (
             <div
               key={achievement.id}
               className="card-ieee text-center"

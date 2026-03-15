@@ -430,7 +430,18 @@ export const galleryItems: GalleryItem[] = [
         "order": 38
     },
     {
-        "id": "gallery-new-39",
+        "id": "gallery-new-40",
+        "title": "",
+        "category": "",
+        "image": "/gallery/culturalnight.jpg",
+        "date": "",
+        "eventId": "",
+        "chapterId": "",
+        "description": "",
+        "order": 40
+    },
+    {
+        "id": "gallery-new-41",
         "title": "",
         "category": "",
         "image": "/gallery/wiecon8_oth.webp",

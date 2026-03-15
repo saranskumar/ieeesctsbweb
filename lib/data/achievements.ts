@@ -79,5 +79,17 @@ export const achievements: Achievement[] = [
         title: "Regional Exemplary Student Branch Award",
         year: "2022, 2023",
         level: "Region 10",
+    },
+    {
+        id: 13,
+        title: "IEEE Regional Exemplary Student Branch Award",
+        year: "2025",
+        level: "Region 10",
+    },
+    {
+        id: 14,
+        title: "IEEE Darrel Chong Student Activity Award (Bronze Tier)",
+        year: "2025",
+        level: "IEEE MGA SAC",
     }
 ];
