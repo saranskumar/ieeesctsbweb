@@ -43,6 +43,8 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [isIeeeMember, setIsIeeeMember] = useState("");
+    const [ieeeMembershipId, setIeeeMembershipId] = useState("");
     // Dynamic form_schema field values keyed by field id
     const [customValues, setCustomValues] = useState<Record<string, string | boolean>>({});
 
@@ -109,8 +111,13 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
         if (!event) return;
         setSubmitError(null);
 
-        if (!name.trim() || !email.trim() || !phone.trim()) {
-            setSubmitError("Name, email, and phone are required.");
+        if (!name.trim() || !email.trim() || !phone.trim() || !isIeeeMember) {
+            setSubmitError("Name, email, phone, and IEEE membership status are required.");
+            return;
+        }
+
+        if (isIeeeMember === "Yes" && !ieeeMembershipId.trim()) {
+            setSubmitError("IEEE Membership ID is required for IEEE members.");
             return;
         }
 
@@ -131,7 +138,11 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                 name: name.trim(),
                 email: email.trim(),
                 phone: phone.trim(),
-                form_data: customValues,
+                form_data: {
+                    ...customValues,
+                    is_ieee_member: isIeeeMember,
+                    ieee_membership_id: isIeeeMember === "Yes" ? ieeeMembershipId.trim() : "",
+                },
                 status: "pending",
             });
             if (insertError) throw insertError;
@@ -256,6 +267,45 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                 </Label>
                                 <Input id="reg-phone" type="tel" placeholder="Enter your phone number" value={phone} onChange={e => setPhone(e.target.value)} className="font-body" required />
                             </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="reg-ieee-member" className="font-secondary">
+                                    Are you an IEEE Member? <span className="text-destructive">*</span>
+                                </Label>
+                                <select
+                                    id="reg-ieee-member"
+                                    value={isIeeeMember}
+                                    onChange={e => {
+                                        setIsIeeeMember(e.target.value);
+                                        if (e.target.value !== "Yes") {
+                                            setIeeeMembershipId("");
+                                        }
+                                    }}
+                                    required
+                                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                >
+                                    <option value="">Select an option</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
+                            {isIeeeMember === "Yes" && (
+                                <div className="space-y-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                                    <Label htmlFor="reg-ieee-id" className="font-secondary">
+                                        IEEE Membership ID <span className="text-destructive">*</span>
+                                    </Label>
+                                    <Input
+                                        id="reg-ieee-id"
+                                        type="text"
+                                        placeholder="Enter your 8-digit IEEE membership ID"
+                                        value={ieeeMembershipId}
+                                        onChange={e => setIeeeMembershipId(e.target.value)}
+                                        className="font-body"
+                                        required
+                                    />
+                                </div>
+                            )}
 
                             {/* Dynamic Custom Fields from form_schema */}
                             {event.form_schema.map(field => (
