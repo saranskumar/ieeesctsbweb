@@ -1,12 +1,60 @@
-import { Calendar, MapPin, ArrowRight, Monitor, Users } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { events } from "@/lib/data/events";
+import { supabase } from "@/lib/supabase";
+import { events as staticEvents } from "@/lib/data/events";
 
-const EventsSection = () => {
-  const sortedEvents = [...events].sort((a, b) => {
-    return (b.order || 0) - (a.order || 0);
-  }).slice(0, 6);
+async function getHomeEvents() {
+  try {
+    const { data: dbEvents, error } = await supabase
+      .from("events")
+      .select("*")
+      .limit(20);
+
+    if (error || !dbEvents || dbEvents.length === 0) {
+      return staticEvents.slice(0, 6);
+    }
+
+    return dbEvents.map((e: any) => {
+      const statusVal = e.status === "published" ? "Registration Open" : "Completed";
+      
+      let formattedDate = "";
+      let formattedTime = "";
+      if (e.event_date) {
+        const d = new Date(e.event_date);
+        formattedDate = d.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        });
+        formattedTime = d.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+      }
+
+      return {
+        id: e.slug,
+        title: e.title,
+        date: formattedDate || "TBA",
+        time: formattedTime,
+        mode: "Offline" as const,
+        venue: e.venue || "",
+        status: statusVal,
+        description: e.description,
+        image: e.main_poster_url || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+        order: 0,
+      };
+    }).slice(0, 6);
+  } catch (err) {
+    console.error("Error fetching home events from Supabase:", err);
+    return staticEvents.slice(0, 6);
+  }
+}
+
+const EventsSection = async () => {
+  const sortedEvents = await getHomeEvents();
 
   return (
     <section className="section-padding bg-card">
@@ -57,7 +105,10 @@ const EventsSection = () => {
                     <div className="space-y-2 mb-4 flex-grow">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="w-4 h-4 text-primary" />
-                        <span className="font-body">{event.date}</span>
+                        <span className="font-body">
+                          {event.date}
+                          {event.time && ` • ${event.time}`}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         {event.mode === "Online" ? (

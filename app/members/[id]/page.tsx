@@ -1,75 +1,135 @@
-import { getMember, members, TeamEntry } from "@/lib/data/members";
 import { Mail, Linkedin, Github, Globe, ArrowLeft, Briefcase, Award } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
-import { execom26, sbcTeams26 } from "@/lib/data/team26";
-import { execom25, sbcTeams25 } from "@/lib/data/team25";
-import { execom24, sbcTeams24 } from "@/lib/data/team24";
-import { execom23, sbcTeams23 } from "@/lib/data/team23";
-import { execom22, sbcTeams22 } from "@/lib/data/team22";
-import { execom21, sbcTeams21 } from "@/lib/data/team21";
-import { execom20, sbcTeams20 } from "@/lib/data/team20";
-
-// Map years to their respective data modules
-const teamData: Record<string, { execom: TeamEntry[], sbcTeams: Record<string, TeamEntry[]> }> = {
-    "2026": { execom: execom26, sbcTeams: sbcTeams26 },
-    "2025": { execom: execom25, sbcTeams: sbcTeams25 },
-    "2024": { execom: execom24, sbcTeams: sbcTeams24 },
-    "2023": { execom: execom23, sbcTeams: sbcTeams23 },
-    "2022": { execom: execom22, sbcTeams: sbcTeams22 },
-    "2021": { execom: execom21, sbcTeams: sbcTeams21 },
-    "2020": { execom: execom20, sbcTeams: sbcTeams20 },
-};
-
-// Generate static params for all registered members
+// Generate static params for all registered members from Supabase
 export async function generateStaticParams() {
-    return Object.keys(members).map((id) => ({ id }));
-}
+    const params: { id: string }[] = [];
 
-function getMemberRoles(memberId: string) {
-    const roles: { year: string; role: string; chapter: string }[] = [];
-    
-    // Sort years descending to get most recent first
-    const years = Object.keys(teamData).sort((a, b) => parseInt(b) - parseInt(a));
-    
-    for (const year of years) {
-        const data = teamData[year];
+    try {
+        const { data: dbProfiles } = await supabase
+            .from('profiles')
+            .select('id, username');
         
-        // Check Execom
-        const execomMatch = data.execom.find(e => e.memberId === memberId);
-        if (execomMatch) {
-            roles.push({ year, role: execomMatch.role, chapter: "SB Execom" });
+        if (dbProfiles) {
+            dbProfiles.forEach((profile) => {
+                // Add by UUID (id)
+                if (profile.id) {
+                    params.push({ id: profile.id });
+                }
+                // Add by username
+                if (profile.username) {
+                    params.push({ id: profile.username });
+                }
+            });
         }
-        
-        // Check SBC Teams
-        for (const [chapter, team] of Object.entries(data.sbcTeams)) {
-            const sbcMatch = team.find(e => e.memberId === memberId);
-            if (sbcMatch) {
-                roles.push({ year, role: sbcMatch.role, chapter: chapter.toUpperCase() });
-            }
-        }
+    } catch (err) {
+        console.error("Error generating static params from Supabase:", err);
     }
-    
-    return roles;
+
+    // Deduplicate to avoid rendering duplicates during build
+    const uniqueIds = new Set<string>();
+    return params.filter(p => {
+        if (uniqueIds.has(p.id)) return false;
+        uniqueIds.add(p.id);
+        return true;
+    });
 }
 
 export default async function MemberProfilePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const member = getMember(id);
 
-    if (!member) {
+    const isUuid = (str: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+    
+    let dbProfile: any = null;
+    let dbRoles: any[] = [];
+    
+    try {
+        let query = supabase.from('profiles').select('*, users ( email )');
+        if (isUuid(id)) {
+            query = query.eq('id', id);
+        } else {
+            query = query.eq('username', id);
+        }
+        const { data } = await query.single();
+        if (data) {
+            dbProfile = data;
+            
+            const { data: rolesData } = await supabase
+                .from('team_entries')
+                .select(`
+                    role,
+                    team_years (
+                        year
+                    )
+                `)
+                .eq('user_id', dbProfile.id);
+            
+            if (rolesData) {
+                dbRoles = rolesData.map(entry => {
+                    const teamYearsObj = Array.isArray(entry.team_years)
+                        ? entry.team_years[0]
+                        : entry.team_years;
+                    const yearRange = teamYearsObj?.year || '';
+                    const year = yearRange.split('-')[0] || '';
+                    
+                    let chapter = "SB Execom";
+                    const roleLower = entry.role.toLowerCase();
+                    
+                    if (roleLower.startsWith("cs ") || roleLower === "women in computing" || roleLower === "ai sig coordinator") {
+                        chapter = "CS";
+                    } else if (roleLower.startsWith("embs ")) {
+                        chapter = "EMBS";
+                    } else if (roleLower.startsWith("ras ")) {
+                        chapter = "RAS";
+                    } else if (roleLower.startsWith("ias ")) {
+                        chapter = "IAS";
+                    } else if (roleLower.startsWith("pes ") || roleLower === "women in power") {
+                        chapter = "PES";
+                    } else if (roleLower.startsWith("comsoc ") || roleLower === "wice") {
+                        chapter = "COMSOC";
+                    } else if (roleLower.startsWith("sight ") || roleLower === "project head") {
+                        chapter = "SIGHT";
+                    } else if (roleLower.startsWith("wie ")) {
+                        chapter = "WIE";
+                    }
+                    
+                    return {
+                        year,
+                        role: entry.role,
+                        chapter
+                    };
+                });
+            }
+        }
+    } catch (err) {
+        console.error("Error fetching member profile from Supabase:", err);
+    }
+
+    if (!dbProfile) {
         notFound();
     }
 
-    const generatedRoles = getMemberRoles(id);
-    // Combine generated history with manually specified otherRoles from the registry
-    const combinedRoles = [...generatedRoles, ...(member.otherRoles || [])];
+    const usersObj = Array.isArray(dbProfile.users) ? dbProfile.users[0] : dbProfile.users;
+    const email = usersObj?.email || null;
     
-    // Sort all roles in descending order based on the year
-    const roles = combinedRoles.sort((a, b) => parseInt(b.year) - parseInt(a.year));
+    const member = {
+        id: dbProfile.id,
+        name: dbProfile.name,
+        image: dbProfile.image_url || "/person.svg",
+        department: dbProfile.department || null,
+        batch: dbProfile.batch || null,
+        linkedin: dbProfile.linkedin_url || null,
+        github: dbProfile.github_url || null,
+        email: email,
+        bio: dbProfile.bio || null,
+        awards: [],
+        instagram: null,
+        website: null
+    };
     
-    // The "latestRole" is the one used for the top badge. We can just take the first one after sorting.
+    const roles = dbRoles.sort((a, b) => parseInt(b.year) - parseInt(a.year));
     const latestRole = roles.length > 0 ? roles[0] : null;
 
     return (
@@ -178,7 +238,7 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
                             Achievements & Awards
                         </h3>
                         <ul className="space-y-3">
-                            {member.awards.map((award, i) => (
+                            {(member.awards as string[]).map((award: string, i: number) => (
                                 <li key={i} className="text-muted-foreground font-body text-sm flex items-start gap-3">
                                     <span className="text-primary mt-0.5">•</span>
                                     {award}
@@ -195,10 +255,7 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
                             Other Roles
                         </h3>
                         <ul className="space-y-3">
-                            {roles.map((r, i) => {
-                                // Skip the very first role IF it came from the generated registry and is the active "latestRole"
-                                if (i === 0 && Array.isArray(generatedRoles) && generatedRoles.length > 0 && r === generatedRoles[0]) return null;
-                                
+                            {roles.slice(1).map((r, i) => {
                                 // Handling dynamic registry roles (which have a 'chapter' property) vs hardcoded pastRoles
                                 const chapterSuffix = 'chapter' in r ? ` (${r.chapter})` : '';
                                 

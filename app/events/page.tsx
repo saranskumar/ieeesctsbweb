@@ -2,10 +2,98 @@ import Link from "next/link";
 import { Calendar, MapPin, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import { events } from "@/lib/data/events";
+import { supabase } from "@/lib/supabase";
+import { events as staticEvents } from "@/lib/data/events";
+import { announcements as staticAnnouncements } from "@/lib/data/announcements";
 
-export default function EventsPage() {
-  const sortedEvents = [...events].sort((a, b) => {
+export const revalidate = 60; // Revalidate every minute
+
+async function getEventsAndAnnouncements() {
+  try {
+    const { data: dbEvents, error: eventsError } = await supabase
+      .from("events")
+      .select("*")
+      .order("event_date", { ascending: false });
+
+    const { data: dbAnnouncements, error: announcementsError } = await supabase
+      .from("announcements")
+      .select("*")
+      .order("announcement_date", { ascending: false });
+
+    if (eventsError || announcementsError) {
+      console.error("Supabase error fetching events/announcements, falling back to static:", eventsError || announcementsError);
+      return { events: staticEvents, announcements: staticAnnouncements };
+    }
+
+    if (!dbEvents || dbEvents.length === 0) {
+      return { events: staticEvents, announcements: staticAnnouncements };
+    }
+
+    const mappedEvents = dbEvents.map((e: any) => {
+      const statusVal = e.status === "published" ? "Registration Open" : "Completed";
+      
+      let formattedDate = "";
+      let formattedTime = "";
+      if (e.event_date) {
+        const d = new Date(e.event_date);
+        formattedDate = d.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        });
+        formattedTime = d.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+      }
+
+      return {
+        id: e.slug,
+        title: e.title,
+        date: formattedDate || "TBA",
+        time: formattedTime,
+        mode: "Offline", // default
+        venue: e.venue || "",
+        status: statusVal,
+        description: e.description,
+        image: e.main_poster_url || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+        order: 0,
+      };
+    });
+
+    const mappedAnnouncements = (dbAnnouncements || []).map((a: any) => {
+      let formattedDate = "";
+      if (a.announcement_date) {
+        const d = new Date(a.announcement_date);
+        formattedDate = d.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        });
+      }
+
+      return {
+        id: a.slug,
+        title: a.title,
+        description: a.description,
+        date: formattedDate,
+        imageUrl: a.image_url || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+        order: a.display_order,
+      };
+    });
+
+    return { events: mappedEvents, announcements: mappedAnnouncements };
+  } catch (error) {
+    console.error("Exception fetching from Supabase, falling back to static:", error);
+    return { events: staticEvents, announcements: staticAnnouncements };
+  }
+}
+
+export default async function EventsPage() {
+  const { events: fetchedEvents, announcements: fetchedAnnouncements } = await getEventsAndAnnouncements();
+
+  const sortedEvents = [...fetchedEvents].sort((a, b) => {
     return (b.order || 0) - (a.order || 0);
   });
 
@@ -30,7 +118,7 @@ export default function EventsPage() {
         </div>
       </section>
 
-      {/* Events Sections */}
+      {/* Content Section */}
       <section className="section-padding bg-card min-h-[60vh]">
         <div className="section-container space-y-20">
           
@@ -60,11 +148,53 @@ export default function EventsPage() {
             </div>
           )}
 
+          {/* Announcements Section */}
+          {fetchedAnnouncements && fetchedAnnouncements.length > 0 && (
+            <div>
+              <div className="mb-10">
+                <h2 className="text-3xl font-heading font-bold text-foreground mb-2">
+                  Announcements
+                </h2>
+                <p className="text-muted-foreground font-body">
+                  Latest updates, honors, and official news from IEEE SCT SB.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {fetchedAnnouncements.map((ann) => (
+                  <div
+                    key={ann.id}
+                    className="bg-background rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full group"
+                  >
+                    <div className="aspect-video bg-muted relative overflow-hidden">
+                      <img
+                        src={ann.imageUrl || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg"}
+                        alt={ann.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                    </div>
+                    <div className="p-6 flex flex-col flex-grow">
+                      <span className="text-xs font-semibold text-primary mb-2 block">
+                        {ann.date}
+                      </span>
+                      <h3 className="text-lg font-heading font-bold text-foreground mb-3 line-clamp-2">
+                        {ann.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm font-body line-clamp-4 leading-relaxed">
+                        {ann.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* All Events Section */}
           <div>
             <div className="mb-10">
               <h2 className="text-3xl font-heading font-bold text-foreground mb-2">
-                {showLiveSection ? "Recent & Past Activities" : "All Events & Announcements"}
+                {showLiveSection ? "Recent & Past Activities" : "All Events"}
               </h2>
               {!showLiveSection && (
                 <p className="text-muted-foreground font-body">
@@ -96,7 +226,7 @@ export default function EventsPage() {
 function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
   return (
     <div
-      className={`bg-background rounded-xl overflow-hidden group flex flex-col h-full border border-border shadow-sm hover:shadow-xl transition-all duration-500 ${!isLive ? 'opacity-95' : 'border-primary/20 shadow-primary/5'}`}
+      className={`bg-background rounded-xl overflow-hidden group flex flex-col h-full border border-border shadow-sm hover:shadow-xl transition-all duration-500 ${!isLive ? "opacity-95" : "border-primary/20 shadow-primary/5"}`}
     >
       <div className="aspect-[4/5] bg-muted relative overflow-hidden">
         <img
@@ -126,7 +256,10 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center gap-3 text-sm text-foreground/80">
               <Calendar className="w-4 h-4 text-primary" />
-              <span className="font-body font-medium">{event.date}</span>
+              <span className="font-body font-medium">
+                {event.date}
+                {event.time && ` • ${event.time}`}
+              </span>
             </div>
             <div className="flex items-center gap-3 text-sm text-foreground/80">
               {event.mode === "Online" ? (
@@ -142,11 +275,11 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
           </div>
           <Button 
             asChild 
-            className={`w-full font-bold group/btn ${isLive ? 'shadow-lg shadow-primary/20' : ''}`}
+            className={`w-full font-bold group/btn ${isLive ? "shadow-lg shadow-primary/20" : ""}`}
             variant={isLive ? "default" : "outline"}
           >
-            <Link href={`/${event.id}`}>
-              {event.status === "Registration Open" ? "Join Event" : "Explore Details"}
+            <Link href={event.status === "Registration Open" ? `/${event.id}/register` : `/${event.id}`}>
+              {event.status === "Registration Open" ? "Register Now" : "Explore Details"}
             </Link>
           </Button>
         </div>

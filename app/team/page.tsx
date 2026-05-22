@@ -1,34 +1,115 @@
 "use client";
 
-import { useState } from "react";
-import { execom26, sbcTeams26 } from "@/lib/data/team26";
-import { execom25, sbcTeams25 } from "@/lib/data/team25";
-import { execom24, sbcTeams24 } from "@/lib/data/team24";
-import { execom23, sbcTeams23 } from "@/lib/data/team23";
-import { execom22, sbcTeams22 } from "@/lib/data/team22";
-import { execom21, sbcTeams21 } from "@/lib/data/team21";
-import { execom20, sbcTeams20 } from "@/lib/data/team20";
+import { useState, useEffect } from "react";
 import { Mail, Linkedin, ChevronLeft, ChevronRight, User } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { TeamEntry, resolveEntry } from "@/lib/data/members";
+import { supabase } from "@/lib/supabase";
 
-
-// Map years to their respective data modules
-const teamData: Record<string, { execom: TeamEntry[], sbcTeams: Record<string, TeamEntry[]> }> = {
-   // "2026": { execom: execom26, sbcTeams: sbcTeams26 },
-    "2025": { execom: execom25, sbcTeams: sbcTeams25 },
-    "2024": { execom: execom24, sbcTeams: sbcTeams24 },
-    "2023": { execom: execom23, sbcTeams: sbcTeams23 },
-    "2022": { execom: execom22, sbcTeams: sbcTeams22 },
-    "2021": { execom: execom21, sbcTeams: sbcTeams21 },
-    "2020": { execom: execom20, sbcTeams: sbcTeams20 },
+const getSbcKey = (role: string): string | null => {
+    const roleLower = role.toLowerCase();
+    if (roleLower.includes("advisor") || roleLower.includes("counselor")) {
+        return null; // Faculty advisors are part of SB Execom
+    }
+    if (roleLower.startsWith("cs ") || roleLower === "women in computing" || roleLower === "ai sig coordinator") return "cs";
+    if (roleLower.startsWith("embs ")) return "embs";
+    if (roleLower.startsWith("ras ")) return "ras";
+    if (roleLower.startsWith("ias ")) return "ias";
+    if (roleLower.startsWith("pes ") || roleLower === "women in power") return "pes";
+    if (roleLower.startsWith("comsoc ") || roleLower === "wice") return "comsoc";
+    if (roleLower.startsWith("sight ") || roleLower === "project head") return "sight";
+    if (roleLower.startsWith("wie ")) return "wie";
+    return null;
 };
 
-const availableYears = Object.keys(teamData).sort((a, b) => Number(b) - Number(a));
-
 export default function TeamPage() {
-    const [year, setYear] = useState<string>(availableYears[0]);
+    const [availableYears, setAvailableYears] = useState<string[]>([]);
+    const [year, setYear] = useState<string>("");
+    const [yearIdMap, setYearIdMap] = useState<Record<string, string>>({});
+    const [loading, setLoading] = useState<boolean>(true);
+    const [dbEntries, setDbEntries] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function fetchYears() {
+            try {
+                const { data, error } = await supabase
+                    .from("team_years")
+                    .select("id, year, is_active")
+                    .order("year", { ascending: false });
+                
+                if (data && data.length > 0) {
+                    const mappedYears = data.map(y => y.year.split("-")[0]);
+                    const idMap: Record<string, string> = {};
+                    data.forEach(y => {
+                        idMap[y.year.split("-")[0]] = y.id;
+                    });
+                    setYearIdMap(idMap);
+                    setAvailableYears(mappedYears);
+                    
+                    const activeRow = data.find(y => y.is_active);
+                    if (activeRow) {
+                        setYear(activeRow.year.split("-")[0]);
+                    } else {
+                        setYear(mappedYears[0]);
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching team years:", err);
+            }
+        }
+        fetchYears();
+    }, []);
+
+    useEffect(() => {
+        const yearId = yearIdMap[year];
+        if (!yearId) {
+            setDbEntries([]);
+            setLoading(false);
+            return;
+        }
+
+        async function fetchEntries() {
+            setLoading(true);
+            try {
+                const { data, error } = await supabase
+                    .from("team_entries")
+                    .select(`
+                        id,
+                        role,
+                        display_order,
+                        user_id,
+                        users (
+                            email
+                        ),
+                        profiles (
+                            id,
+                            name,
+                            image_url,
+                            linkedin_url,
+                            github_url,
+                            department,
+                            batch,
+                            bio
+                        )
+                    `)
+                    .eq("team_year_id", yearId)
+                    .order("display_order", { ascending: true });
+                
+                if (data) {
+                    setDbEntries(data);
+                } else {
+                    setDbEntries([]);
+                }
+            } catch (err) {
+                console.error("Error fetching team entries:", err);
+                setDbEntries([]);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchEntries();
+    }, [year, yearIdMap]);
+
     const currentIndex = availableYears.indexOf(year);
 
     const handlePreviousYear = () => {
@@ -38,21 +119,45 @@ export default function TeamPage() {
         if (currentIndex > 0) setYear(availableYears[currentIndex - 1]);
     };
 
-    const { execom, sbcTeams } = teamData[year];
-
-    // Resolve TeamEntry → full profile from members registry
-    const resolved = execom.map(resolveEntry);
-    const resolvedSbc = Object.fromEntries(
-        Object.entries(sbcTeams).map(([k, v]) => [k, v.map(resolveEntry)])
-    );
+    const mapped = dbEntries.map(entry => {
+        const p = entry.profiles;
+        const name = p?.name || "Unknown Member";
+        const email = entry.users?.email || (Array.isArray(entry.users) ? entry.users[0]?.email : null) || null;
+        
+        return {
+            id: p ? p.id : entry.user_id,
+            name: name,
+            image: p?.image_url || "/person.svg",
+            department: p?.department || null,
+            batch: p?.batch || null,
+            linkedin: p?.linkedin_url || null,
+            github: p?.github_url || null,
+            email: email,
+            bio: p?.bio || null,
+            role: entry.role
+        };
+    });
 
     const isFaculty = (role: string) => /(advisor|counselor)/i.test(role);
-
     const coreRoles = ["Chairperson", "Vice Chairperson", "Secretary"];
+    
+    const execomEntries = mapped.filter(m => getSbcKey(m.role) === null);
+    const sbcEntries = mapped.filter(m => getSbcKey(m.role) !== null);
 
-    const facultyTeam = resolved.filter(m => isFaculty(m.role));
-    const coreTeam = resolved.filter(m => coreRoles.includes(m.role) && !isFaculty(m.role));
-    const otherTeam = resolved.filter(m => !coreRoles.includes(m.role) && !isFaculty(m.role));
+    const facultyTeam = execomEntries.filter(m => isFaculty(m.role));
+    const coreTeam = execomEntries.filter(m => coreRoles.includes(m.role) && !isFaculty(m.role));
+    const otherTeam = execomEntries.filter(m => !coreRoles.includes(m.role) && !isFaculty(m.role));
+
+    const resolvedSbc: Record<string, any[]> = {};
+    sbcEntries.forEach(m => {
+        const key = getSbcKey(m.role);
+        if (key) {
+            if (!resolvedSbc[key]) {
+                resolvedSbc[key] = [];
+            }
+            resolvedSbc[key].push(m);
+        }
+    });
 
 
     return (

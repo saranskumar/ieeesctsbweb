@@ -1,11 +1,56 @@
-import { webTeam } from "@/lib/data/web-team";
-import { resolveEntry } from "@/lib/data/members";
 import { Github, Linkedin, Globe, Code, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase";
 
-export default function WebTeamPage() {
-    const resolvedTeam = webTeam.map(resolveEntry);
+export default async function WebTeamPage() {
+    let resolvedTeam: any[] = [];
+    try {
+        const { data } = await supabase
+            .from("profiles")
+            .select(`
+                id,
+                username,
+                name,
+                image_url,
+                linkedin_url,
+                github_url,
+                department
+            `)
+            .in("username", ["saranskumar", "mahreen-zuraiq", "hari-narayanan-s"]);
+
+        if (data) {
+            const roleAndOrderMap: Record<string, { role: string; order: number; website?: string }> = {
+                "saranskumar": { role: "Webmaster / Lead Developer", order: 0 },
+                "mahreen-zuraiq": { role: "UI/UX Designer & Developer", order: 1 },
+                "hari-narayanan-s": { role: "Frontend Developer", order: 2 }
+            };
+
+            resolvedTeam = data
+                .map(p => {
+                    const meta = roleAndOrderMap[p.username] || { role: "Web Developer", order: 9 };
+                    return {
+                        id: p.id,
+                        name: p.name,
+                        image: p.image_url || "/person.svg",
+                        linkedin: p.linkedin_url || null,
+                        github: p.github_url || null,
+                        website: meta.website || null,
+                        department: p.department || null,
+                        role: meta.role,
+                        username: p.username
+                    };
+                })
+                .sort((a, b) => {
+                    const orderA = roleAndOrderMap[a.username]?.order ?? 99;
+                    const orderB = roleAndOrderMap[b.username]?.order ?? 99;
+                    return orderA - orderB;
+                });
+        }
+    } catch (err) {
+        console.error("Error fetching web team profiles:", err);
+    }
+
 
     return (
         <div className="min-h-screen bg-background">

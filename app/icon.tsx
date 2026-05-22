@@ -13,8 +13,8 @@ export const contentType = 'image/png';
 
 // Image generation
 export default function Icon() {
-    // Read the favicon image from the public directory
-    const imagePath = path.join(process.cwd(), 'public', 'favicon.png');
+    // Read the logo image from the public directory
+    const imagePath = path.join(process.cwd(), 'public', 'logo.png');
     const file = fs.readFileSync(imagePath);
     const imageSrc = `data:image/png;base64,${file.toString('base64')}`;
 
