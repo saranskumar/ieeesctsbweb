@@ -43,12 +43,59 @@ export default async function EventDetailPage({ params }: { params: Promise<{ ev
                 venue: data.venue || "",
                 status: statusVal,
                 description: data.description,
-                image: data.main_poster_url || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+                image: data.main_poster_url 
+                  ? (data.main_poster_url.includes("res.cloudinary.com") 
+                      ? data.main_poster_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
+                      : data.main_poster_url) 
+                  : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
                 order: 0,
+                redirectLinks: data.redirect_links || [],
+                guidelines: data.guidelines || [],
+                rules: data.rules || [],
             };
         }
+
+        if (!event) {
+            const { data: annData, error: annError } = await supabase
+                .from("announcements")
+                .select("*")
+                .eq("slug", eventId)
+                .maybeSingle();
+
+            if (annData && !annError) {
+                let formattedDate = "";
+                if (annData.announcement_date) {
+                    const d = new Date(annData.announcement_date);
+                    formattedDate = d.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                    });
+                }
+                event = {
+                    id: annData.slug,
+                    title: annData.title,
+                    date: formattedDate || "TBA",
+                    time: "",
+                    mode: "Offline" as const,
+                    venue: "",
+                    status: null,
+                    description: annData.description,
+                    image: annData.image_url 
+                      ? (annData.image_url.includes("res.cloudinary.com") 
+                          ? annData.image_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
+                          : annData.image_url) 
+                      : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+                    order: 0,
+                    isAnnouncement: true,
+                    redirectLinks: annData.redirect_links || [],
+                    guidelines: annData.guidelines || [],
+                    rules: annData.rules || [],
+                };
+            }
+        }
     } catch (err) {
-        console.error("Error fetching single event from Supabase:", err);
+        console.error("Error fetching single event/announcement from Supabase:", err);
     }
     
     // Fallback to static if db query didn't find it

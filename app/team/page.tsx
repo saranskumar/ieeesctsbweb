@@ -63,8 +63,10 @@ export default function TeamPage() {
     useEffect(() => {
         const yearId = yearIdMap[year];
         if (!yearId) {
-            setDbEntries([]);
-            setLoading(false);
+            if (availableYears.length > 0) {
+                setDbEntries([]);
+                setLoading(false);
+            }
             return;
         }
 
@@ -218,7 +220,19 @@ export default function TeamPage() {
                     <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-12 text-center">
                         {year} Core Execom
                     </h2>
-                    {coreTeam.length > 0 ? (
+                    {loading ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 max-w-4xl mx-auto gap-6 sm:gap-8">
+                            {[1, 2, 3].map((n) => (
+                                <div key={n} className="bg-background rounded-lg overflow-hidden border border-border p-4 space-y-4 shadow-sm animate-pulse">
+                                    <div className="aspect-square w-full bg-muted rounded-lg" />
+                                    <div className="space-y-2">
+                                        <div className="h-5 bg-muted rounded w-3/4" />
+                                        <div className="h-4 bg-muted rounded w-1/2" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : coreTeam.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-3 max-w-4xl mx-auto gap-6 sm:gap-8">
                             {coreTeam.map((member, index) => (
                                 <div
@@ -286,7 +300,19 @@ export default function TeamPage() {
                     <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-12 text-center">
                         Faculty Advisors
                     </h2>
-                    {facultyTeam.length > 0 ? (
+                    {loading ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 justify-center">
+                            {[1, 2, 3, 4, 5].map((n) => (
+                                <div key={n} className="bg-card rounded-lg overflow-hidden border border-border p-4 space-y-4 shadow-sm animate-pulse">
+                                    <div className="aspect-square w-full bg-muted rounded-lg" />
+                                    <div className="space-y-2">
+                                        <div className="h-5 bg-muted rounded w-3/4" />
+                                        <div className="h-4 bg-muted rounded w-1/2" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : facultyTeam.length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 justify-center">
                             {facultyTeam.map((member, index) => (
                                 <div
@@ -354,7 +380,19 @@ export default function TeamPage() {
                     <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-12 text-center">
                         Execom Members
                     </h2>
-                    {otherTeam.length > 0 ? (
+                    {loading ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+                            {[1, 2, 3, 4, 5, 6].map((n) => (
+                                <div key={n} className="bg-card rounded-lg overflow-hidden border border-border p-4 space-y-4 shadow-sm animate-pulse">
+                                    <div className="aspect-square w-full bg-muted rounded-lg" />
+                                    <div className="space-y-2">
+                                        <div className="h-5 bg-muted rounded w-3/4" />
+                                        <div className="h-4 bg-muted rounded w-1/2" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : otherTeam.length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
                             {otherTeam.map((member, index) => (
                                 <div
@@ -424,7 +462,26 @@ export default function TeamPage() {
                     </h2>
 
                     <div className="space-y-16">
-                        {Object.keys(resolvedSbc).length > 0 ? (
+                        {loading ? (
+                            <div className="space-y-8">
+                                {[1, 2].map((sbc) => (
+                                    <div key={sbc} className="space-y-4">
+                                        <div className="h-6 bg-muted rounded w-1/4 animate-pulse" />
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+                                            {[1, 2, 3, 4].map((n) => (
+                                                <div key={n} className="bg-card rounded-lg overflow-hidden border border-border p-4 space-y-4 shadow-sm animate-pulse">
+                                                    <div className="aspect-square w-full bg-muted rounded-lg" />
+                                                    <div className="space-y-2">
+                                                        <div className="h-5 bg-muted rounded w-3/4" />
+                                                        <div className="h-4 bg-muted rounded w-1/2" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : Object.keys(resolvedSbc).length > 0 ? (
                             Object.entries(resolvedSbc).map(([chapterId, members]) => (
                                 <div key={chapterId}>
                                     <h3 className="text-2xl font-heading font-bold text-primary mb-8 border-l-4 border-primary pl-4 uppercase">

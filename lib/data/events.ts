@@ -5,7 +5,7 @@ export interface Event {
     time: string;
     mode: "Online" | "Offline" | "Hybrid";
     venue?: string;
-    status: "Upcoming" | "Completed" | "Registration Open";
+    status: "Upcoming" | "Completed" | "Registration Open" | null;
     description: string;
     image: string;
     chapterId?: string; // Optional: if null/undefined, it could be a main SB event
@@ -13,8 +13,11 @@ export interface Event {
     speakers?: string[];
     eligibility?: string;
     rules?: string[];
+    guidelines?: string[];
     gallery?: string[]; // Array of poster images
     order: number; // Manual sorting order
+    isAnnouncement?: boolean;
+    redirectLinks?: { label: string; url: string }[];
 }
 
 export const events: Event[] = [

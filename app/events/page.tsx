@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Calendar, MapPin, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AnnouncementsScroll from "@/components/AnnouncementsScroll";
 
 import { supabase } from "@/lib/supabase";
 import { events as staticEvents } from "@/lib/data/events";
@@ -57,7 +58,11 @@ async function getEventsAndAnnouncements() {
         venue: e.venue || "",
         status: statusVal,
         description: e.description,
-        image: e.main_poster_url || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+        image: e.main_poster_url 
+          ? (e.main_poster_url.includes("res.cloudinary.com") 
+              ? e.main_poster_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
+              : e.main_poster_url) 
+          : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
         order: 0,
       };
     });
@@ -78,8 +83,12 @@ async function getEventsAndAnnouncements() {
         title: a.title,
         description: a.description,
         date: formattedDate,
-        imageUrl: a.image_url || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
-        order: a.display_order,
+        imageUrl: a.image_url 
+          ? (a.image_url.includes("res.cloudinary.com") 
+              ? a.image_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
+              : a.image_url) 
+          : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+        order: 0,
       };
     });
 
@@ -150,44 +159,7 @@ export default async function EventsPage() {
 
           {/* Announcements Section */}
           {fetchedAnnouncements && fetchedAnnouncements.length > 0 && (
-            <div>
-              <div className="mb-10">
-                <h2 className="text-3xl font-heading font-bold text-foreground mb-2">
-                  Announcements
-                </h2>
-                <p className="text-muted-foreground font-body">
-                  Latest updates, honors, and official news from IEEE SCT SB.
-                </p>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {fetchedAnnouncements.map((ann) => (
-                  <div
-                    key={ann.id}
-                    className="bg-background rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full group"
-                  >
-                    <div className="aspect-video bg-muted relative overflow-hidden">
-                      <img
-                        src={ann.imageUrl || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg"}
-                        alt={ann.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
-                    </div>
-                    <div className="p-6 flex flex-col flex-grow">
-                      <span className="text-xs font-semibold text-primary mb-2 block">
-                        {ann.date}
-                      </span>
-                      <h3 className="text-lg font-heading font-bold text-foreground mb-3 line-clamp-2">
-                        {ann.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm font-body line-clamp-4 leading-relaxed">
-                        {ann.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <AnnouncementsScroll announcements={fetchedAnnouncements} />
           )}
 
           {/* All Events Section */}
@@ -255,7 +227,7 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
         <div className="mt-auto space-y-6">
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center gap-3 text-sm text-foreground/80">
-              <Calendar className="w-4 h-4 text-primary" />
+              <Calendar className="w-4 h-4 text-primary shrink-0" />
               <span className="font-body font-medium">
                 {event.date}
                 {event.time && ` • ${event.time}`}
@@ -263,11 +235,11 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
             </div>
             <div className="flex items-center gap-3 text-sm text-foreground/80">
               {event.mode === "Online" ? (
-                <Monitor className="w-4 h-4 text-primary" />
+                <Monitor className="w-4 h-4 text-primary shrink-0" />
               ) : (
-                <MapPin className="w-4 h-4 text-primary" />
+                <MapPin className="w-4 h-4 text-primary shrink-0" />
               )}
-              <span className="font-body font-medium">
+              <span className="font-body font-medium truncate block max-w-[280px]">
                 {event.mode}
                 {event.venue && ` • ${event.venue}`}
               </span>
@@ -278,7 +250,7 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
             className={`w-full font-bold group/btn ${isLive ? "shadow-lg shadow-primary/20" : ""}`}
             variant={isLive ? "default" : "outline"}
           >
-            <Link href={event.status === "Registration Open" ? `/${event.id}/register` : `/${event.id}`}>
+            <Link href={`/${event.id}`}>
               {event.status === "Registration Open" ? "Register Now" : "Explore Details"}
             </Link>
           </Button>
