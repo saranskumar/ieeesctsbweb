@@ -7,7 +7,7 @@ interface_def = """export interface Event {
     time: string;
     mode: "Online" | "Offline" | "Hybrid";
     venue?: string;
-    status: "Upcoming" | "Completed" | "Registration Open";
+    status: "Open" | "Closed" | "Completed";
     description: string;
     image: string;
     chapterId?: string; // Optional: if null/undefined, it could be a main SB event

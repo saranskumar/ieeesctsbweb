@@ -17,7 +17,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ ev
             .maybeSingle();
             
         if (data && !error) {
-            const statusVal = data.status === "published" ? "Registration Open" : "Completed";
+            const statusVal = data.status === "open" ? "Open" : data.status === "closed" ? "Closed" : "Completed";
             let formattedDate = "";
             let formattedTime = "";
             if (data.event_date) {

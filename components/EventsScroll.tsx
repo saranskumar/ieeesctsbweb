@@ -146,9 +146,11 @@ export default function EventsScroll({ events }: EventsScrollProps) {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <span className={`absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-md ${
-                  event.status === "Registration Open"
+                  event.status === "Open"
                     ? "bg-green-500 text-white shadow-green-500/20"
-                    : "bg-secondary/90 text-secondary-foreground backdrop-blur-sm"
+                    : event.status === "Closed"
+                      ? "bg-rose-50 text-rose-700 border-rose-200"
+                      : "bg-secondary/90 text-secondary-foreground backdrop-blur-sm"
                 }`}>
                   {event.status}
                 </span>
@@ -178,9 +180,9 @@ export default function EventsScroll({ events }: EventsScrollProps) {
                     </span>
                   </div>
                 </div>
-                <Button asChild className="w-full font-secondary mt-auto" size="sm" variant={event.status === "Registration Open" ? "default" : "outline"}>
+                <Button asChild className="w-full font-secondary mt-auto" size="sm" variant={event.status === "Open" ? "default" : "outline"}>
                   <Link href={`/${event.id}`}>
-                    {event.status === "Registration Open" ? "Register Now" : "View Details"}
+                    {event.status === "Open" ? "Register Now" : "View Details"}
                   </Link>
                 </Button>
               </div>

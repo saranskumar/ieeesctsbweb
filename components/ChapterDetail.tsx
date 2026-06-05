@@ -180,9 +180,11 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                                             />
                                             <span
                                                 className={`absolute bottom-3 left-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
-                                                    event.status === "Registration Open"
+                                                    event.status === "Open"
                                                         ? "bg-green-500 text-white shadow-lg shadow-green-500/20"
-                                                        : "bg-secondary/90 text-secondary-foreground backdrop-blur-sm"
+                                                        : event.status === "Closed"
+                                                            ? "bg-rose-50 text-rose-700 border-rose-200"
+                                                            : "bg-secondary/90 text-secondary-foreground backdrop-blur-sm"
                                                 }`}
                                             >
                                                 {event.status}
@@ -209,9 +211,9 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                                                         {event.mode}{event.venue && ` • ${event.venue}`}
                                                     </span>
                                                 </div>
-                                                <Button asChild variant={event.status === "Registration Open" ? "default" : "outline"} size="sm" className="w-full font-secondary mt-1">
+                                                <Button asChild variant={event.status === "Open" ? "default" : "outline"} size="sm" className="w-full font-secondary mt-1">
                                                     <Link href={`/${event.id}`}>
-                                                        {event.status === "Registration Open" ? "Join Event" : "Explore Details"}
+                                                        {event.status === "Open" ? "Join Event" : "Explore Details"}
                                                     </Link>
                                                 </Button>
                                             </div>

@@ -65,7 +65,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                     return;
                 }
 
-                if (data.status !== "published") {
+                if (data.status !== "open") {
                     setError("Registration is not currently open for this event.");
                     return;
                 }

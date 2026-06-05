@@ -31,26 +31,62 @@ with open(events_ts_path, "w", encoding="utf-8") as f:
     f.write(updated_content)
 print("events.ts updated in-place.")
 
-# 2. Extract events from events.ts using npx tsx
+# 2. Extract events from events.ts using a temporary node script
 print("Extracting events from events.ts...")
 try:
-    cmd_events = ["npx", "--yes", "tsx", "-e", "import { events } from './events.ts'; console.log(JSON.stringify(events))"]
+    with open(os.path.join(data_dir, "events.ts"), "r", encoding="utf-8") as f:
+        events_ts = f.read()
+    parts = events_ts.split("export const events")
+    if len(parts) < 2:
+        raise ValueError("Could not find 'export const events' in events.ts")
+    events_js = "const events" + parts[1]
+    events_js = events_js.replace(": Event[] =", " =").replace(": Event[]=", "=")
+    events_js += "\nconsole.log(JSON.stringify(events));\n"
+    
+    temp_js_path = os.path.join(data_dir, "temp_events.js")
+    with open(temp_js_path, "w", encoding="utf-8") as f:
+        f.write(events_js)
+        
+    cmd_events = ["node", "temp_events.js"]
     result_events = subprocess.run(cmd_events, cwd=data_dir, capture_output=True, text=True, check=True, shell=True)
     events_data = json.loads(result_events.stdout)
+    
+    if os.path.exists(temp_js_path):
+        os.remove(temp_js_path)
 except Exception as e:
-    print(f"Error running tsx command for events: {e}")
+    print(f"Error extracting events: {e}")
+    if 'result_events' in locals() and result_events.stderr:
+        print(f"Node error: {result_events.stderr}")
     sys.exit(1)
 
 print(f"Successfully extracted {len(events_data)} events.")
 
-# 3. Extract announcements from announcements.ts using npx tsx
+# 3. Extract announcements from announcements.ts using a temporary node script
 print("Extracting announcements from announcements.ts...")
 try:
-    cmd_announcements = ["npx", "--yes", "tsx", "-e", "import { announcements } from './announcements.ts'; console.log(JSON.stringify(announcements))"]
+    with open(os.path.join(data_dir, "announcements.ts"), "r", encoding="utf-8") as f:
+        ann_ts = f.read()
+    parts = ann_ts.split("export const announcements")
+    if len(parts) < 2:
+        raise ValueError("Could not find 'export const announcements' in announcements.ts")
+    ann_js = "const announcements" + parts[1]
+    ann_js = ann_js.replace(": Announcement[] =", " =").replace(": Announcement[]=", "=")
+    ann_js += "\nconsole.log(JSON.stringify(announcements));\n"
+    
+    temp_js_path = os.path.join(data_dir, "temp_announcements.js")
+    with open(temp_js_path, "w", encoding="utf-8") as f:
+        f.write(ann_js)
+        
+    cmd_announcements = ["node", "temp_announcements.js"]
     result_announcements = subprocess.run(cmd_announcements, cwd=data_dir, capture_output=True, text=True, check=True, shell=True)
     announcements_data = json.loads(result_announcements.stdout)
+    
+    if os.path.exists(temp_js_path):
+        os.remove(temp_js_path)
 except Exception as e:
-    print(f"Error running tsx command for announcements: {e}")
+    print(f"Error extracting announcements: {e}")
+    if 'result_announcements' in locals() and result_announcements.stderr:
+        print(f"Node error: {result_announcements.stderr}")
     sys.exit(1)
 
 print(f"Successfully extracted {len(announcements_data)} announcements.")
@@ -93,10 +129,12 @@ for event in events_data:
     main_poster_url = PLACEHOLDER_URL
     
     status_str = event.get("status", "Completed")
-    if status_str == "Upcoming" or status_str == "Registration Open":
-        status_val = "published"
-    else:
+    if status_str in ("Upcoming", "Registration Open", "Open"):
+        status_val = "open"
+    elif status_str == "Closed":
         status_val = "closed"
+    else:
+        status_val = "completed"
         
     raw_date = event.get("date", "")
     parsed_date = parse_date(raw_date)

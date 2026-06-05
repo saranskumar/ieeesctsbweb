@@ -32,7 +32,7 @@ async function getEventsAndAnnouncements() {
     }
 
     const mappedEvents = dbEvents.map((e: any) => {
-      const statusVal = e.status === "published" ? "Registration Open" : "Completed";
+      const statusVal = e.status === "open" ? "Open" : e.status === "closed" ? "Closed" : "Completed";
       
       let formattedDate = "";
       let formattedTime = "";
@@ -107,8 +107,8 @@ export default async function EventsPage() {
     return (b.order || 0) - (a.order || 0);
   });
 
-  const liveEvents = sortedEvents.filter((e) => e.status === "Registration Open");
-  const otherEvents = sortedEvents.filter((e) => e.status !== "Registration Open");
+  const liveEvents = sortedEvents.filter((e) => e.status === "Open");
+  const otherEvents = sortedEvents.filter((e) => e.status !== "Open");
 
   const showLiveSection = liveEvents.length > 0;
 
@@ -210,11 +210,11 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         <span
           className={`absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-            event.status === "Registration Open"
+            event.status === "Open"
               ? "bg-green-500 text-white shadow-lg shadow-green-500/20"
-              : event.status === "Completed" 
-                ? "bg-secondary/90 text-secondary-foreground backdrop-blur-sm" 
-                : "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+              : event.status === "Closed" 
+                ? "bg-rose-500 text-white shadow-lg shadow-rose-500/20" 
+                : "bg-secondary/90 text-secondary-foreground backdrop-blur-sm"
           }`}
         >
           {event.status}
@@ -252,7 +252,7 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
             variant={isLive ? "default" : "outline"}
           >
             <Link href={`/${event.id}`}>
-              {event.status === "Registration Open" ? "Register Now" : "Explore Details"}
+              {event.status === "Open" ? "Register Now" : "Explore Details"}
             </Link>
           </Button>
         </div>

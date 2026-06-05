@@ -16,7 +16,7 @@ async function getHomeEvents(): Promise<Event[]> {
     }
 
     return dbEvents.map((e: any) => {
-      const statusVal = (e.status === "published" ? "Registration Open" : "Completed") as "Registration Open" | "Completed";
+      const statusVal = (e.status === "open" ? "Open" : e.status === "closed" ? "Closed" : "Completed") as "Open" | "Closed" | "Completed";
       
       let formattedDate = "";
       let formattedTime = "";

@@ -80,9 +80,11 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                         {!event.isAnnouncement && event.status && (
                             <div className="lg:hidden">
                                 <span className={`inline-block px-4 py-1.5 text-sm font-secondary font-medium rounded-full ${
-                                    event.status === "Registration Open" 
+                                    event.status === "Open" 
                                     ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                    : "badge-upcoming"
+                                    : event.status === "Closed"
+                                    ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400"
+                                    : "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-400"
                                 }`}>
                                     {event.status}
                                 </span>
@@ -95,11 +97,11 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                         {!event.isAnnouncement && event.status && (
                             <div className="hidden lg:block mb-6">
                                 <span className={`inline-block px-4 py-1.5 text-sm font-secondary font-medium rounded-full ${
-                                    event.status === "Registration Open" 
+                                    event.status === "Open" 
                                     ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                    : event.status === "Completed"
-                                    ? "badge-completed"
-                                    : "badge-upcoming"
+                                    : event.status === "Closed"
+                                    ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400"
+                                    : "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-400"
                                 }`}>
                                     {event.status}
                                 </span>
@@ -159,11 +161,11 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                             {!event.isAnnouncement && event.status && (
                                 <div className="flex items-center gap-4 text-foreground pt-2 sm:pt-4 border-t border-border/50 sm:border-none sm:pt-0">
                                     <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                        event.status === "Registration Open" 
+                                        event.status === "Open" 
                                         ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                        : event.status === "Completed"
-                                        ? "bg-muted text-muted-foreground"
-                                        : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                                        : event.status === "Closed"
+                                        ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400"
+                                        : "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-400"
                                     }`}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                     </div>
@@ -192,13 +194,19 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                                         ✓ Already Registered
                                     </Button>
                                 ) : (
-                                    event.status === "Registration Open" && (
+                                    event.status === "Open" && (
                                         <Button asChild size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 shadow-lg shadow-primary/20">
                                             <Link href={`/${event.id}/register`}>Register Now</Link>
                                         </Button>
                                     )
                                 )}
                                 
+                                {event.status === "Closed" && (
+                                    <Button disabled variant="outline" size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 opacity-70">
+                                        Registrations Closed
+                                    </Button>
+                                )}
+
                                 {event.status === "Completed" && (
                                     <Button disabled variant="outline" size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 opacity-70">
                                         Event Concluded

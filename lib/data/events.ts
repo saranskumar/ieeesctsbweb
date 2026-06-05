@@ -5,7 +5,7 @@ export interface Event {
     time: string;
     mode: "Online" | "Offline" | "Hybrid";
     venue?: string;
-    status: "Upcoming" | "Completed" | "Registration Open" | null;
+    status: "Open" | "Closed" | "Completed" | null;
     description: string;
     image: string;
     chapterId?: string; // Optional: if null/undefined, it could be a main SB event
@@ -560,7 +560,7 @@ export const events: Event[] = [
         time: "4:30 PM",
         mode: "Offline",
         venue: "Seminar Hall (Room no 112)",
-        status: "Upcoming",
+        status: "Closed",
         description: "The Annual General Meeting of IEEE SCT SB serves as a cornerstone event for our student branch, providing a formal platform to reflect on the milestones achieved during the past year. This year's gathering will feature the presentation of the Student Awards for the 2025-26 term, recognizing the outstanding contributions of our members. Additionally, the event will conclude with the announcement and introduction of the new Executive Committee, marking the commencement of the next leadership cycle. All members are invited to join us as we evaluate our progress and set the trajectory for our future endeavors.",
         image: "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
         order: 43,
