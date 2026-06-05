@@ -370,7 +370,12 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
             return;
         }
 
-        const isFree = resolvedFee === 0;
+        // A "free event" = every tier is 0 (the event is configured as free).
+        // A paid event where one tier happens to be ₹0 still requires admin verification.
+        const isFree =
+            event.tier_non_ieee_fee === 0 &&
+            event.tier_ieee_fee === 0 &&
+            event.tier_sbc_fee === 0;
         setIsSubmitting(true);
         try {
             const { data: newReg, error: insertError } = await supabase
@@ -390,7 +395,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                         payment_tier: resolvedTierName,
                         amount_paid: resolvedFee,
                     },
-                    status: isFree ? "verified" : "pending",
+                    status: "pending", // RLS only allows 'pending' from anon; auto-verify route upgrades free regs server-side
                 })
                 .select("id")
                 .single();
