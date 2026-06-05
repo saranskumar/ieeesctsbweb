@@ -32,7 +32,7 @@ async function getSbcEvents(): Promise<MappedEvent[]> {
   try {
     const { data: dbEvents, error } = await supabase
       .from("events")
-      .select("id, title, slug, event_date, status, main_poster_url, venue, description, sbc_id")
+      .select("id, title, slug, event_date, status, main_poster_url, venue, description, sbc_id, collaborators")
       .order("event_date", { ascending: false });
 
     if (error || !dbEvents || dbEvents.length === 0) {
@@ -74,6 +74,7 @@ async function getSbcEvents(): Promise<MappedEvent[]> {
               : e.main_poster_url) 
           : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
         sbc_id: e.sbc_id,
+        collaborators: Array.isArray(e.collaborators) ? e.collaborators : [],
       };
     });
   } catch (err) {
@@ -100,19 +101,26 @@ export default async function SbcEventsPage() {
   // Group events by chapter
   const chaptersWithEvents = chapters.map((chapter) => {
     const chapterEvents = allEvents.filter((event) => {
-      if (event.sbc_id) {
-        return event.sbc_id.toLowerCase() === chapter.id.toLowerCase();
-      }
-      // static events fallback
-      return (
-        event.chapterId?.toLowerCase() === chapter.id.toLowerCase() ||
-        event.collaborators?.some((c) => c.toLowerCase() === chapter.id.toLowerCase())
-      );
+      const primaryMatch =
+        event.sbc_id?.toLowerCase() === chapter.id.toLowerCase() ||
+        event.chapterId?.toLowerCase() === chapter.id.toLowerCase();
+      const collabMatch =
+        (event.collaborators ?? []).some((c) => c.toLowerCase() === chapter.id.toLowerCase());
+      return primaryMatch || collabMatch;
     });
+
+    // Annotate each event with whether this chapter is only a collaborator
+    const annotated = chapterEvents.map((ev) => ({
+      ...ev,
+      isCollab:
+        ev.sbc_id?.toLowerCase() !== chapter.id.toLowerCase() &&
+        ev.chapterId?.toLowerCase() !== chapter.id.toLowerCase() &&
+        (ev.collaborators ?? []).some((c) => c.toLowerCase() === chapter.id.toLowerCase()),
+    }));
 
     return {
       ...chapter,
-      events: chapterEvents,
+      events: annotated,
       IconComponent: chapterIconMap[chapter.id] || Code,
     };
   });
@@ -244,6 +252,12 @@ export default async function SbcEventsPage() {
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                              {/* Collab badge */}
+                              {(event as any).isCollab && (
+                                <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/20 text-amber-700 border border-amber-400/30 backdrop-blur-md">
+                                  Collab
+                                </span>
+                              )}
                               
                               {/* Pulse badging for statuses */}
                               {event.status === "Open" && (
