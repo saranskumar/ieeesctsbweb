@@ -72,7 +72,7 @@ async function getSbcEvents(): Promise<MappedEvent[]> {
           ? (e.main_poster_url.includes("res.cloudinary.com") 
               ? e.main_poster_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
               : e.main_poster_url) 
-          : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+          : null,
         sbc_id: e.sbc_id,
         collaborators: Array.isArray(e.collaborators) ? e.collaborators : [],
       };
@@ -244,44 +244,46 @@ export default async function SbcEventsPage() {
                             key={event.id}
                             className={`bg-background rounded-xl overflow-hidden group flex flex-col h-full border border-border shadow-sm hover:shadow-xl transition-all duration-500 ${!isLive ? "opacity-95" : "border-primary/20 shadow-primary/5"}`}
                           >
-                            {/* Poster Image */}
-                            <div className="aspect-[4/5] bg-muted relative overflow-hidden">
-                              <img
-                                src={event.image || "/placeholder.svg"}
-                                alt={event.title}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                              {/* Collab badge */}
-                              {(event as any).isCollab && (
-                                <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/20 text-amber-700 border border-amber-400/30 backdrop-blur-md">
-                                  Collab
-                                </span>
-                              )}
-                              
-                              {/* Pulse badging for statuses */}
-                              {event.status === "Open" && (
-                                <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 backdrop-blur-md shadow-sm">
-                                  <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            {/* Poster Image — only show if a real poster URL exists */}
+                            {event.image && (
+                              <div className="aspect-[4/5] bg-muted relative overflow-hidden">
+                                <img
+                                  src={event.image}
+                                  alt={event.title}
+                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                {/* Collab badge */}
+                                {(event as any).isCollab && (
+                                  <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/20 text-amber-700 border border-amber-400/30 backdrop-blur-md">
+                                    Collab
                                   </span>
-                                  <span>Open</span>
-                                </span>
-                              )}
-                              {event.status === "Closed" && (
-                                <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 border border-rose-500/20 backdrop-blur-md shadow-sm">
-                                  <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0" />
-                                  <span>Closed</span>
-                                </span>
-                              )}
-                              {event.status === "Completed" && (
-                                <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-500/10 text-slate-600 border border-slate-500/20 backdrop-blur-md shadow-sm">
-                                  <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
-                                  <span>Completed</span>
-                                </span>
-                              )}
-                            </div>
+                                )}
+                                
+                                {/* Pulse badging for statuses */}
+                                {event.status === "Open" && (
+                                  <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 backdrop-blur-md shadow-sm">
+                                    <span className="relative flex h-2 w-2">
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    </span>
+                                    <span>Open</span>
+                                  </span>
+                                )}
+                                {event.status === "Closed" && (
+                                  <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 border border-rose-500/20 backdrop-blur-md shadow-sm">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0" />
+                                    <span>Closed</span>
+                                  </span>
+                                )}
+                                {event.status === "Completed" && (
+                                  <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-500/10 text-slate-600 border border-slate-500/20 backdrop-blur-md shadow-sm">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+                                    <span>Completed</span>
+                                  </span>
+                                )}
+                              </div>
+                            )}
 
                             {/* Details */}
                             <div className="p-6 flex flex-col flex-grow">
