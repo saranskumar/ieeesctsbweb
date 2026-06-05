@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, use } from "react";
-import { ArrowLeft, CheckCircle, Loader2, AlertCircle, Calendar, MapPin, Clock, Info } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader2, AlertCircle, Calendar, MapPin, Clock, Info, UploadCloud, X, Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +30,9 @@ interface EventData {
     main_poster_url: string | null;
     venue: string | null;
     description: string | null;
+    event_fee: number;
+    upi_id: string;
+    payment_instructions: string | null;
 }
 
 export default function EventRegisterPage({ params }: { params: Promise<{ eventId: string }> }) {
@@ -48,6 +51,12 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
     const [phone, setPhone] = useState("");
     const [isIeeeMember, setIsIeeeMember] = useState("");
     const [ieeeMembershipId, setIeeeMembershipId] = useState("");
+
+    // Payment states
+    const [paymentMode, setPaymentMode] = useState("");
+    const [paymentProofUrl, setPaymentProofUrl] = useState("");
+    const [isUploadingProof, setIsUploadingProof] = useState(false);
+    const [dragActiveProof, setDragActiveProof] = useState(false);
     // Dynamic form_schema field values keyed by field id
     const [customValues, setCustomValues] = useState<Record<string, string | boolean>>({});
 
@@ -56,7 +65,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
             try {
                 const { data, error: fetchErr } = await supabase
                     .from("events")
-                    .select("id, title, slug, event_date, status, form_schema, registration_type, redirect_url, success_message, whatsapp_group_url, main_poster_url, venue, description")
+                    .select("id, title, slug, event_date, status, form_schema, registration_type, redirect_url, success_message, whatsapp_group_url, main_poster_url, venue, description, event_fee, upi_id, payment_instructions")
                     .eq("slug", eventId)
                     .maybeSingle();
 
@@ -98,6 +107,9 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                     main_poster_url: data.main_poster_url || null,
                     venue: data.venue || null,
                     description: data.description || null,
+                    event_fee: Number(data.event_fee || 0),
+                    upi_id: data.upi_id || "ieee-sctsb@upi",
+                    payment_instructions: data.payment_instructions || null,
                 });
             } catch {
                 setError("Failed to load event data. Please try again.");
@@ -110,6 +122,165 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
 
     const handleCustomChange = (fieldId: string, value: string | boolean) => {
         setCustomValues(prev => ({ ...prev, [fieldId]: value }));
+    };
+
+    const compressImageIfNeeded = (file: File): Promise<File> => {
+        return new Promise((resolve) => {
+            if (file.size <= 1024 * 1024) {
+                resolve(file);
+                return;
+            }
+
+            const img = new Image();
+            const objectUrl = URL.createObjectURL(file);
+            img.src = objectUrl;
+
+            img.onload = () => {
+                URL.revokeObjectURL(objectUrl);
+                
+                let width = img.width;
+                let height = img.height;
+                const maxDim = 1600;
+                if (width > maxDim || height > maxDim) {
+                    if (width > height) {
+                        height = Math.round((height * maxDim) / width);
+                        width = maxDim;
+                    } else {
+                        width = Math.round((width * maxDim) / height);
+                        height = maxDim;
+                    }
+                }
+
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext("2d");
+                if (!ctx) {
+                    resolve(file);
+                    return;
+                }
+
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob) {
+                            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+                                type: "image/jpeg",
+                                lastModified: Date.now()
+                            });
+                            resolve(compressedFile);
+                        } else {
+                            resolve(file);
+                        }
+                    },
+                    "image/jpeg",
+                    0.8
+                );
+            };
+
+            img.onerror = () => {
+                resolve(file);
+            };
+        });
+    };
+
+    const handleProofUpload = async (rawFile: File) => {
+        if (!rawFile.type.startsWith("image/")) {
+            alert("Please upload a valid image file (PNG, JPG, or WEBP) as payment proof.");
+            return;
+        }
+
+        let file = rawFile;
+        if (rawFile.size > 1024 * 1024) {
+            try {
+                setIsUploadingProof(true);
+                file = await compressImageIfNeeded(rawFile);
+            } catch (err) {
+                console.error("Compression failed:", err);
+            } finally {
+                setIsUploadingProof(false);
+            }
+        }
+
+        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+        const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+        if (!cloudName || !uploadPreset) {
+            // Fallback: Read as Base64
+            if (file.size > 2.5 * 1024 * 1024) {
+                alert("Payment proof screenshot must be less than 2.5MB to save directly.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (e.target?.result) {
+                    setPaymentProofUrl(e.target.result as string);
+                }
+            };
+            reader.readAsDataURL(file);
+            return;
+        }
+
+        try {
+            setIsUploadingProof(true);
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", uploadPreset);
+
+            const res = await fetch(
+                `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            if (!res.ok) {
+                throw new Error("Failed to upload screenshot to Cloudinary. Verify your connection.");
+            }
+
+            const data = await res.json();
+            if (data.secure_url) {
+                setPaymentProofUrl(data.secure_url);
+            } else {
+                throw new Error("Invalid Cloudinary upload response.");
+            }
+        } catch (error: any) {
+            alert(error.message || "An error occurred during file upload.");
+        } finally {
+            setIsUploadingProof(false);
+        }
+    };
+
+    const handleProofFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            handleProofUpload(file);
+        }
+    };
+
+    const handleProofDrag = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActiveProof(true);
+        } else if (e.type === "dragleave") {
+            setDragActiveProof(false);
+        }
+    };
+
+    const handleProofDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActiveProof(false);
+        
+        const file = e.dataTransfer.files?.[0];
+        if (file) {
+            handleProofUpload(file);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -143,6 +314,17 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
             }
         }
 
+        if (event.event_fee > 0) {
+            if (!paymentMode) {
+                setSubmitError("Please select a payment mode.");
+                return;
+            }
+            if (!paymentProofUrl) {
+                setSubmitError("Please upload a screenshot of your payment proof.");
+                return;
+            }
+        }
+
         setIsSubmitting(true);
         try {
             const { error: insertError } = await supabase.from("registrations").insert({
@@ -150,10 +332,12 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                 name: name.trim(),
                 email: email.trim(),
                 phone: phone.trim(),
+                payment_proof_url: event.event_fee > 0 ? paymentProofUrl : null,
                 form_data: {
                     ...customValues,
                     is_ieee_member: isIeeeMember,
                     ieee_membership_id: isIeeeMember === "Yes" ? ieeeMembershipId.trim() : "",
+                    payment_mode: event.event_fee > 0 ? paymentMode : "Free",
                 },
                 status: "pending",
             });
@@ -615,6 +799,190 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                         )}
                                     </div>
                                 ))}
+
+                                {/* Payment Configuration Block (Conditional on event_fee > 0) */}
+                                {event.event_fee > 0 && (
+                                    <div className="border-t border-border/50 pt-6 space-y-6 animate-in fade-in duration-300">
+                                        <div className="border-b border-border/50 pb-3 mb-1 flex items-center gap-3">
+                                            <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                                <Info className="w-4.5 h-4.5" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">Registration Payment</h3>
+                                                <p className="text-[10px] text-muted-foreground mt-0.5">This event requires a registration fee of INR {event.event_fee}.</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Payment Mode Selector */}
+                                        <div className="space-y-2">
+                                            <Label htmlFor="payment-mode" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                                                Payment Mode <span className="text-destructive">*</span>
+                                            </Label>
+                                            <div className="relative">
+                                                <select
+                                                    id="payment-mode"
+                                                    value={paymentMode}
+                                                    onChange={e => {
+                                                        setPaymentMode(e.target.value);
+                                                        setPaymentProofUrl(""); // clear uploaded proof if mode changes
+                                                    }}
+                                                    required
+                                                    className="w-full rounded-xl border border-border/70 bg-background/30 px-4 py-3.5 text-sm font-body text-foreground transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary hover:bg-background/70 hover:border-primary/30 appearance-none cursor-pointer"
+                                                >
+                                                    <option value="" className="bg-background text-foreground">Select a payment mode</option>
+                                                    <option value="UPI" className="bg-background text-foreground">UPI (Instant Verification)</option>
+                                                    <option value="Bank Transfer" className="bg-background text-foreground">Bank Transfer / IMPS</option>
+                                                </select>
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+                                                    <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* UPI Payment Flow */}
+                                        {paymentMode === "UPI" && (
+                                            <div className="bg-secondary/10 border border-border/80 rounded-2xl p-5 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                                                <div className="flex flex-col md:flex-row items-center gap-5 justify-between">
+                                                    <div className="space-y-2 text-center md:text-left">
+                                                        <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
+                                                            Pay with UPI QR
+                                                        </span>
+                                                        <p className="text-xs text-muted-foreground leading-relaxed">
+                                                            Scan the QR code using any UPI app (GPay, PhonePe, Paytm) or copy the UPI ID below to pay <strong className="text-foreground">INR {event.event_fee}</strong>.
+                                                        </p>
+                                                        <div className="flex items-center gap-2 justify-center md:justify-start pt-1.5">
+                                                            <span className="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg border border-border bg-background/50 select-all">
+                                                                {event.upi_id}
+                                                            </span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    navigator.clipboard.writeText(event.upi_id);
+                                                                    alert("UPI ID copied to clipboard!");
+                                                                }}
+                                                                className="p-2 rounded-lg border border-border bg-background hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition cursor-pointer"
+                                                                title="Copy UPI ID"
+                                                            >
+                                                                <Copy className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="shrink-0 bg-white p-3 rounded-2xl border border-border shadow-sm flex items-center justify-center">
+                                                        <img
+                                                            src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                                                                `upi://pay?pa=${event.upi_id}&pn=${encodeURIComponent(event.title)}&am=${event.event_fee}&cu=INR`
+                                                            )}`}
+                                                            alt="UPI Payment QR Code"
+                                                            className="w-32 h-32 object-contain"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                {event.payment_instructions && (
+                                                    <div className="text-[11px] text-muted-foreground border-t border-border/50 pt-3 font-body leading-relaxed whitespace-pre-wrap">
+                                                        <strong className="text-foreground block mb-1">Instructions:</strong>
+                                                        {event.payment_instructions}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {/* Bank Transfer Info Flow */}
+                                        {paymentMode === "Bank Transfer" && (
+                                            <div className="bg-secondary/10 border border-border/80 rounded-2xl p-5 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                                                <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
+                                                    Bank Account Details
+                                                </span>
+                                                {event.payment_instructions ? (
+                                                    <p className="text-xs text-muted-foreground font-body leading-relaxed whitespace-pre-wrap pt-1">
+                                                        {event.payment_instructions}
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-xs text-muted-foreground italic font-body">
+                                                        Please complete the transfer to the official bank account listed in the instructions.
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {/* Payment Receipt / Screenshot Uploader */}
+                                        {paymentMode && (
+                                            <div className="space-y-2 animate-in fade-in duration-300">
+                                                <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                                                    Upload Payment Proof / Screenshot <span className="text-destructive">*</span>
+                                                </Label>
+
+                                                {!paymentProofUrl ? (
+                                                    <div
+                                                        onDragEnter={handleProofDrag}
+                                                        onDragOver={handleProofDrag}
+                                                        onDragLeave={handleProofDrag}
+                                                        onDrop={handleProofDrop}
+                                                        className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 transition-all duration-300 text-center cursor-pointer ${
+                                                            dragActiveProof
+                                                                ? "border-primary bg-primary/5 shadow-md scale-[1.01]"
+                                                                : "border-border hover:border-primary/40 hover:bg-secondary/10"
+                                                        }`}
+                                                    >
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onChange={handleProofFileChange}
+                                                            disabled={isUploadingProof}
+                                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                                        />
+                                                        {isUploadingProof ? (
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                                                                <p className="text-xs font-semibold text-foreground mt-1">Uploading proof...</p>
+                                                                <p className="text-[10px] text-muted-foreground">Compressing and sending screenshot...</p>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                <div className="w-10 h-10 rounded-full bg-secondary/30 flex items-center justify-center text-muted-foreground mb-1">
+                                                                    <UploadCloud className="w-5 h-5 text-primary" />
+                                                                </div>
+                                                                <p className="text-xs font-bold text-foreground">
+                                                                    Drag & Drop Receipt or Click to Browse
+                                                                </p>
+                                                                <p className="text-[10px] text-muted-foreground">
+                                                                    Supports PNG, JPG, or WEBP. Max size 2.5MB.
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <div className="relative rounded-2xl border border-border bg-secondary/15 p-3 flex items-center gap-3 group animate-in zoom-in-95 duration-200">
+                                                        <div className="w-12 h-15 rounded-lg overflow-hidden border border-border shrink-0 bg-white">
+                                                            <img
+                                                                src={paymentProofUrl}
+                                                                alt="Screenshot Preview"
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className="text-xs font-bold text-foreground truncate">Screenshot uploaded successfully</p>
+                                                            <p className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1 mt-0.5">
+                                                                <Check className="w-3 h-3" /> Ready to Submit
+                                                            </p>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setPaymentProofUrl("")}
+                                                            className="p-1.5 rounded-lg border border-border bg-background hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition cursor-pointer"
+                                                            title="Remove screenshot"
+                                                        >
+                                                            <X className="w-3.5 h-3.5" />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* Error Alert panel */}
                                 {submitError && (
