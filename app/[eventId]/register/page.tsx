@@ -30,9 +30,15 @@ interface EventData {
     main_poster_url: string | null;
     venue: string | null;
     description: string | null;
-    event_fee: number;
     upi_id: string;
     payment_instructions: string | null;
+    sbc_id: string | null;
+    tier_non_ieee_name: string;
+    tier_non_ieee_fee: number;
+    tier_ieee_name: string;
+    tier_ieee_fee: number;
+    tier_sbc_name: string;
+    tier_sbc_fee: number;
 }
 
 export default function EventRegisterPage({ params }: { params: Promise<{ eventId: string }> }) {
@@ -51,6 +57,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
     const [phone, setPhone] = useState("");
     const [isIeeeMember, setIsIeeeMember] = useState("");
     const [ieeeMembershipId, setIeeeMembershipId] = useState("");
+    const [isSbcMember, setIsSbcMember] = useState("");
 
     // Payment states
     const [paymentMode, setPaymentMode] = useState("");
@@ -60,12 +67,33 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
     // Dynamic form_schema field values keyed by field id
     const [customValues, setCustomValues] = useState<Record<string, string | boolean>>({});
 
+    // Dynamically calculate resolved fee and tier name based on member inputs
+    const getResolvedPricing = () => {
+        if (!event) return { fee: 0, tierName: "Free" };
+
+        const isFree = event.tier_non_ieee_fee === 0 && event.tier_ieee_fee === 0 && event.tier_sbc_fee === 0;
+        if (isFree) return { fee: 0, tierName: "Free" };
+
+        if (isIeeeMember === "No" || !isIeeeMember) {
+            return { fee: event.tier_non_ieee_fee, tierName: event.tier_non_ieee_name };
+        }
+
+        // IEEE Member status is "Yes"
+        if (event.sbc_id && isSbcMember === "Yes") {
+            return { fee: event.tier_sbc_fee, tierName: event.tier_sbc_name };
+        }
+
+        return { fee: event.tier_ieee_fee, tierName: event.tier_ieee_name };
+    };
+
+    const { fee: resolvedFee, tierName: resolvedTierName } = getResolvedPricing();
+
     useEffect(() => {
         async function fetchEvent() {
             try {
                 const { data, error: fetchErr } = await supabase
                     .from("events")
-                    .select("id, title, slug, event_date, status, form_schema, registration_type, redirect_url, success_message, whatsapp_group_url, main_poster_url, venue, description, event_fee, upi_id, payment_instructions")
+                    .select("id, title, slug, event_date, status, form_schema, registration_type, redirect_url, success_message, whatsapp_group_url, main_poster_url, venue, description, event_fee, upi_id, payment_instructions, sbc_id, tier_non_ieee_name, tier_non_ieee_fee, tier_ieee_name, tier_ieee_fee, tier_sbc_name, tier_sbc_fee")
                     .eq("slug", eventId)
                     .maybeSingle();
 
@@ -107,9 +135,15 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                     main_poster_url: data.main_poster_url || null,
                     venue: data.venue || null,
                     description: data.description || null,
-                    event_fee: Number(data.event_fee || 0),
                     upi_id: data.upi_id || "ieee-sctsb@upi",
                     payment_instructions: data.payment_instructions || null,
+                    sbc_id: data.sbc_id || null,
+                    tier_non_ieee_name: data.tier_non_ieee_name || "Non-IEEE Member",
+                    tier_non_ieee_fee: Number(data.tier_non_ieee_fee || 0),
+                    tier_ieee_name: data.tier_ieee_name || "IEEE Member",
+                    tier_ieee_fee: Number(data.tier_ieee_fee || 0),
+                    tier_sbc_name: data.tier_sbc_name || "IEEE SBC Member",
+                    tier_sbc_fee: Number(data.tier_sbc_fee || 0),
                 });
             } catch {
                 setError("Failed to load event data. Please try again.");
@@ -314,7 +348,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
             }
         }
 
-        if (event.event_fee > 0) {
+        if (resolvedFee > 0) {
             if (!paymentMode) {
                 setSubmitError("Please select a payment mode.");
                 return;
@@ -332,12 +366,15 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                 name: name.trim(),
                 email: email.trim(),
                 phone: phone.trim(),
-                payment_proof_url: event.event_fee > 0 ? paymentProofUrl : null,
+                payment_proof_url: resolvedFee > 0 ? paymentProofUrl : null,
                 form_data: {
                     ...customValues,
                     is_ieee_member: isIeeeMember,
                     ieee_membership_id: isIeeeMember === "Yes" ? ieeeMembershipId.trim() : "",
-                    payment_mode: event.event_fee > 0 ? paymentMode : "Free",
+                    is_sbc_member: (event.sbc_id && isIeeeMember === "Yes") ? isSbcMember : "No",
+                    payment_mode: resolvedFee > 0 ? paymentMode : "Free",
+                    payment_tier: resolvedTierName,
+                    amount_paid: resolvedFee,
                 },
                 status: "pending",
             });
@@ -723,6 +760,33 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                     </div>
                                 )}
 
+                                {/* SBC Membership check (Conditional on sbc_id and isIeeeMember === "Yes") */}
+                                {isIeeeMember === "Yes" && event.sbc_id && (
+                                    <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <Label htmlFor="reg-sbc-member" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                                            Are you a member of IEEE {event.sbc_id.toUpperCase()} Chapter? <span className="text-destructive">*</span>
+                                        </Label>
+                                        <div className="relative">
+                                            <select
+                                                id="reg-sbc-member"
+                                                value={isSbcMember}
+                                                onChange={e => setIsSbcMember(e.target.value)}
+                                                required
+                                                className="w-full rounded-xl border border-border/70 bg-background/30 px-4 py-3.5 text-sm font-body text-foreground transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary hover:bg-background/70 hover:border-primary/30 appearance-none cursor-pointer"
+                                            >
+                                                <option value="" className="bg-background text-foreground">Select an option</option>
+                                                <option value="Yes" className="bg-background text-foreground">Yes, I am a member of IEEE {event.sbc_id.toUpperCase()}</option>
+                                                <option value="No" className="bg-background text-foreground">No, I am not a member of IEEE {event.sbc_id.toUpperCase()}</option>
+                                            </select>
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+                                                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {/* Custom Fields Section Divider */}
                                 {event.form_schema.length > 0 && (
                                     <div className="border-b border-border/50 pt-5 pb-3 mb-1">
@@ -800,8 +864,8 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                     </div>
                                 ))}
 
-                                {/* Payment Configuration Block (Conditional on event_fee > 0) */}
-                                {event.event_fee > 0 && (
+                                {/* Payment Configuration Block (Conditional on resolvedFee > 0) */}
+                                {resolvedFee > 0 && (
                                     <div className="border-t border-border/50 pt-6 space-y-6 animate-in fade-in duration-300">
                                         <div className="border-b border-border/50 pb-3 mb-1 flex items-center gap-3">
                                             <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
@@ -809,7 +873,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                             </div>
                                             <div>
                                                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">Registration Payment</h3>
-                                                <p className="text-[10px] text-muted-foreground mt-0.5">This event requires a registration fee of INR {event.event_fee}.</p>
+                                                <p className="text-[10px] text-muted-foreground mt-0.5">This event requires a registration fee of INR {resolvedFee} ({resolvedTierName}).</p>
                                             </div>
                                         </div>
 
@@ -850,7 +914,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                                             Pay with UPI QR
                                                         </span>
                                                         <p className="text-xs text-muted-foreground leading-relaxed">
-                                                            Scan the QR code using any UPI app (GPay, PhonePe, Paytm) or copy the UPI ID below to pay <strong className="text-foreground">INR {event.event_fee}</strong>.
+                                                            Scan the QR code using any UPI app (GPay, PhonePe, Paytm) or copy the UPI ID below to pay <strong className="text-foreground">INR {resolvedFee}</strong>.
                                                         </p>
                                                         <div className="flex items-center gap-2 justify-center md:justify-start pt-1.5">
                                                             <span className="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg border border-border bg-background/50 select-all">
@@ -873,7 +937,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                                     <div className="shrink-0 bg-white p-3 rounded-2xl border border-border shadow-sm flex items-center justify-center">
                                                         <img
                                                             src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
-                                                                `upi://pay?pa=${event.upi_id}&pn=${encodeURIComponent(event.title)}&am=${event.event_fee}&cu=INR`
+                                                                `upi://pay?pa=${event.upi_id}&pn=${encodeURIComponent(event.title)}&am=${resolvedFee}&cu=INR`
                                                             )}`}
                                                             alt="UPI Payment QR Code"
                                                             className="w-32 h-32 object-contain"

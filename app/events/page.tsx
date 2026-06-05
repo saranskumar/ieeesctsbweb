@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, MapPin, Monitor } from "lucide-react";
+import { Calendar, MapPin, Monitor, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnnouncementsScroll from "@/components/AnnouncementsScroll";
 
@@ -121,9 +121,17 @@ export default async function EventsPage() {
             <h1 className="text-4xl md:text-6xl font-heading font-bold text-foreground mb-6">
               Events & Announcements
             </h1>
-            <p className="text-xl text-muted-foreground font-body leading-relaxed">
+            <p className="text-xl text-muted-foreground font-body leading-relaxed mb-8">
               Explore our workshops, talk sessions, hackathons, and community announcements that drive innovation forward.
             </p>
+            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+              <Button asChild className="font-secondary rounded-full px-6 py-5 shadow-lg shadow-primary/10">
+                <Link href="/chapters/events" className="flex items-center gap-2">
+                  Browse by Chapter
+                  <ArrowRight className="w-4 h-4 text-primary-foreground" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>

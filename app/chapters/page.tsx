@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { chapters } from "@/lib/data/chapters";
+import { Button } from "@/components/ui/button";
 
 export default function ChaptersPage() {
   return (
@@ -12,10 +13,18 @@ export default function ChaptersPage() {
             <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">
               Our Societies & Chapters
             </h1>
-            <p className="text-lg text-muted-foreground font-body leading-relaxed">
+            <p className="text-lg text-muted-foreground font-body leading-relaxed mb-8">
               IEEE SCT Student Branch hosts multiple technical chapters and affinity groups,
               each focusing on specific domains of engineering, technology, and community development.
             </p>
+            <div className="flex flex-wrap gap-4">
+              <Button asChild className="font-secondary rounded-full px-6 py-5 shadow-lg shadow-primary/10">
+                <Link href="/chapters/events" className="flex items-center gap-2">
+                  Browse Chapter Events
+                  <ArrowRight className="w-4 h-4 text-primary-foreground" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
