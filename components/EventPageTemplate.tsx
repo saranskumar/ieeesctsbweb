@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Calendar, MapPin, Monitor, Users, Clock, ArrowLeft, BookOpen, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,20 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
     const images = event.gallery && event.gallery.length > 0 ? [event.image, ...event.gallery] : [event.image];
     const activeGuidelines = event.guidelines?.filter((g) => g && g.trim() !== "") || [];
     const activeRules = event.rules?.filter((r) => r && r.trim() !== "") || [];
+
+    const [isRegistered, setIsRegistered] = useState(false);
+
+    useEffect(() => {
+        try {
+            const regs = JSON.parse(localStorage.getItem("sctsb_registrations") || "[]");
+            const match = regs.some((r: any) => r.eventId === event.id);
+            if (match) {
+                setIsRegistered(true);
+            }
+        } catch (e) {
+            console.error("Failed to read localStorage registrations:", e);
+        }
+    }, [event.id]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -162,11 +177,26 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
  
                         {/* CTA / Action Button directly below grid (for events only) */}
                         {!event.isAnnouncement && event.status && (
-                            <div className="mb-12">
-                                {event.status === "Registration Open" && (
-                                    <Button asChild size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 shadow-lg shadow-primary/20">
-                                        <Link href={`/${event.id}/register`}>Register Now</Link>
+                            <div className="mb-12 space-y-4">
+                                {isRegistered && (
+                                    <div className="p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-start space-x-3 shadow-sm animate-in fade-in duration-300">
+                                        <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 shrink-0 mt-1 animate-pulse" />
+                                        <div className="text-xs font-semibold leading-relaxed">
+                                            You are registered for this event! Your verification audit is active and ticket details will be dispatched to your email inbox upon approval.
+                                        </div>
+                                    </div>
+                                )}
+
+                                {isRegistered ? (
+                                    <Button disabled variant="outline" size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 opacity-100 cursor-not-allowed select-none">
+                                        ✓ Already Registered
                                     </Button>
+                                ) : (
+                                    event.status === "Registration Open" && (
+                                        <Button asChild size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 shadow-lg shadow-primary/20">
+                                            <Link href={`/${event.id}/register`}>Register Now</Link>
+                                        </Button>
+                                    )
                                 )}
                                 
                                 {event.status === "Completed" && (

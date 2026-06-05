@@ -122,6 +122,12 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
             return;
         }
 
+        const cleanedPhone = phone.trim().replace(/\D/g, "");
+        if (cleanedPhone.length !== 10) {
+            setSubmitError("Please enter a valid 10-digit phone number.");
+            return;
+        }
+
         if (isIeeeMember === "Yes" && !ieeeMembershipId.trim()) {
             setSubmitError("IEEE Membership ID is required for IEEE members.");
             return;
@@ -152,6 +158,26 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                 status: "pending",
             });
             if (insertError) throw insertError;
+
+            // Save registration entry locally in localStorage to persist registered events
+            const regEntry = {
+                eventId: event.slug,
+                dbId: event.dbId,
+                eventTitle: event.title,
+                name: name.trim(),
+                email: email.trim(),
+                phone: phone.trim(),
+                status: "pending",
+                registeredAt: new Date().toISOString(),
+            };
+            try {
+                const cached = JSON.parse(localStorage.getItem("sctsb_registrations") || "[]");
+                const filtered = cached.filter((r: any) => r.eventId !== event.slug);
+                localStorage.setItem("sctsb_registrations", JSON.stringify([...filtered, regEntry]));
+            } catch (e) {
+                console.error("Local storage sync error:", e);
+            }
+
             setIsSubmitted(true);
         } catch (err: any) {
             setSubmitError(err?.message || "Registration failed. Please try again.");
@@ -444,15 +470,24 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                     <Label htmlFor="reg-phone" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                                         Phone Number <span className="text-destructive">*</span>
                                     </Label>
-                                    <Input 
-                                        id="reg-phone" 
-                                        type="tel" 
-                                        placeholder="e.g. +91 9876543210" 
-                                        value={phone} 
-                                        onChange={e => setPhone(e.target.value)} 
-                                        className="w-full font-body px-4 py-3.5 rounded-xl border border-border/70 bg-background/30 focus-visible:ring-4 focus-visible:ring-primary/5 focus-visible:border-primary transition-all duration-300 placeholder:text-muted-foreground/60 hover:bg-background/70 hover:border-primary/30" 
-                                        required 
-                                    />
+                                    <div className="flex">
+                                        <span className="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-border/70 bg-secondary/15 text-sm font-semibold text-muted-foreground select-none">
+                                            +91
+                                        </span>
+                                        <Input 
+                                            id="reg-phone" 
+                                            type="tel" 
+                                            maxLength={10}
+                                            placeholder="9876543210" 
+                                            value={phone} 
+                                            onChange={e => {
+                                                const val = e.target.value.replace(/\D/g, "");
+                                                setPhone(val.slice(0, 10));
+                                            }} 
+                                            className="w-full font-body px-4 py-3.5 rounded-r-xl rounded-l-none border border-border/70 bg-background/30 focus-visible:ring-4 focus-visible:ring-primary/5 focus-visible:border-primary transition-all duration-300 placeholder:text-muted-foreground/60 hover:bg-background/70 hover:border-primary/30" 
+                                            required 
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* IEEE Member Status */}

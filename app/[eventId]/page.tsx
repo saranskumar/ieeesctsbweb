@@ -60,6 +60,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ ev
                 .from("announcements")
                 .select("*")
                 .eq("slug", eventId)
+                .eq("is_published", true)
                 .maybeSingle();
 
             if (annData && !annError) {

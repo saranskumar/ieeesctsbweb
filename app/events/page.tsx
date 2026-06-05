@@ -19,6 +19,7 @@ async function getEventsAndAnnouncements() {
     const { data: dbAnnouncements, error: announcementsError } = await supabase
       .from("announcements")
       .select("*")
+      .eq("is_published", true)
       .order("announcement_date", { ascending: false });
 
     if (eventsError || announcementsError) {

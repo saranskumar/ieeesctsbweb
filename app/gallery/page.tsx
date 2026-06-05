@@ -1,12 +1,45 @@
 "use client";
 
-import { galleryItems } from "@/lib/data/gallery";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function GalleryPage() {
+  const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  // Fetch gallery from Supabase
+  useEffect(() => {
+    async function fetchGallery() {
+      try {
+        const { data, error } = await supabase
+          .from("gallery")
+          .select("*")
+          .order("display_order", { ascending: true });
+        
+        if (error) throw error;
+        if (data) {
+          // Map to match the existing interface properties
+          setGalleryItems(data.map(item => ({
+            id: item.id,
+            title: item.title || "",
+            description: item.description || "",
+            image: item.image_url,
+            category: item.category || "",
+            date: item.event_date || "",
+            order: item.display_order
+          })));
+        }
+      } catch (err) {
+        console.error("Error loading gallery:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchGallery();
+  }, []);
 
   // Sort by order descending (newest first)
   const sorted = [...galleryItems].sort((a, b) => (b.order || 0) - (a.order || 0));
@@ -48,6 +81,14 @@ export default function GalleryPage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedIndex, handleNext, handlePrev, handleClose]);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <>

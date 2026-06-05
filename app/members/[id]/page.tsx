@@ -114,18 +114,23 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
     const usersObj = Array.isArray(dbProfile.users) ? dbProfile.users[0] : dbProfile.users;
     const email = usersObj?.email || null;
     
+    const socials = dbProfile.socials || {};
+    const linkedin = socials.linkedin || dbProfile.linkedin_url || null;
+    const github = socials.github || dbProfile.github_url || null;
+    const instagram = socials.instagram || dbProfile.instagram_url || null;
+    
     const member = {
         id: dbProfile.id,
         name: dbProfile.name,
         image: dbProfile.image_url || "/person.svg",
         department: dbProfile.department || null,
         batch: dbProfile.batch || null,
-        linkedin: dbProfile.linkedin_url || null,
-        github: dbProfile.github_url || null,
+        linkedin: linkedin,
+        github: github,
         email: email,
         bio: dbProfile.bio || null,
         awards: [],
-        instagram: null,
+        instagram: instagram,
         website: null
     };
     
