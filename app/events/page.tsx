@@ -208,17 +208,27 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <span
-          className={`absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-            event.status === "Open"
-              ? "bg-green-500 text-white shadow-lg shadow-green-500/20"
-              : event.status === "Closed" 
-                ? "bg-rose-500 text-white shadow-lg shadow-rose-500/20" 
-                : "bg-secondary/90 text-secondary-foreground backdrop-blur-sm"
-          }`}
-        >
-          {event.status}
-        </span>
+        {event.status === "Open" && (
+          <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 backdrop-blur-md shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span>Open</span>
+          </span>
+        )}
+        {event.status === "Closed" && (
+          <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 border border-rose-500/20 backdrop-blur-md shadow-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0" />
+            <span>Closed</span>
+          </span>
+        )}
+        {event.status === "Completed" && (
+          <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-500/10 text-slate-600 border border-slate-500/20 backdrop-blur-md shadow-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+            <span>Completed</span>
+          </span>
+        )}
       </div>
       <div className="p-6 flex flex-col flex-grow">
         <h3 className="text-xl font-heading font-bold text-foreground mb-4 line-clamp-2 group-hover:text-primary transition-colors">

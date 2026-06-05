@@ -79,15 +79,27 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                         {/* Status Badge mobile only */}
                         {!event.isAnnouncement && event.status && (
                             <div className="lg:hidden">
-                                <span className={`inline-block px-4 py-1.5 text-sm font-secondary font-medium rounded-full ${
-                                    event.status === "Open" 
-                                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                    : event.status === "Closed"
-                                    ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400"
-                                    : "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-400"
-                                }`}>
-                                    {event.status}
-                                </span>
+                                {event.status === "Open" && (
+                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-full shadow-sm">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                        </span>
+                                        <span>Open</span>
+                                    </span>
+                                )}
+                                {event.status === "Closed" && (
+                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 border border-rose-500/20 rounded-full shadow-sm">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0" />
+                                        <span>Closed</span>
+                                    </span>
+                                )}
+                                {event.status === "Completed" && (
+                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-slate-500/10 text-slate-600 border border-slate-500/20 rounded-full shadow-sm">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+                                        <span>Completed</span>
+                                    </span>
+                                )}
                             </div>
                         )}
                     </div>
@@ -96,15 +108,27 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                     <div className="lg:col-span-7 flex flex-col pt-2 lg:pt-0">
                         {!event.isAnnouncement && event.status && (
                             <div className="hidden lg:block mb-6">
-                                <span className={`inline-block px-4 py-1.5 text-sm font-secondary font-medium rounded-full ${
-                                    event.status === "Open" 
-                                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                    : event.status === "Closed"
-                                    ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400"
-                                    : "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-400"
-                                }`}>
-                                    {event.status}
-                                </span>
+                                {event.status === "Open" && (
+                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-full shadow-sm">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                        </span>
+                                        <span>Open</span>
+                                    </span>
+                                )}
+                                {event.status === "Closed" && (
+                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 border border-rose-500/20 rounded-full shadow-sm">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0" />
+                                        <span>Closed</span>
+                                    </span>
+                                )}
+                                {event.status === "Completed" && (
+                                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-slate-500/10 text-slate-600 border border-slate-500/20 rounded-full shadow-sm">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-slate-400 shrink-0" />
+                                        <span>Completed</span>
+                                    </span>
+                                )}
                             </div>
                         )}
                         
@@ -160,12 +184,12 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                             {/* Status (for events only) */}
                             {!event.isAnnouncement && event.status && (
                                 <div className="flex items-center gap-4 text-foreground pt-2 sm:pt-4 border-t border-border/50 sm:border-none sm:pt-0">
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 border ${
                                         event.status === "Open" 
-                                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                                        ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                                         : event.status === "Closed"
-                                        ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400"
-                                        : "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-400"
+                                        ? "bg-rose-500/10 text-rose-600 border-rose-500/20"
+                                        : "bg-slate-500/10 text-slate-600 border-slate-500/20"
                                     }`}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                     </div>
