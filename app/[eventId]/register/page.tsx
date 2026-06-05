@@ -376,11 +376,15 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
             event.tier_non_ieee_fee === 0 &&
             event.tier_ieee_fee === 0 &&
             event.tier_sbc_fee === 0;
+        // Pre-generate the UUID so we never need to SELECT after INSERT
+        // (anon users have no SELECT policy on registrations — only INSERT).
+        const regId = crypto.randomUUID();
         setIsSubmitting(true);
         try {
-            const { data: newReg, error: insertError } = await supabase
+            const { error: insertError } = await supabase
                 .from("registrations")
                 .insert({
+                    id: regId,
                     event_id: event.dbId,
                     name: name.trim(),
                     email: email.trim(),
@@ -396,18 +400,16 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                         amount_paid: resolvedFee,
                     },
                     status: "pending", // RLS only allows 'pending' from anon; auto-verify route upgrades free regs server-side
-                })
-                .select("id")
-                .single();
+                });
             if (insertError) throw insertError;
 
             // For free events: auto-dispatch confirmation email server-side
-            if (isFree && newReg?.id) {
+            if (isFree) {
                 try {
                     await fetch("/api/auto-verify", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ regId: newReg.id }),
+                        body: JSON.stringify({ regId }),
                     });
                 } catch (emailErr) {
                     console.error("Auto-verify email dispatch failed (non-fatal):", emailErr);
@@ -639,7 +641,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                             <div className="bg-card rounded-3xl border border-border/80 p-6 shadow-md shadow-primary/5 space-y-5">
                                 <div>
                                     <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
-                                        Event Metadata
+                                        Event Details
                                     </span>
                                     <h2 className="text-xl font-heading font-bold text-foreground mt-3 tracking-tight">
                                         {event.title}
