@@ -59,11 +59,14 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
     const [ieeeMembershipId, setIeeeMembershipId] = useState("");
     const [isSbcMember, setIsSbcMember] = useState("");
 
-    // Payment states
-    const [paymentMode, setPaymentMode] = useState("");
+    // Payment states — UPI is the only accepted payment mode
     const [paymentProofUrl, setPaymentProofUrl] = useState("");
     const [isUploadingProof, setIsUploadingProof] = useState(false);
     const [dragActiveProof, setDragActiveProof] = useState(false);
+
+    // Registration outcome
+    const [isFreeRegistration, setIsFreeRegistration] = useState(false);
+
     // Dynamic form_schema field values keyed by field id
     const [customValues, setCustomValues] = useState<Record<string, string | boolean>>({});
 
@@ -317,6 +320,20 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
         }
     };
 
+    const resetForm = () => {
+        setName("");
+        setEmail("");
+        setPhone("");
+        setIsIeeeMember("");
+        setIeeeMembershipId("");
+        setIsSbcMember("");
+        setPaymentProofUrl("");
+        setCustomValues({});
+        setSubmitError(null);
+        setIsFreeRegistration(false);
+        setIsSubmitted(false);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!event) return;
@@ -348,39 +365,51 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
             }
         }
 
-        if (resolvedFee > 0) {
-            if (!paymentMode) {
-                setSubmitError("Please select a payment mode.");
-                return;
-            }
-            if (!paymentProofUrl) {
-                setSubmitError("Please upload a screenshot of your payment proof.");
-                return;
-            }
+        if (resolvedFee > 0 && !paymentProofUrl) {
+            setSubmitError("Please upload a screenshot of your UPI payment proof.");
+            return;
         }
 
+        const isFree = resolvedFee === 0;
         setIsSubmitting(true);
         try {
-            const { error: insertError } = await supabase.from("registrations").insert({
-                event_id: event.dbId,
-                name: name.trim(),
-                email: email.trim(),
-                phone: phone.trim(),
-                payment_proof_url: resolvedFee > 0 ? paymentProofUrl : null,
-                form_data: {
-                    ...customValues,
-                    is_ieee_member: isIeeeMember,
-                    ieee_membership_id: isIeeeMember === "Yes" ? ieeeMembershipId.trim() : "",
-                    is_sbc_member: (event.sbc_id && isIeeeMember === "Yes") ? isSbcMember : "No",
-                    payment_mode: resolvedFee > 0 ? paymentMode : "Free",
-                    payment_tier: resolvedTierName,
-                    amount_paid: resolvedFee,
-                },
-                status: "pending",
-            });
+            const { data: newReg, error: insertError } = await supabase
+                .from("registrations")
+                .insert({
+                    event_id: event.dbId,
+                    name: name.trim(),
+                    email: email.trim(),
+                    phone: phone.trim(),
+                    payment_proof_url: isFree ? null : paymentProofUrl,
+                    form_data: {
+                        ...customValues,
+                        is_ieee_member: isIeeeMember,
+                        ieee_membership_id: isIeeeMember === "Yes" ? ieeeMembershipId.trim() : "",
+                        is_sbc_member: (event.sbc_id && isIeeeMember === "Yes") ? isSbcMember : "No",
+                        payment_mode: isFree ? "Free" : "UPI",
+                        payment_tier: resolvedTierName,
+                        amount_paid: resolvedFee,
+                    },
+                    status: isFree ? "verified" : "pending",
+                })
+                .select("id")
+                .single();
             if (insertError) throw insertError;
 
-            // Save registration entry locally in localStorage to persist registered events
+            // For free events: auto-dispatch confirmation email server-side
+            if (isFree && newReg?.id) {
+                try {
+                    await fetch("/api/auto-verify", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ regId: newReg.id }),
+                    });
+                } catch (emailErr) {
+                    console.error("Auto-verify email dispatch failed (non-fatal):", emailErr);
+                }
+            }
+
+            // Save to localStorage
             const regEntry = {
                 eventId: event.slug,
                 dbId: event.dbId,
@@ -388,7 +417,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                 name: name.trim(),
                 email: email.trim(),
                 phone: phone.trim(),
-                status: "pending",
+                status: isFree ? "verified" : "pending",
                 registeredAt: new Date().toISOString(),
             };
             try {
@@ -399,6 +428,7 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                 console.error("Local storage sync error:", e);
             }
 
+            setIsFreeRegistration(isFree);
             setIsSubmitted(true);
         } catch (err: any) {
             setSubmitError(err?.message || "Registration failed. Please try again.");
@@ -492,19 +522,29 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                     </div>
 
                     <div className="space-y-3">
-                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest bg-emerald-500/5 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/15">
-                            Registration Confirmed
-                        </span>
+                        {isFreeRegistration ? (
+                            <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest bg-emerald-500/5 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/15">
+                                Registered &amp; Email Sent
+                            </span>
+                        ) : (
+                            <span className="text-[10px] font-bold text-amber-600 uppercase tracking-widest bg-amber-500/5 px-3 py-1.5 rounded-full border border-amber-500/15">
+                                Pending Payment Verification
+                            </span>
+                        )}
                         <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground tracking-tight pt-1">
-                            You're Registered!
+                            You&apos;re Registered!
                         </h1>
                         {event.success_message ? (
                             <p className="text-sm text-muted-foreground font-body leading-relaxed whitespace-pre-wrap pt-2">
                                 {event.success_message}
                             </p>
+                        ) : isFreeRegistration ? (
+                            <p className="text-sm text-muted-foreground font-body leading-relaxed pt-2">
+                                Your spot for <strong className="text-foreground">{event.title}</strong> is confirmed. A confirmation email with your entry details has been sent to your inbox.
+                            </p>
                         ) : (
                             <p className="text-sm text-muted-foreground font-body leading-relaxed pt-2">
-                                Congratulations! Your credentials have been successfully verified for <strong className="text-foreground">{event.title}</strong>. We will keep you updated.
+                                Registration submitted for <strong className="text-foreground">{event.title}</strong>. Your entry will be confirmed after our team verifies your payment proof. You&apos;ll receive a confirmation email once verified.
                             </p>
                         )}
                     </div>
@@ -523,7 +563,15 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                         <Button asChild variant="outline" className="w-full font-secondary py-6 rounded-xl hover:scale-[1.01] active:scale-95 transition-all duration-300">
                             <Link href={`/${event.slug}`}>View Event Details</Link>
                         </Button>
-                        <Button asChild variant="ghost" className="w-full font-secondary py-6 rounded-xl text-muted-foreground hover:text-foreground transition-all duration-300">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={resetForm}
+                            className="w-full font-secondary py-6 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/20 transition-all duration-300"
+                        >
+                            Register Another Person
+                        </Button>
+                        <Button asChild variant="ghost" className="w-full font-secondary py-3 rounded-xl text-muted-foreground/70 hover:text-foreground transition-all duration-300">
                             <Link href="/events" className="flex items-center justify-center gap-2">
                                 <ArrowLeft className="w-4 h-4" />
                                 <span>Browse Other Events</span>
@@ -877,103 +925,65 @@ export default function EventRegisterPage({ params }: { params: Promise<{ eventI
                                             </div>
                                         </div>
 
-                                        {/* Payment Mode Selector */}
-                                        <div className="space-y-2">
-                                            <Label htmlFor="payment-mode" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                                Payment Mode <span className="text-destructive">*</span>
-                                            </Label>
-                                            <div className="relative">
-                                                <select
-                                                    id="payment-mode"
-                                                    value={paymentMode}
-                                                    onChange={e => {
-                                                        setPaymentMode(e.target.value);
-                                                        setPaymentProofUrl(""); // clear uploaded proof if mode changes
-                                                    }}
-                                                    required
-                                                    className="w-full rounded-xl border border-border/70 bg-background/30 px-4 py-3.5 text-sm font-body text-foreground transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary hover:bg-background/70 hover:border-primary/30 appearance-none cursor-pointer"
-                                                >
-                                                    <option value="" className="bg-background text-foreground">Select a payment mode</option>
-                                                    <option value="UPI" className="bg-background text-foreground">UPI (Instant Verification)</option>
-                                                    <option value="Bank Transfer" className="bg-background text-foreground">Bank Transfer / IMPS</option>
-                                                </select>
-                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
-                                                    <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                                    </svg>
+                                        {/* UPI Payment Block — always shown for paid events */}
+                                        <div className="bg-secondary/10 border border-border/80 rounded-2xl p-5 space-y-4 animate-in fade-in duration-300">
+                                            <div className="flex flex-col md:flex-row items-center gap-5 justify-between">
+                                                <div className="space-y-2 text-center md:text-left">
+                                                    <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
+                                                        Pay via UPI
+                                                    </span>
+                                                    <p className="text-xs text-muted-foreground leading-relaxed">
+                                                        Scan the QR or copy the UPI ID to pay <strong className="text-foreground">₹{resolvedFee}</strong> using GPay, PhonePe, or Paytm.
+                                                    </p>
+                                                    <div className="flex items-center gap-2 justify-center md:justify-start pt-1.5">
+                                                        <span className="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg border border-border bg-background/50 select-all">
+                                                            {event.upi_id}
+                                                        </span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                navigator.clipboard.writeText(event.upi_id);
+                                                                alert("UPI ID copied!");
+                                                            }}
+                                                            className="p-2 rounded-lg border border-border bg-background hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition cursor-pointer"
+                                                            title="Copy UPI ID"
+                                                        >
+                                                            <Copy className="w-3.5 h-3.5" />
+                                                        </button>
+                                                    </div>
+                                                    {/* Open Payment App deep-link */}
+                                                    <a
+                                                        href={`upi://pay?pa=${encodeURIComponent(event.upi_id)}&pn=${encodeURIComponent(event.title)}&am=${resolvedFee}&cu=INR&tn=Registration`}
+                                                        className="inline-flex items-center gap-2 mt-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-md shadow-primary/20 hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all duration-200 select-none"
+                                                    >
+                                                        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M2.25 6.75c0-1.036.84-1.875 1.875-1.875h15.75c1.036 0 1.875.84 1.875 1.875v10.5c0 1.036-.84 1.875-1.875 1.875H4.125A1.875 1.875 0 012.25 17.25V6.75zm9.75 8.25a3 3 0 100-6 3 3 0 000 6zM6 10.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm12 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                                                        </svg>
+                                                        Open Payment App
+                                                    </a>
+                                                </div>
+
+                                                <div className="shrink-0 bg-white p-3 rounded-2xl border border-border shadow-sm flex items-center justify-center">
+                                                    <img
+                                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                                                            `upi://pay?pa=${event.upi_id}&pn=${encodeURIComponent(event.title)}&am=${resolvedFee}&cu=INR`
+                                                        )}`}
+                                                        alt="UPI Payment QR Code"
+                                                        className="w-32 h-32 object-contain"
+                                                    />
                                                 </div>
                                             </div>
+
+                                            {event.payment_instructions && (
+                                                <div className="text-[11px] text-muted-foreground border-t border-border/50 pt-3 font-body leading-relaxed whitespace-pre-wrap">
+                                                    <strong className="text-foreground block mb-1">Instructions:</strong>
+                                                    {event.payment_instructions}
+                                                </div>
+                                            )}
                                         </div>
 
-                                        {/* UPI Payment Flow */}
-                                        {paymentMode === "UPI" && (
-                                            <div className="bg-secondary/10 border border-border/80 rounded-2xl p-5 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                                                <div className="flex flex-col md:flex-row items-center gap-5 justify-between">
-                                                    <div className="space-y-2 text-center md:text-left">
-                                                        <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
-                                                            Pay with UPI QR
-                                                        </span>
-                                                        <p className="text-xs text-muted-foreground leading-relaxed">
-                                                            Scan the QR code using any UPI app (GPay, PhonePe, Paytm) or copy the UPI ID below to pay <strong className="text-foreground">INR {resolvedFee}</strong>.
-                                                        </p>
-                                                        <div className="flex items-center gap-2 justify-center md:justify-start pt-1.5">
-                                                            <span className="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg border border-border bg-background/50 select-all">
-                                                                {event.upi_id}
-                                                            </span>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    navigator.clipboard.writeText(event.upi_id);
-                                                                    alert("UPI ID copied to clipboard!");
-                                                                }}
-                                                                className="p-2 rounded-lg border border-border bg-background hover:bg-secondary/40 text-muted-foreground hover:text-foreground transition cursor-pointer"
-                                                                title="Copy UPI ID"
-                                                            >
-                                                                <Copy className="w-3.5 h-3.5" />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="shrink-0 bg-white p-3 rounded-2xl border border-border shadow-sm flex items-center justify-center">
-                                                        <img
-                                                            src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
-                                                                `upi://pay?pa=${event.upi_id}&pn=${encodeURIComponent(event.title)}&am=${resolvedFee}&cu=INR`
-                                                            )}`}
-                                                            alt="UPI Payment QR Code"
-                                                            className="w-32 h-32 object-contain"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                {event.payment_instructions && (
-                                                    <div className="text-[11px] text-muted-foreground border-t border-border/50 pt-3 font-body leading-relaxed whitespace-pre-wrap">
-                                                        <strong className="text-foreground block mb-1">Instructions:</strong>
-                                                        {event.payment_instructions}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {/* Bank Transfer Info Flow */}
-                                        {paymentMode === "Bank Transfer" && (
-                                            <div className="bg-secondary/10 border border-border/80 rounded-2xl p-5 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                                                <span className="text-[9px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
-                                                    Bank Account Details
-                                                </span>
-                                                {event.payment_instructions ? (
-                                                    <p className="text-xs text-muted-foreground font-body leading-relaxed whitespace-pre-wrap pt-1">
-                                                        {event.payment_instructions}
-                                                    </p>
-                                                ) : (
-                                                    <p className="text-xs text-muted-foreground italic font-body">
-                                                        Please complete the transfer to the official bank account listed in the instructions.
-                                                    </p>
-                                                )}
-                                            </div>
-                                        )}
-
                                         {/* Payment Receipt / Screenshot Uploader */}
-                                        {paymentMode && (
+                                        {resolvedFee > 0 && (
                                             <div className="space-y-2 animate-in fade-in duration-300">
                                                 <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                                                     Upload Payment Proof / Screenshot <span className="text-destructive">*</span>
