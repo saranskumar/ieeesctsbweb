@@ -214,9 +214,16 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                                 )}
 
                                 {isRegistered ? (
-                                    <Button disabled variant="outline" size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 opacity-100 cursor-not-allowed select-none">
-                                        ✓ Already Registered
-                                    </Button>
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <Button disabled variant="outline" size="lg" className="font-secondary text-lg px-10 py-6 border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 opacity-100 cursor-not-allowed select-none">
+                                            ✓ Already Registered
+                                        </Button>
+                                        {event.status === "Open" && (
+                                            <Button asChild size="lg" variant="outline" className="font-secondary text-lg px-10 py-6 border-border hover:border-primary hover:text-primary transition-all duration-200">
+                                                <Link href={`/${event.id}/register`}>Register Another Person</Link>
+                                            </Button>
+                                        )}
+                                    </div>
                                 ) : (
                                     event.status === "Open" && (
                                         <Button asChild size="lg" className="w-full sm:w-auto font-secondary text-lg px-12 py-6 shadow-lg shadow-primary/20">
