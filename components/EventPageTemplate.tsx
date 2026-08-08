@@ -18,7 +18,8 @@ interface EventPageTemplateProps {
 }
 
 export default function EventPageTemplate({ event }: EventPageTemplateProps) {
-    const images = event.gallery && event.gallery.length > 0 ? [event.image, ...event.gallery] : [event.image];
+    const rawImages = event.gallery && event.gallery.length > 0 ? [event.image, ...event.gallery] : [event.image];
+    const images = rawImages.filter(img => img && img.trim() !== "" && !img.includes("kla4bkjx0zr1dvdghtnb") && img !== "/placeholder.svg");
     const activeGuidelines = event.guidelines?.filter((g) => g && g.trim() !== "") || [];
     const activeRules = event.rules?.filter((r) => r && r.trim() !== "") || [];
 
@@ -54,27 +55,36 @@ export default function EventPageTemplate({ event }: EventPageTemplateProps) {
                     {/* Left Column: Carousel/Images (Aspect Ratio 4:5) */}
                     <div className="lg:col-span-5 space-y-4">
                         <div className="rounded-2xl overflow-hidden bg-transparent">
-                            <Carousel className="w-full">
-                                <CarouselContent>
-                                    {images.map((img, index) => (
-                                        <CarouselItem key={index}>
-                                            <div className="relative bg-transparent flex items-center justify-center w-full">
-                                                <img
-                                                    src={img || "/placeholder.svg"}
-                                                    alt={`${event.title} - Image ${index + 1}`}
-                                                    className="w-full h-auto rounded-3xl border border-border/70 shadow-md bg-card/10 object-contain"
-                                                />
-                                            </div>
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-                                {images.length > 1 && (
-                                    <>
-                                        <CarouselPrevious className="left-4 bg-background/50 hover:bg-background/90 border-none text-foreground" />
-                                        <CarouselNext className="right-4 bg-background/50 hover:bg-background/90 border-none text-foreground" />
-                                    </>
-                                )}
-                            </Carousel>
+                            {images.length > 0 ? (
+                                <Carousel className="w-full">
+                                    <CarouselContent>
+                                        {images.map((img, index) => (
+                                            <CarouselItem key={index}>
+                                                <div className="relative bg-transparent flex items-center justify-center w-full">
+                                                    <img
+                                                        src={img}
+                                                        alt={`${event.title} - Image ${index + 1}`}
+                                                        className="w-full h-auto rounded-3xl border border-border/70 shadow-md bg-card/10 object-contain"
+                                                    />
+                                                </div>
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                    {images.length > 1 && (
+                                        <>
+                                            <CarouselPrevious className="left-4 bg-background/50 hover:bg-background/90 border-none text-foreground" />
+                                            <CarouselNext className="right-4 bg-background/50 hover:bg-background/90 border-none text-foreground" />
+                                        </>
+                                    )}
+                                </Carousel>
+                            ) : (
+                                <div className="w-full aspect-[4/5] rounded-3xl border border-border/70 shadow-md bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 flex flex-col items-center justify-center p-8 text-center">
+                                    <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 text-primary shadow-inner">
+                                        <Calendar className="w-8 h-8" />
+                                    </div>
+                                    <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground/80 font-heading">IEEE SCT SB</span>
+                                </div>
+                            )}
                         </div>
                         {/* Status Badge mobile only */}
                         {!event.isAnnouncement && event.status && (

@@ -116,11 +116,17 @@ export default function GalleryPage() {
                 onClick={() => setSelectedIndex(index)}
                 className="group relative break-inside-avoid overflow-hidden rounded-xl bg-transparent transition-all duration-500 cursor-zoom-in shadow-sm hover:shadow-2xl"
               >
-                <img
-                  src={item.image || "/placeholder.svg"}
-                  alt={item.title || "Gallery Image"}
-                  className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
-                />
+                {item.image && item.image.trim() !== "" && !item.image.includes("kla4bkjx0zr1dvdghtnb") && item.image !== "/placeholder.svg" ? (
+                  <img
+                    src={item.image}
+                    alt={item.title || "Gallery Image"}
+                    className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
+                  />
+                ) : (
+                  <div className="w-full aspect-[4/3] bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-700">
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/80 font-heading">IEEE SCT SB</span>
+                  </div>
+                )}
                 {/* Overlay - subtle hover effect */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
                   <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">

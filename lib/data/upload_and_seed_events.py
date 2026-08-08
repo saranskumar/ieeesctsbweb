@@ -10,8 +10,8 @@ import subprocess
 data_dir = r"d:\WORK\IEEE\SB\ieeeweb\main\lib\data"
 supabase_dir = r"d:\WORK\IEEE\SB\ieeeweb\admin\Supabase"
 
-# Placeholder Cloudinary image URL
-PLACEHOLDER_URL = "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg"
+# Placeholder Cloudinary image URL (empty string)
+PLACEHOLDER_URL = ""
 
 # 1. Update events.ts image paths in-place
 events_ts_path = os.path.join(data_dir, "events.ts")

@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { events as staticEvents, Event } from "@/lib/data/events";
+import { Event } from "@/lib/data/events";
 import EventsScroll from "@/components/EventsScroll";
 import AnnouncementsScroll from "@/components/AnnouncementsScroll";
 
@@ -12,7 +12,7 @@ async function getHomeEvents(): Promise<Event[]> {
       .limit(20);
 
     if (error || !dbEvents || dbEvents.length === 0) {
-      return staticEvents.slice(0, 10);
+      return [];
     }
 
     return dbEvents.map((e: any) => {
@@ -43,17 +43,17 @@ async function getHomeEvents(): Promise<Event[]> {
         venue: e.venue || "",
         status: statusVal,
         description: e.description,
-        image: e.main_poster_url 
+        image: (e.main_poster_url && !e.main_poster_url.includes("kla4bkjx0zr1dvdghtnb"))
           ? (e.main_poster_url.includes("res.cloudinary.com") 
               ? e.main_poster_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
               : e.main_poster_url) 
-          : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+          : "",
         order: e.order || 0,
       };
     });
   } catch (err) {
     console.error("Error fetching home events from Supabase:", err);
-    return staticEvents.slice(0, 10);
+    return [];
   }
 }
 
@@ -83,11 +83,11 @@ async function getHomeAnnouncements() {
         id: a.slug,
         title: a.title,
         description: a.description,
-        imageUrl: a.image_url 
+        imageUrl: (a.image_url && !a.image_url.includes("kla4bkjx0zr1dvdghtnb"))
           ? (a.image_url.includes("res.cloudinary.com") 
               ? a.image_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
               : a.image_url) 
-             : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+          : "",
         date: formattedDate || "TBA",
       };
     });

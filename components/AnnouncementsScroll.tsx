@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Announcement {
@@ -136,12 +136,21 @@ export default function AnnouncementsScroll({ announcements }: AnnouncementsScro
               href={`/${ann.id}`}
               className="flex-none w-[290px] sm:w-[320px] md:w-[360px] snap-start bg-background rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-xl hover:scale-[1.01] transition-all duration-500 flex flex-col group cursor-pointer"
             >
-              <div className="aspect-[4/5] bg-muted relative overflow-hidden">
-                <img
-                  src={ann.imageUrl || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg"}
-                  alt={ann.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+              <div className="aspect-[4/5] bg-muted relative overflow-hidden flex items-center justify-center">
+                {ann.imageUrl && ann.imageUrl.trim() !== "" && !ann.imageUrl.includes("kla4bkjx0zr1dvdghtnb") && ann.imageUrl !== "/placeholder.svg" ? (
+                  <img
+                    src={ann.imageUrl}
+                    alt={ann.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-700">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-3 text-primary shadow-inner">
+                      <Megaphone className="w-7 h-7" />
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/80 font-heading">Announcement</span>
+                  </div>
+                )}
               </div>
               <div className="p-6 flex flex-col flex-grow">
                 <span className="text-xs font-semibold text-primary mb-2 block font-secondary">

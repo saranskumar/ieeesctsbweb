@@ -1,7 +1,6 @@
 import { chapters } from "@/lib/data/chapters";
-import { sbcTeams, execom } from "@/lib/data/team";
-import { resolveEntry } from "@/lib/data/members";
-import { events } from "@/lib/data/events";
+import { Event } from "@/lib/data/events";
+import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, Calendar, MapPin, Monitor } from "lucide-react";
@@ -11,22 +10,114 @@ interface ChapterDetailProps {
     chapterId: string;
 }
 
-export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
+async function getChapterEvents(chapterId: string): Promise<Event[]> {
+    try {
+        const { data: dbEvents, error } = await supabase
+            .from("events")
+            .select("*")
+            .order("event_date", { ascending: false });
+
+        if (error || !dbEvents) return [];
+
+        return dbEvents
+            .filter((e: any) => e.sbc_id === chapterId || (Array.isArray(e.collaborators) && e.collaborators.includes(chapterId)))
+            .map((e: any) => {
+                const statusVal = (e.status === "open" ? "Open" : e.status === "closed" ? "Closed" : "Completed") as "Open" | "Closed" | "Completed";
+                let formattedDate = "";
+                if (e.event_date) {
+                    const d = new Date(e.event_date);
+                    formattedDate = d.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                    });
+                }
+                return {
+                    id: e.slug,
+                    title: e.title,
+                    date: formattedDate || "TBA",
+                    time: "",
+                    mode: "Offline" as const,
+                    venue: e.venue || "",
+                    status: statusVal,
+                    description: e.description || "",
+                    image: (e.main_poster_url && !e.main_poster_url.includes("kla4bkjx0zr1dvdghtnb"))
+                        ? (e.main_poster_url.includes("res.cloudinary.com")
+                            ? e.main_poster_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/")
+                            : e.main_poster_url)
+                        : "",
+                    order: e.order || 0,
+                };
+            });
+    } catch {
+        return [];
+    }
+}
+
+async function getChapterTeam(chapterId: string) {
+    try {
+        const { data: activeYear } = await supabase
+            .from("team_years")
+            .select("id")
+            .eq("is_active", true)
+            .maybeSingle();
+
+        if (!activeYear) return [];
+
+        const { data: entries, error } = await supabase
+            .from("team_entries")
+            .select(`
+                id,
+                role,
+                display_order,
+                profiles (
+                    id,
+                    name,
+                    image_url,
+                    email,
+                    linkedin_url
+                )
+            `)
+            .eq("team_year_id", activeYear.id)
+            .order("display_order", { ascending: true });
+
+        if (error || !entries) return [];
+
+        const regex = new RegExp(`\\b${chapterId}\\b`, 'i');
+
+        return entries
+            .filter((e: any) => e.profiles && e.role && (
+                regex.test(e.role) ||
+                (chapterId === 'cs' && (e.role.toLowerCase().startsWith('cs ') || e.role.toLowerCase().includes('computer society'))) ||
+                (chapterId === 'wie' && (e.role.toLowerCase().startsWith('wie ') || e.role.toLowerCase().includes('women in engineering'))) ||
+                (chapterId === 'ras' && (e.role.toLowerCase().startsWith('ras ') || e.role.toLowerCase().includes('robotics'))) ||
+                (chapterId === 'pes' && (e.role.toLowerCase().startsWith('pes ') || e.role.toLowerCase().includes('power & energy'))) ||
+                (chapterId === 'ias' && (e.role.toLowerCase().startsWith('ias ') || e.role.toLowerCase().includes('industry applications'))) ||
+                (chapterId === 'comsoc' && (e.role.toLowerCase().startsWith('comsoc ') || e.role.toLowerCase().includes('communications'))) ||
+                (chapterId === 'sight' && (e.role.toLowerCase().startsWith('sight ') || e.role.toLowerCase().includes('sight'))) ||
+                (chapterId === 'embs' && (e.role.toLowerCase().startsWith('embs ') || e.role.toLowerCase().includes('engineering in medicine')))
+            ))
+            .map((e: any) => ({
+                id: e.profiles.id || e.id,
+                name: e.profiles.name,
+                role: e.role,
+                image: e.profiles.image_url || "",
+                email: e.profiles.email || "",
+                linkedin: e.profiles.linkedin_url || "",
+            }));
+    } catch {
+        return [];
+    }
+}
+
+export default async function ChapterDetail({ chapterId }: ChapterDetailProps) {
     const chapter = chapters.find((c) => c.id === chapterId);
-    const chapterEvents = events.filter((e) => e.chapterId === chapterId || e.collaborators?.includes(chapterId));
+    const chapterEvents = await getChapterEvents(chapterId);
+    const teamToDisplay = await getChapterTeam(chapterId);
 
     if (!chapter) {
         notFound();
     }
-
-    // Filter main execom to find any Advisors or Branch Counselors matching this chapter
-    const regex = new RegExp(`\\b${chapterId}\\b`, 'i');
-    const advisors = execom.filter(e => 
-        (e.role.toLowerCase().includes("advisor") || e.role.toLowerCase().includes("counselor")) &&
-        regex.test(e.role)
-    );
-
-    const teamToDisplay = [...advisors, ...(sbcTeams[chapterId] || [])];
 
     return (
         <>
@@ -172,12 +263,21 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
                                         className="flex-none w-64 snap-start bg-card rounded-xl overflow-hidden border border-border group hover:shadow-xl transition-all duration-500 flex flex-col"
                                     >
                                         {/* Poster — 4:5 ratio */}
-                                        <div className="aspect-[4/5] bg-muted relative overflow-hidden">
-                                            <img
-                                                src={event.image || "/placeholder.svg"}
-                                                alt={event.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            />
+                                        <div className="aspect-[4/5] bg-muted relative overflow-hidden flex items-center justify-center">
+                                            {event.image && event.image.trim() !== "" && !event.image.includes("kla4bkjx0zr1dvdghtnb") && event.image !== "/placeholder.svg" ? (
+                                                <img
+                                                    src={event.image}
+                                                    alt={event.title}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-700">
+                                                    <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-2 text-primary shadow-inner">
+                                                        <Calendar className="w-6 h-6" />
+                                                    </div>
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 font-heading">IEEE SCT SB</span>
+                                                </div>
+                                            )}
                                             {event.status === "Open" && (
                                                 <span className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 backdrop-blur-md shadow-sm">
                                                     <span className="relative flex h-2 w-2">
@@ -246,7 +346,7 @@ export default function ChapterDetail({ chapterId }: ChapterDetailProps) {
 
                     {teamToDisplay.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {teamToDisplay.map(resolveEntry).map((member, index) => (
+                            {teamToDisplay.map((member, index) => (
                                 <div
                                     key={index}
                                     className="bg-card rounded-lg overflow-hidden border border-border hover:shadow-lg transition-all hover:-translate-y-1 group relative"

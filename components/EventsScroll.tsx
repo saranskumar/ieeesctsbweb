@@ -139,12 +139,21 @@ export default function EventsScroll({ events }: EventsScrollProps) {
               className="flex-none w-[290px] sm:w-[320px] md:w-[360px] snap-start bg-background rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-xl hover:scale-[1.01] transition-all duration-500 flex flex-col group"
             >
               {/* Poster Image */}
-              <div className="aspect-[4/5] bg-muted relative overflow-hidden">
-                <img
-                  src={event.image || "https://res.cloudinary.com/djsime0yn/image/upload/v1779484601/kla4bkjx0zr1dvdghtnb.jpg"}
-                  alt={event.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+              <div className="aspect-[4/5] bg-muted relative overflow-hidden flex items-center justify-center">
+                {event.image && event.image.trim() !== "" && !event.image.includes("kla4bkjx0zr1dvdghtnb") && event.image !== "/placeholder.svg" ? (
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-700">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-3 text-primary shadow-inner">
+                      <Calendar className="w-7 h-7" />
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/80 font-heading">IEEE SCT SB</span>
+                  </div>
+                )}
                 {event.status === "Open" && (
                   <span className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 backdrop-blur-md shadow-sm">
                     <span className="relative flex h-2 w-2">

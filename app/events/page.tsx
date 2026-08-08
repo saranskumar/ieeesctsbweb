@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import AnnouncementsScroll from "@/components/AnnouncementsScroll";
 
 import { supabase } from "@/lib/supabase";
-import { events as staticEvents } from "@/lib/data/events";
-import { announcements as staticAnnouncements } from "@/lib/data/announcements";
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -23,15 +21,10 @@ async function getEventsAndAnnouncements() {
       .order("announcement_date", { ascending: false });
 
     if (eventsError || announcementsError) {
-      console.error("Supabase error fetching events/announcements, falling back to static:", eventsError || announcementsError);
-      return { events: staticEvents, announcements: staticAnnouncements };
+      console.error("Supabase error fetching events/announcements:", eventsError || announcementsError);
     }
 
-    if (!dbEvents || dbEvents.length === 0) {
-      return { events: staticEvents, announcements: staticAnnouncements };
-    }
-
-    const mappedEvents = dbEvents.map((e: any) => {
+    const mappedEvents = (dbEvents || []).map((e: any) => {
       const statusVal = e.status === "open" ? "Open" : e.status === "closed" ? "Closed" : "Completed";
       
       let formattedDate = "";
@@ -59,11 +52,11 @@ async function getEventsAndAnnouncements() {
         venue: e.venue || "",
         status: statusVal,
         description: e.description,
-        image: e.main_poster_url 
+        image: (e.main_poster_url && !e.main_poster_url.includes("kla4bkjx0zr1dvdghtnb"))
           ? (e.main_poster_url.includes("res.cloudinary.com") 
               ? e.main_poster_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
               : e.main_poster_url) 
-          : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+          : "",
         order: 0,
       };
     });
@@ -84,19 +77,19 @@ async function getEventsAndAnnouncements() {
         title: a.title,
         description: a.description,
         date: formattedDate,
-        imageUrl: a.image_url 
+        imageUrl: (a.image_url && !a.image_url.includes("kla4bkjx0zr1dvdghtnb"))
           ? (a.image_url.includes("res.cloudinary.com") 
               ? a.image_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
               : a.image_url) 
-          : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+          : "",
         order: 0,
       };
     });
 
     return { events: mappedEvents, announcements: mappedAnnouncements };
   } catch (error) {
-    console.error("Exception fetching from Supabase, falling back to static:", error);
-    return { events: staticEvents, announcements: staticAnnouncements };
+    console.error("Exception fetching from Supabase:", error);
+    return { events: [], announcements: [] };
   }
 }
 
@@ -209,13 +202,24 @@ function EventCard({ event, isLive }: { event: any; isLive?: boolean }) {
     <div
       className={`bg-background rounded-xl overflow-hidden group flex flex-col h-full border border-border shadow-sm hover:shadow-xl transition-all duration-500 ${!isLive ? "opacity-95" : "border-primary/20 shadow-primary/5"}`}
     >
-      <div className="aspect-[4/5] bg-muted relative overflow-hidden">
-        <img
-          src={event.image || "/placeholder.svg"}
-          alt={event.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="aspect-[4/5] bg-muted relative overflow-hidden flex items-center justify-center">
+        {event.image && event.image.trim() !== "" && !event.image.includes("kla4bkjx0zr1dvdghtnb") && event.image !== "/placeholder.svg" ? (
+          <>
+            <img
+              src={event.image}
+              alt={event.title}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          </>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-700">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-3 text-primary shadow-inner">
+              <Calendar className="w-7 h-7" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/80 font-heading">IEEE SCT SB</span>
+          </div>
+        )}
         {event.status === "Open" && (
           <span className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 backdrop-blur-md shadow-sm">
             <span className="relative flex h-2 w-2">

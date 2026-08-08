@@ -1,39 +1,52 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { execom, sbcTeams } from "@/lib/data/team";
-import { resolveEntry } from "@/lib/data/members";
+import { supabase } from "@/lib/supabase";
 
-const coreRoles = [
-  "Chairperson",
-  "Vice Chairperson",
-  "Secretary",
-];
+async function getHomeExecom() {
+  try {
+    const { data: activeYear } = await supabase
+      .from("team_years")
+      .select("id, year")
+      .eq("is_active", true)
+      .maybeSingle();
 
-const coreMembers = execom
-  .map(resolveEntry)
-  .filter((m) => coreRoles.includes(m.role));
+    if (!activeYear) return [];
 
-const sbcChairRoles = [
-  "CS Chairperson",
-  "EMBS Chairperson",
-  "RAS Chairperson",
-  "IAS Chairperson",
-  "PES Chairperson",
-  "ComSoc Chairperson",
-  "SIGHT Chairperson",
-  "WIE Chairperson",
-];
+    const { data: entries, error } = await supabase
+      .from("team_entries")
+      .select(`
+        id,
+        role,
+        display_order,
+        profiles (
+          id,
+          name,
+          image_url
+        )
+      `)
+      .eq("team_year_id", activeYear.id)
+      .order("display_order", { ascending: true })
+      .limit(12);
 
-const sbcChairs = Object.values(sbcTeams)
-  .flat()
-  .map(resolveEntry)
-  .filter((m) => sbcChairRoles.includes(m.role));
+    if (error || !entries) return [];
 
-const displayMembers = [...coreMembers, ...sbcChairs];
+    return entries
+      .filter((e: any) => e.profiles && e.profiles.name)
+      .map((e: any) => ({
+        id: e.profiles.id || e.id,
+        name: e.profiles.name,
+        role: e.role,
+        image: e.profiles.image_url || "",
+      }));
+  } catch (err) {
+    console.error("Error fetching home execom from Supabase:", err);
+    return [];
+  }
+}
 
-
-const ExecomSection = () => {
+const ExecomSection = async () => {
+  const displayMembers = await getHomeExecom();
   return (
     <section className="section-padding bg-card">
       <div className="section-container">
@@ -62,12 +75,18 @@ const ExecomSection = () => {
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <div className="relative mb-4">
-                <div className="aspect-square rounded-lg overflow-hidden bg-muted">
-                  <img
-                    src={member.image ?? "/team/placeholder.jpg"}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="aspect-square rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                  {member.image && member.image !== "/team/placeholder.jpg" && member.image.trim() !== "" ? (
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg font-heading">
+                      {member.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
+                    </div>
+                  )}
                 </div>
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary rounded-full">
                   <span className="text-xs font-secondary text-primary-foreground whitespace-nowrap">

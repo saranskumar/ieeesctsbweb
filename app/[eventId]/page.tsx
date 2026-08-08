@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabase";
-import { events as staticEvents } from "@/lib/data/events";
 import { notFound } from "next/navigation";
 import EventPageTemplate from "@/components/EventPageTemplate";
 
@@ -43,11 +42,11 @@ export default async function EventDetailPage({ params }: { params: Promise<{ ev
                 venue: data.venue || "",
                 status: statusVal,
                 description: data.description,
-                image: data.main_poster_url 
+                image: (data.main_poster_url && !data.main_poster_url.includes("kla4bkjx0zr1dvdghtnb"))
                   ? (data.main_poster_url.includes("res.cloudinary.com") 
                       ? data.main_poster_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
                       : data.main_poster_url) 
-                  : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+                  : "",
                 order: 0,
                 redirectLinks: data.redirect_links || [],
                 guidelines: data.guidelines || [],
@@ -82,11 +81,11 @@ export default async function EventDetailPage({ params }: { params: Promise<{ ev
                     venue: "",
                     status: null,
                     description: annData.description,
-                    image: annData.image_url 
+                    image: (annData.image_url && !annData.image_url.includes("kla4bkjx0zr1dvdghtnb"))
                       ? (annData.image_url.includes("res.cloudinary.com") 
                           ? annData.image_url.replace("/image/upload/", "/image/upload/f_auto,q_auto/") 
                           : annData.image_url) 
-                      : "https://res.cloudinary.com/djsime0yn/image/upload/f_auto,q_auto/v1779484601/kla4bkjx0zr1dvdghtnb.jpg",
+                      : "",
                     order: 0,
                     isAnnouncement: true,
                     redirectLinks: annData.redirect_links || [],
@@ -99,11 +98,6 @@ export default async function EventDetailPage({ params }: { params: Promise<{ ev
         console.error("Error fetching single event/announcement from Supabase:", err);
     }
     
-    // Fallback to static if db query didn't find it
-    if (!event) {
-        event = staticEvents.find((e) => e.id === eventId);
-    }
-
     if (!event) {
         notFound();
     }
